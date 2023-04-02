@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Asteroids.Settings;
 
 namespace Asteroids.Core.Services
 {
@@ -9,12 +10,12 @@ namespace Asteroids.Core.Services
 
         private IExitState _currentState;
 
-        public StateMachine(ISceneLoader sceneLoader)
+        public StateMachine(IScreenSystem screenSystem, ISceneLoader sceneLoader, ICanvasConfig canvasConfig)
         {
             _states = new Dictionary<Type, IState>()
             {
                 [typeof(BootstrapState)] = new BootstrapState(this),
-                [typeof(GameState)] = new GameState(this),
+                [typeof(GameState)] = new GameState(this, screenSystem, canvasConfig),
                 [typeof(SceneLoaderState)] = new SceneLoaderState(sceneLoader),
                 [typeof(GameLoopState)] = new GameLoopState(),
             };
