@@ -17,7 +17,7 @@ namespace Asteroids.Core
         {
             _configStorage = configStorage;
 
-            _serviceStorage = new ServiceStorage(coroutineRunner, configStorage);
+            _serviceStorage = new ServiceStorage(coroutineRunner, this, configStorage);
         }
 
         public void Destroy() { }

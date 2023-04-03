@@ -2,9 +2,17 @@
 {
     public sealed class GameLoopState : IEnterState
     {
-        public GameLoopState() { }
+        private readonly IScreenSystem _screenSystem;
 
-        public void Enter() { }
+        public GameLoopState(IScreenSystem screenSystem)
+        {
+            _screenSystem = screenSystem;
+        }
+
+        public void Enter()
+        {
+            _screenSystem.ShowGame();
+        }
 
         public void Exit() { }
     }

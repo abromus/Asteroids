@@ -8,6 +8,7 @@ namespace Asteroids.Settings
     public sealed class ConfigStorage : ScriptableObject, IConfigStorage
     {
         [SerializeField] private CanvasConfig _canvasConfig;
+        [SerializeField] private ScreenConfig _screenConfig;
         [SerializeField] private UiServiceConfig _uiServiceConfig;
 
         private Dictionary<Type, IConfig> _configs;
@@ -17,6 +18,7 @@ namespace Asteroids.Settings
             _configs = new Dictionary<Type, IConfig>()
             {
                 [typeof(ICanvasConfig)] = _canvasConfig,
+                [typeof(IScreenConfig)] = _screenConfig,
                 [typeof(IUiServiceConfig)] = _uiServiceConfig,
             };
         }

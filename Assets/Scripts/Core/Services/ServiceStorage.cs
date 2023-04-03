@@ -9,7 +9,7 @@ namespace Asteroids.Core.Services
     {
         private readonly Dictionary<Type, IService> _services;
 
-        public ServiceStorage(ICoroutineRunner coroutineRunner, IConfigStorage configStorage)
+        public ServiceStorage(ICoroutineRunner coroutineRunner, IGame game, IConfigStorage configStorage)
         {
             var screenSystem = configStorage.GetConfig<IUiServiceConfig>().UiServices
                 .FirstOrDefault(service => service.UiServiceType == UiServiceType.ScreenSystem) as IScreenSystem;
@@ -18,6 +18,7 @@ namespace Asteroids.Core.Services
             {
                 [typeof(IScreenSystem)] = screenSystem,
                 [typeof(IStateMachine)] = new StateMachine(
+                    game,
                     screenSystem,
                     new SceneLoader(coroutineRunner),
                     configStorage.GetConfig<ICanvasConfig>()),

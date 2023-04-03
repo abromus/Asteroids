@@ -6,12 +6,14 @@ namespace Asteroids.Core.Services
 {
     public sealed class GameState : IEnterState
     {
+        private readonly IGame _game;
         private readonly IStateMachine _stateMachine;
         private readonly IScreenSystem _screenSystem;
         private readonly ICanvasConfig _canvasConfig;
 
-        public GameState(IStateMachine stateMachine, IScreenSystem screenSystem, ICanvasConfig canvasConfig)
+        public GameState(IGame game, IStateMachine stateMachine, IScreenSystem screenSystem, ICanvasConfig canvasConfig)
         {
+            _game = game;
             _stateMachine = stateMachine;
             _screenSystem = screenSystem;
             _canvasConfig = canvasConfig;
@@ -37,7 +39,7 @@ namespace Asteroids.Core.Services
         {
             var canvas = CreateCanvas();
 
-            _screenSystem.Init(canvas);
+            _screenSystem.Init(_game, canvas);
         }
 
         private Transform CreateCanvas()
