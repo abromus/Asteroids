@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using Asteroids.Screens;
-using Asteroids.Settings;
+using Asteroids.Core.Screens;
+using Asteroids.Core.Settings;
 using UnityEngine;
 
 namespace Asteroids.Core.Services
@@ -28,7 +28,9 @@ namespace Asteroids.Core.Services
 
             var screen = Instantiate(screenPrefab, _transform);
 
-            screen.Init();
+            var options = new Options(_game.ConfigStorage.GetConfig<IUiFactoryConfig>().UiFactories);
+
+            screen.Init(options);
         }
     }
 }

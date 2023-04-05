@@ -1,5 +1,5 @@
 ﻿using Asteroids.Core.Services;
-using Asteroids.Settings;
+using Asteroids.Core.Settings;
 using UnityEngine;
 
 namespace Asteroids.Core

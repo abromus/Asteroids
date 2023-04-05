@@ -1,6 +1,6 @@
 ﻿using UnityEngine.UI;
 using UnityEngine;
-using Asteroids.Settings;
+using Asteroids.Core.Settings;
 
 namespace Asteroids.Core.Services
 {

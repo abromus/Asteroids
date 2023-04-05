@@ -1,21 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Asteroids.Settings;
+using Asteroids.Core.Settings;
 
 namespace Asteroids.Core.Services
 {
     public sealed class ServiceStorage : IServiceStorage
     {
+        private readonly IReadOnlyList<IUiService> _uiServices;
         private readonly Dictionary<Type, IService> _services;
 
         public ServiceStorage(ICoroutineRunner coroutineRunner, IGame game, IConfigStorage configStorage)
         {
-            var screenSystem = configStorage.GetConfig<IUiServiceConfig>().UiServices
-                .FirstOrDefault(service => service.UiServiceType == UiServiceType.ScreenSystem) as IScreenSystem;
+            _uiServices = configStorage.GetConfig<IUiServiceConfig>().UiServices;
+
+            var inputSystem = _uiServices.FirstOrDefault(service => service.UiServiceType == UiServiceType.InputSystem) as IInputSystem;
+            var screenSystem = _uiServices.FirstOrDefault(service => service.UiServiceType == UiServiceType.ScreenSystem) as IScreenSystem;
 
             _services = new Dictionary<Type, IService>()
             {
+                [typeof(IInputSystem)] = inputSystem,
                 [typeof(IScreenSystem)] = screenSystem,
                 [typeof(IStateMachine)] = new StateMachine(
                     game,

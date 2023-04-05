@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Asteroids.Settings;
+using Asteroids.Core.Settings;
 
 namespace Asteroids.Core.Services
 {

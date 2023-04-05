@@ -13,5 +13,8 @@ MonoBehaviour:
   m_Name: ConfigStorage
   m_EditorClassIdentifier: 
   _canvasConfig: {fileID: 11400000, guid: c54f25435b88e1149b190cf1b82c2540, type: 2}
+  _inputConfig: {fileID: 11400000, guid: a9ffc5349c81a1445a0640ebd3916774, type: 2}
   _screenConfig: {fileID: 11400000, guid: 5bf067b7060d39d44b1bbb17f17cc125, type: 2}
+  _shipConfig: {fileID: 11400000, guid: e973cd7167e3efe4287876579a3a8621, type: 2}
+  _uiFactoryConfig: {fileID: 11400000, guid: 25ac491575d9c4d4aae4441530179718, type: 2}
   _uiServiceConfig: {fileID: 11400000, guid: 88b99f86500f58545be220dd85d44ac8, type: 2}

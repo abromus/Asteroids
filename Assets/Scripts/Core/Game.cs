@@ -1,12 +1,11 @@
 ﻿using Asteroids.Core.Services;
-using Asteroids.Settings;
+using Asteroids.Core.Settings;
 
 namespace Asteroids.Core
 {
     public sealed class Game : IGame
     {
         private readonly IConfigStorage _configStorage;
-
         private readonly IServiceStorage _serviceStorage;
 
         public IConfigStorage ConfigStorage => _configStorage;
