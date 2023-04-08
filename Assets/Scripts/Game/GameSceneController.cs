@@ -12,15 +12,32 @@ namespace Asteroids.Game
     {
         private IGame _game;
 
+        private IUpdater _updater;
+
         public override void Run(IGameData gameData)
         {
             base.Run(gameData);
 
-            _game = new Game(gameData);
+            _game = new Game(gameData, _updater);
 
             InitScreenSystem();
 
             _game.Run();
+        }
+
+        private void Awake()
+        {
+            _updater = new Updater();
+        }
+
+        private void OnDestroy()
+        {
+            _game.Destroy();
+        }
+
+        private void Update()
+        {
+            _updater.Tick(Time.deltaTime);
         }
 
         private void InitScreenSystem()

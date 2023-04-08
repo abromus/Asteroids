@@ -4,6 +4,8 @@
     {
         public IGameData GameData { get; }
 
+        public void Destroy();
+
         public void Run();
     }
 }

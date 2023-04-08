@@ -8,5 +8,10 @@ namespace Asteroids.Core
         {
             block?.Invoke();
         }
+
+        public static void SafeInvoke<T>(this Action<T> block, T value)
+        {
+            block?.Invoke(value);
+        }
     }
 }

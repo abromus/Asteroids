@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Asteroids.Core.Services
+namespace Asteroids.Core.States
 {
     public sealed class SceneInfo
     {

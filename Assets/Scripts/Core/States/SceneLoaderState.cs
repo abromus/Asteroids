@@ -1,4 +1,6 @@
-﻿namespace Asteroids.Core.Services
+﻿using Asteroids.Core.Services;
+
+namespace Asteroids.Core.States
 {
     public sealed class SceneLoaderState : IEnterState<SceneInfo>
     {

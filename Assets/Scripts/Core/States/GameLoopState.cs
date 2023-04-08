@@ -1,6 +1,7 @@
 ﻿using Asteroids.Core.Factories;
+using Asteroids.Core.Services;
 
-namespace Asteroids.Core.Services
+namespace Asteroids.Core.States
 {
     public sealed class GameLoopState : IEnterState
     {

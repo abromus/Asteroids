@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Asteroids.Core.Settings;
+using Asteroids.Core.States;
 
 namespace Asteroids.Core.Services
 {
@@ -13,7 +14,7 @@ namespace Asteroids.Core.Services
         {
             _uiServices = configStorage.GetUiServiceConfig().UiServices;
 
-            var inputSystem = _uiServices.GetInputSystem();
+            var inputSystem = InitInputSystem();
             var stateMachine = InitStateMachine(coroutineRunner, gameData);
 
             _services = new Dictionary<Type, IService>()
@@ -38,7 +39,15 @@ namespace Asteroids.Core.Services
             return _services[typeof(TService)] as TService;
         }
 
-        private StateMachine InitStateMachine(ICoroutineRunner coroutineRunner, IGameData gameData)
+        private IInputSystem InitInputSystem()
+        {
+            var inputSystem = _uiServices.GetInputSystem();
+            inputSystem.Init();
+
+            return inputSystem;
+        }
+
+        private IStateMachine InitStateMachine(ICoroutineRunner coroutineRunner, IGameData gameData)
         {
             var stateMachine = new StateMachine();
 

@@ -1,5 +1,4 @@
 ﻿using Asteroids.Inputs;
-using Asteroids.Core.Settings;
 
 namespace Asteroids.Core.Services
 {
@@ -11,6 +10,6 @@ namespace Asteroids.Core.Services
 
         public void Enable();
 
-        public void Init(IInputConfig inputConfig);
+        public void Init();
     }
 }
