@@ -8,7 +8,7 @@ namespace Asteroids.Core
     {
         [SerializeField] private ConfigStorage _configStorage;
 
-        private IGame _game;
+        private IGameData _gameData;
 
         private void Awake()
         {
@@ -17,21 +17,16 @@ namespace Asteroids.Core
             DontDestroyOnLoad(this);
         }
 
-        public void CreateGame()
+        public void CreateGameData()
         {
-            _game = new Game(this, _configStorage);
+            _gameData = new GameData(this, _configStorage);
 
             EnterInitState();
         }
 
         private void EnterInitState()
         {
-            _game.ServiceStorage.GetService<IStateMachine>().Enter<BootstrapState>();
-        }
-
-        private void OnDestroy()
-        {
-            _game?.Destroy();
+            _gameData.ServiceStorage.GetStateMachine().Enter<BootstrapState>();
         }
     }
 }

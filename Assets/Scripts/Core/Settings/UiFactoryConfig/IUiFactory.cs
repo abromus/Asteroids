@@ -1,6 +1,8 @@
-﻿namespace Asteroids.Core.Settings
+﻿using Asteroids.Core.Factories;
+
+namespace Asteroids.Core.Settings
 {
-    public interface IUiFactory
+    public interface IUiFactory : IFactory
     {
         public UiFactoryType UiFactoryType { get; }
     }

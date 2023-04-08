@@ -1,17 +1,22 @@
-﻿namespace Asteroids.Core.Services
+﻿using Asteroids.Core.Factories;
+
+namespace Asteroids.Core.Services
 {
     public sealed class GameLoopState : IEnterState
     {
-        private readonly IScreenSystem _screenSystem;
+        private readonly IGameData _gameData;
 
-        public GameLoopState(IScreenSystem screenSystem)
+        public GameLoopState(IGameData gameData)
         {
-            _screenSystem = screenSystem;
+            _gameData = gameData;
         }
 
         public void Enter()
         {
-            _screenSystem.ShowGame();
+            var gameSceneControllerFactory = _gameData.FactoryStorage.GetGameSceneControllerFactory();
+            var gameSceneController = gameSceneControllerFactory.Create();
+
+            gameSceneController.Run(_gameData);
         }
 
         public void Exit() { }

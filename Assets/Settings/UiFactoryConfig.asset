@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: UiFactoryConfig
   m_EditorClassIdentifier: 
   _uiFactories:
+  - {fileID: -2371274770504875761, guid: 22ebf02561e235a45bf58b13c4272bbc, type: 3}
   - {fileID: 8613071709593356983, guid: c9d31cf380a2ba84fa393bfb463a0d11, type: 3}

@@ -8,7 +8,7 @@ namespace Asteroids.Core
 
         private void Awake()
         {
-            _coreSceneController.CreateGame();
+            _coreSceneController.CreateGameData();
         }
     }
 }

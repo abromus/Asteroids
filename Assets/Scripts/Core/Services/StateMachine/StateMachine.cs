@@ -1,30 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using Asteroids.Core.Settings;
 
 namespace Asteroids.Core.Services
 {
     public sealed class StateMachine : IStateMachine
     {
-        private readonly Dictionary<Type, IState> _states;
+        private readonly Dictionary<Type, IState> _states = new Dictionary<Type, IState>();
 
         private IExitState _currentState;
-
-        public StateMachine(IGame game, IScreenSystem screenSystem, ISceneLoader sceneLoader, ICanvasConfig canvasConfig)
-        {
-            _states = new Dictionary<Type, IState>()
-            {
-                [typeof(BootstrapState)] = new BootstrapState(this),
-                [typeof(GameState)] = new GameState(game, this, screenSystem, canvasConfig),
-                [typeof(SceneLoaderState)] = new SceneLoaderState(sceneLoader),
-                [typeof(GameLoopState)] = new GameLoopState(screenSystem),
-            };
-        }
 
         public void Enter<TState>() where TState : class, IEnterState
         {
             var state = ChangeState<TState>();
             state.Enter();
+        }
+
+        public void Add<TState>(TState state) where TState : class, IState
+        {
+            var type = typeof(TState);
+
+            if (_states.ContainsKey(type))
+                _states[type] = state;
+            else
+                _states.Add(type, state);
         }
 
         public void Enter<TState, TPayload>(TPayload payload) where TState : class, IEnterState<TPayload>
