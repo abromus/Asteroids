@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Asteroids.Game
 {
-    public sealed class ShipModel
+    public sealed class AsteroidModel
     {
         private Vector2 _movement;
         private Vector3 _rotation;

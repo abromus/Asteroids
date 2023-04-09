@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 652bda89ad3dd16459c8d711279d9600, type: 3}
-  m_Name: ShipConfig
+  m_Script: {fileID: 11500000, guid: 0991c281afe801647aff42b150746145, type: 3}
+  m_Name: AsteroidConfig
   m_EditorClassIdentifier: 
-  _damping: 180
-  _speed: 10
+  _damping: 30
+  _speed: 3

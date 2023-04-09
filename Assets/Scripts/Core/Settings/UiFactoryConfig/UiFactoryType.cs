@@ -2,6 +2,7 @@
 {
     public enum UiFactoryType
     {
+        AsteroidViewFactory,
         GameSceneControllerFactory,
         ShipViewFactory,
     }

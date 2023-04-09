@@ -5,6 +5,11 @@ namespace Asteroids.Game
 {
     public static class FactoryExtensions
     {
+        public static IAsteroidViewFactory GetAsteroidViewFactory(this IFactoryStorage factoryStorage)
+        {
+            return factoryStorage.GetFactory<IAsteroidViewFactory>();
+        }
+
         public static IShipViewFactory GetShipViewFactory(this IFactoryStorage factoryStorage)
         {
             return factoryStorage.GetFactory<IShipViewFactory>();

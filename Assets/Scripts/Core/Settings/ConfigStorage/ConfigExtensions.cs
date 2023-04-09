@@ -2,6 +2,11 @@
 {
     public static class ConfigExtensions
     {
+        public static IAsteroidConfig GetAsteroidConfig(this IConfigStorage configStorage)
+        {
+            return configStorage.GetConfig<IAsteroidConfig>();
+        }
+
         public static ICanvasConfig GetCanvasConfig(this IConfigStorage configStorage)
         {
             return configStorage.GetConfig<ICanvasConfig>();

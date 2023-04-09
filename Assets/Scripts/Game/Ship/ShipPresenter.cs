@@ -49,25 +49,6 @@ namespace Asteroids.Game
             _inputActions.Disable();
         }
 
-        public void Move(float deltaTime)
-        {
-            var movementDirection = _inputActions.Move.ReadValue<Vector2>();
-
-            _model.Movement = _shipConfig.Speed * deltaTime * movementDirection;
-        }
-
-        public void RotateLeft(float deltaTime)
-        {
-            var direction = _inputActions.RotateLeft.ReadValue<float>();
-            Rotate(direction, deltaTime);
-        }
-
-        public void RotateRight(float deltaTime)
-        {
-            var direction = _inputActions.RotateRight.ReadValue<float>();
-            Rotate(direction, deltaTime);
-        }
-
         public void Tick(float deltaTime)
         {
             if (_inputActions.Move.phase == InputActionPhase.Started)
@@ -77,6 +58,28 @@ namespace Asteroids.Game
                 RotateLeft(deltaTime);
             else if (_inputActions.RotateRight.phase == InputActionPhase.Started)
                 RotateRight(deltaTime);
+
+            if (_inputActions.Shoot.phase == InputActionPhase.Performed)
+                Shoot(deltaTime);
+        }
+
+        private void Move(float deltaTime)
+        {
+            var movementDirection = _inputActions.Move.ReadValue<Vector2>();
+
+            _model.Movement = _shipConfig.Speed * deltaTime * movementDirection;
+        }
+
+        private void RotateLeft(float deltaTime)
+        {
+            var direction = _inputActions.RotateLeft.ReadValue<float>();
+            Rotate(direction, deltaTime);
+        }
+
+        private void RotateRight(float deltaTime)
+        {
+            var direction = _inputActions.RotateRight.ReadValue<float>();
+            Rotate(direction, deltaTime);
         }
 
         private void Rotate(float direction, float deltaTime)
@@ -84,6 +87,12 @@ namespace Asteroids.Game
             var rotation = Quaternion.Euler(0f, 0f, direction * _shipConfig.Damping * deltaTime);
 
             _model.Rotation = rotation.eulerAngles;
+        }
+
+        private void Shoot(float deltaTime)
+        {
+            Debug.LogError($"Shoot");
+            //_model.Movement = _shipConfig.Speed * deltaTime * movementDirection;
         }
     }
 }

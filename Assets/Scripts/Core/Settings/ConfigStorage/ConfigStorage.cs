@@ -7,6 +7,7 @@ namespace Asteroids.Core.Settings
     [CreateAssetMenu(fileName = "ConfigStorage", menuName = "Settings/ConfigStorage")]
     public sealed class ConfigStorage : ScriptableObject, IConfigStorage
     {
+        [SerializeField] private AsteroidConfig _asteroidConfig;
         [SerializeField] private CanvasConfig _canvasConfig;
         [SerializeField] private InputConfig _inputConfig;
         [SerializeField] private ScreenConfig _screenConfig;
@@ -20,6 +21,7 @@ namespace Asteroids.Core.Settings
         {
             _configs = new Dictionary<Type, IConfig>()
             {
+                [typeof(IAsteroidConfig)] = _asteroidConfig,
                 [typeof(ICanvasConfig)] = _canvasConfig,
                 [typeof(IInputConfig)] = _inputConfig,
                 [typeof(IScreenConfig)] = _screenConfig,

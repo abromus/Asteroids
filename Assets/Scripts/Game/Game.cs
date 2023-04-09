@@ -13,6 +13,8 @@ namespace Asteroids.Game
 
         private ShipPresenter _shipPresenter;
 
+        private AsteroidPresenter _asteroidPresenter;
+
         public IGameData GameData => _gameData;
 
         public Game(IGameData gameData, IUpdater updater)
@@ -38,8 +40,11 @@ namespace Asteroids.Game
             var shipViewFactory = uiFactories.FirstOrDefault(factory => factory.UiFactoryType == UiFactoryType.ShipViewFactory) as IShipViewFactory;
             _gameData.FactoryStorage.AddFactory(shipViewFactory);
 
+            var asteroidViewFactory = uiFactories.FirstOrDefault(factory => factory.UiFactoryType == UiFactoryType.AsteroidViewFactory) as IAsteroidViewFactory;
+            _gameData.FactoryStorage.AddFactory(asteroidViewFactory);
+
             CreateShip();
-            //CreateEnemies();
+            CreateEnemies();
             //ShowUi();
         }
 
@@ -54,6 +59,23 @@ namespace Asteroids.Game
             
             _shipPresenter = shipFactory.Create();
             _shipPresenter.Enable();
+        }
+
+        private void CreateEnemies()
+        {
+            CreateAsteroids();
+            //CreateFlyingSaucers();
+        }
+
+        private void CreateAsteroids()
+        {
+            var asteroidViewFactory = _gameData.FactoryStorage.GetAsteroidViewFactory();
+            var asteroidConfig = _gameData.ConfigStorage.GetAsteroidConfig();
+
+            var asteroidFactory = new AsteroidFactory(_updater, asteroidViewFactory, asteroidConfig);
+
+            _asteroidPresenter = asteroidFactory.Create();
+            _asteroidPresenter.Enable();
         }
     }
 }
