@@ -53,6 +53,21 @@ namespace Asteroids.Game
             return uiFactories.GetFactory<IFlyingSaucerViewFactory>(UiFactoryType.FlyingSaucerViewFactory);
         }
 
+        public static IMachineGunFactory GetMachineGunFactory(this IFactoryStorage factoryStorage)
+        {
+            return factoryStorage.GetFactory<IMachineGunFactory>();
+        }
+
+        public static IMachineGunViewFactory GetMachineGunViewFactory(this IFactoryStorage factoryStorage)
+        {
+            return factoryStorage.GetFactory<IMachineGunViewFactory>();
+        }
+
+        public static IMachineGunViewFactory GetMachineGunViewFactory(this IReadOnlyList<IUiFactory> uiFactories)
+        {
+            return uiFactories.GetFactory<IMachineGunViewFactory>(UiFactoryType.MachineGunViewFactory);
+        }
+
         public static IShipFactory GetShipFactory(this IFactoryStorage factoryStorage)
         {
             return factoryStorage.GetFactory<IShipFactory>();

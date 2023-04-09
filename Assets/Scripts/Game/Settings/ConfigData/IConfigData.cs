@@ -10,6 +10,8 @@
 
         public IInputConfig InputConfig { get; }
 
+        public IMachineGunConfig MachineGunConfig { get; }
+
         public IShipConfig ShipConfig { get; }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Asteroids.Game.Settings
 {
-    [CreateAssetMenu(fileName = "AsteroidConfig", menuName = "Settings/Game/AsteroidConfig")]
+    [CreateAssetMenu(fileName = "AsteroidConfig", menuName = "Settings/Game/Enemies/AsteroidConfig")]
     public sealed class AsteroidConfig : ScriptableObject, IAsteroidConfig
     {
         [SerializeField] private float _damping;

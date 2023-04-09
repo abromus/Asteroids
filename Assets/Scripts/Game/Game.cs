@@ -27,8 +27,17 @@ namespace Asteroids.Game
 
         public void Run()
         {
+            CreateMachineGun();
             CreateShip();
             CreateEnemies();
+        }
+
+        private void CreateMachineGun()
+        {
+            var factory = _gameData.FactoryStorage.GetMachineGunFactory();
+
+            //_machineGunPresenter = factory.Create();
+            //_machineGunPresenter.Enable();
         }
 
         private void CreateShip()

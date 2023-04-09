@@ -14,11 +14,11 @@ namespace Asteroids.Game
         private readonly IShipView _view;
         private readonly IShipConfig _config;
         private readonly IInputSystem _inputSystem;
-        private readonly IBulletFactory _bulletFactory;
+        private readonly IMachineGunFactory _machineGunFactory;
 
         private readonly PlayerInputActions.PlayerActions _inputActions;
 
-        public ShipPresenter(IUpdater updater, IShipModel model, IShipView view, IShipConfig config, IInputSystem inputSystem, IBulletFactory bulletFactory)
+        public ShipPresenter(IUpdater updater, IShipModel model, IShipView view, IShipConfig config, IInputSystem inputSystem, IMachineGunFactory machineGunFactory)
         {
             _updater = updater;
             _model = model;
@@ -28,7 +28,7 @@ namespace Asteroids.Game
             _inputSystem = inputSystem;
             _inputActions = _inputSystem.InputActions;
 
-            _bulletFactory = bulletFactory;
+            _machineGunFactory = machineGunFactory;
 
             _model.OnMovementChanged += _view.Move;
             _model.OnRotationChanged += _view.Rotate;

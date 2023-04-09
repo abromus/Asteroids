@@ -9,6 +9,7 @@ namespace Asteroids.Game.Settings
         [SerializeField] private BulletConfig _bulletConfig;
         [SerializeField] private FlyingSaucerConfig _flyingSaucerConfig;
         [SerializeField] private InputConfig _inputConfig;
+        [SerializeField] private MachineGunConfig _machineGunConfig;
         [SerializeField] private ShipConfig _shipConfig;
 
         public IAsteroidConfig AsteroidConfig => _asteroidConfig;
@@ -18,6 +19,8 @@ namespace Asteroids.Game.Settings
         public IFlyingSaucerConfig FlyingSaucerConfig => _flyingSaucerConfig;
 
         public IInputConfig InputConfig => _inputConfig;
+
+        public IMachineGunConfig MachineGunConfig => _machineGunConfig;
 
         public IShipConfig ShipConfig => _shipConfig;
     }
