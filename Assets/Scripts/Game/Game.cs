@@ -14,6 +14,7 @@ namespace Asteroids.Game
         private ShipPresenter _shipPresenter;
 
         private AsteroidPresenter _asteroidPresenter;
+        private FlyingSaucerPresenter _flyingSaucerPresenter;
 
         public IGameData GameData => _gameData;
 
@@ -43,6 +44,9 @@ namespace Asteroids.Game
             var asteroidViewFactory = uiFactories.FirstOrDefault(factory => factory.UiFactoryType == UiFactoryType.AsteroidViewFactory) as IAsteroidViewFactory;
             _gameData.FactoryStorage.AddFactory(asteroidViewFactory);
 
+            var flyingSaucerViewFactory = uiFactories.FirstOrDefault(factory => factory.UiFactoryType == UiFactoryType.FlyingSaucerViewFactory) as IFlyingSaucerViewFactory;
+            _gameData.FactoryStorage.AddFactory(flyingSaucerViewFactory);
+
             CreateShip();
             CreateEnemies();
             //ShowUi();
@@ -50,32 +54,43 @@ namespace Asteroids.Game
 
         private void CreateShip()
         {
-            var shipViewFactory = _gameData.FactoryStorage.GetShipViewFactory();
+            var viewFactory = _gameData.FactoryStorage.GetShipViewFactory();
             var inputSystem = _gameData.ServiceStorage.GetInputSystem();
             var inputConfig = _gameData.ConfigStorage.GetInputConfig();
-            var shipConfig = _gameData.ConfigStorage.GetShipConfig();
+            var config = _gameData.ConfigStorage.GetShipConfig();
 
-            var shipFactory = new ShipFactory(_updater, shipViewFactory, inputSystem, inputConfig, shipConfig);
+            var factory = new ShipFactory(_updater, viewFactory, config, inputSystem, inputConfig);
             
-            _shipPresenter = shipFactory.Create();
+            _shipPresenter = factory.Create();
             _shipPresenter.Enable();
         }
 
         private void CreateEnemies()
         {
             CreateAsteroids();
-            //CreateFlyingSaucers();
+            CreateFlyingSaucers();
         }
 
         private void CreateAsteroids()
         {
-            var asteroidViewFactory = _gameData.FactoryStorage.GetAsteroidViewFactory();
-            var asteroidConfig = _gameData.ConfigStorage.GetAsteroidConfig();
+            var viewFactory = _gameData.FactoryStorage.GetAsteroidViewFactory();
+            var config = _gameData.ConfigStorage.GetAsteroidConfig();
 
-            var asteroidFactory = new AsteroidFactory(_updater, asteroidViewFactory, asteroidConfig);
+            var factory = new AsteroidFactory(_updater, viewFactory, config);
 
-            _asteroidPresenter = asteroidFactory.Create();
+            _asteroidPresenter = factory.Create();
             _asteroidPresenter.Enable();
+        }
+
+        private void CreateFlyingSaucers()
+        {
+            var viewFactory = _gameData.FactoryStorage.GetFlyingSaucerViewFactory();
+            var config = _gameData.ConfigStorage.GetFlyingSaucerConfig();
+
+            var factory = new FlyingSaucerFactory(_updater, viewFactory, config);
+
+            _flyingSaucerPresenter = factory.Create();
+            _flyingSaucerPresenter.Enable();
         }
     }
 }

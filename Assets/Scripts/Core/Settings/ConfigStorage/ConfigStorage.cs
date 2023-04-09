@@ -9,6 +9,7 @@ namespace Asteroids.Core.Settings
     {
         [SerializeField] private AsteroidConfig _asteroidConfig;
         [SerializeField] private CanvasConfig _canvasConfig;
+        [SerializeField] private FlyingSaucerConfig _flyingSaucerConfig;
         [SerializeField] private InputConfig _inputConfig;
         [SerializeField] private ScreenConfig _screenConfig;
         [SerializeField] private ShipConfig _shipConfig;
@@ -23,6 +24,7 @@ namespace Asteroids.Core.Settings
             {
                 [typeof(IAsteroidConfig)] = _asteroidConfig,
                 [typeof(ICanvasConfig)] = _canvasConfig,
+                [typeof(IFlyingSaucerConfig)] = _flyingSaucerConfig,
                 [typeof(IInputConfig)] = _inputConfig,
                 [typeof(IScreenConfig)] = _screenConfig,
                 [typeof(IShipConfig)] = _shipConfig,

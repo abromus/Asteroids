@@ -3,6 +3,7 @@
     public enum UiFactoryType
     {
         AsteroidViewFactory,
+        FlyingSaucerViewFactory,
         GameSceneControllerFactory,
         ShipViewFactory,
     }

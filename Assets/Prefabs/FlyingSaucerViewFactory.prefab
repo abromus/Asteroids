@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8613071709593356980}
-  - component: {fileID: 8613071709593356983}
+  - component: {fileID: 3819319062153166793}
   m_Layer: 0
-  m_Name: ShipViewFactory
+  m_Name: FlyingSaucerViewFactory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8613071709593356983
+--- !u!114 &3819319062153166793
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8613071709593356982}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbb92763869278a44a373758789eba53, type: 3}
+  m_Script: {fileID: 11500000, guid: 3d7078b175d38be41a19354f9063e713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prefab: {fileID: -5682873865455527534, guid: 3f4785a1440edd54eb624ab5ae321b01, type: 3}
+  _prefab: {fileID: 3153424538989190206, guid: f16cea12994c75f4daff7d2b514639dc, type: 3}

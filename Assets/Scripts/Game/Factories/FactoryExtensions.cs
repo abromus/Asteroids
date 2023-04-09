@@ -10,6 +10,11 @@ namespace Asteroids.Game
             return factoryStorage.GetFactory<IAsteroidViewFactory>();
         }
 
+        public static IFlyingSaucerViewFactory GetFlyingSaucerViewFactory(this IFactoryStorage factoryStorage)
+        {
+            return factoryStorage.GetFactory<IFlyingSaucerViewFactory>();
+        }
+
         public static IShipViewFactory GetShipViewFactory(this IFactoryStorage factoryStorage)
         {
             return factoryStorage.GetFactory<IShipViewFactory>();

@@ -11,17 +11,17 @@ namespace Asteroids.Game
         private readonly IUpdater _updater;
         private readonly ShipModel _model;
         private readonly ShipView _view;
+        private readonly IShipConfig _config;
         private readonly IInputSystem _inputSystem;
-        private readonly IShipConfig _shipConfig;
         private readonly PlayerInputActions.PlayerActions _inputActions;
 
-        public ShipPresenter(IUpdater updater, ShipModel model, ShipView view, IInputSystem inputSystem, IShipConfig shipConfig)
+        public ShipPresenter(IUpdater updater, ShipModel model, ShipView view, IShipConfig config, IInputSystem inputSystem)
         {
             _updater = updater;
             _model = model;
             _view = view;
+            _config = config;
             _inputSystem = inputSystem;
-            _shipConfig = shipConfig;
             _inputActions = _inputSystem.InputActions;
 
             _model.OnMovementChanged += _view.Move;
@@ -67,7 +67,7 @@ namespace Asteroids.Game
         {
             var movementDirection = _inputActions.Move.ReadValue<Vector2>();
 
-            _model.Movement = _shipConfig.Speed * deltaTime * movementDirection;
+            _model.Movement = _config.Speed * deltaTime * movementDirection;
         }
 
         private void RotateLeft(float deltaTime)
@@ -84,7 +84,7 @@ namespace Asteroids.Game
 
         private void Rotate(float direction, float deltaTime)
         {
-            var rotation = Quaternion.Euler(0f, 0f, direction * _shipConfig.Damping * deltaTime);
+            var rotation = Quaternion.Euler(0f, 0f, direction * _config.Damping * deltaTime);
 
             _model.Rotation = rotation.eulerAngles;
         }
