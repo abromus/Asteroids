@@ -1,6 +1,6 @@
-using Asteroids.Core.Settings;
 using System.Collections.Generic;
 using System.Linq;
+using Asteroids.Core.Settings;
 
 namespace Asteroids.Core.Factories
 {

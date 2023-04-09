@@ -9,7 +9,7 @@ namespace Asteroids.Game.Factory
 
         public override UiFactoryType UiFactoryType => UiFactoryType.FlyingSaucerViewFactory;
 
-        public FlyingSaucerView Create()
+        public IFlyingSaucerView Create()
         {
             var flyingSaucer = Instantiate(_prefab);
             flyingSaucer.Init();

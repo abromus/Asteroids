@@ -1,5 +1,5 @@
-﻿using Asteroids.Core.Settings;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Asteroids.Core.Settings;
 
 namespace Asteroids.Core.Screens
 {

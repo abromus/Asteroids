@@ -9,7 +9,7 @@ namespace Asteroids.Game.Factory
 
         public override UiFactoryType UiFactoryType => UiFactoryType.AsteroidViewFactory;
 
-        public AsteroidView Create()
+        public IAsteroidView Create()
         {
             var asteroid = Instantiate(_prefab);
             asteroid.Init();

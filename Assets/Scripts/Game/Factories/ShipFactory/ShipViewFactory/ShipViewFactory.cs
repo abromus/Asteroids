@@ -1,4 +1,5 @@
 ﻿using Asteroids.Core.Settings;
+using Asteroids.Game.Settings;
 using UnityEngine;
 
 namespace Asteroids.Game.Factory
@@ -9,7 +10,7 @@ namespace Asteroids.Game.Factory
 
         public override UiFactoryType UiFactoryType => UiFactoryType.ShipViewFactory;
 
-        public ShipView Create(IInputConfig inputConfig)
+        public IShipView Create(IInputConfig inputConfig)
         {
             var ship = Instantiate(_prefab);
             ship.Init(inputConfig);

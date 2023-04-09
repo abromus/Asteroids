@@ -14,12 +14,10 @@ namespace Asteroids.Core.Services
         {
             _uiServices = configStorage.GetUiServiceConfig().UiServices;
 
-            var inputSystem = InitInputSystem();
             var stateMachine = InitStateMachine(coroutineRunner, gameData);
 
             _services = new Dictionary<Type, IService>()
             {
-                [typeof(IInputSystem)] = inputSystem,
                 [typeof(IStateMachine)] = stateMachine,
             };
         }
@@ -37,14 +35,6 @@ namespace Asteroids.Core.Services
         public TService GetService<TService>() where TService : class, IService
         {
             return _services[typeof(TService)] as TService;
-        }
-
-        private IInputSystem InitInputSystem()
-        {
-            var inputSystem = _uiServices.GetInputSystem();
-            inputSystem.Init();
-
-            return inputSystem;
         }
 
         private IStateMachine InitStateMachine(ICoroutineRunner coroutineRunner, IGameData gameData)

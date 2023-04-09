@@ -2,9 +2,9 @@
 
 namespace Asteroids.Game
 {
-    public class Updater : IUpdater
+    public sealed class Updater : IUpdater
     {
-        private List<IUpdatable> _updatables = new List<IUpdatable>();
+        private readonly List<IUpdatable> _updatables = new List<IUpdatable>();
 
         public void Add(IUpdatable updatable)
         {

@@ -1,18 +1,22 @@
-using System.Linq;
 using Asteroids.Core;
 using Asteroids.Core.Services;
-using Asteroids.Core.Settings;
-using Asteroids.Game.Services;
+using Asteroids.Game.Initializers;
+using Asteroids.Game.Settings;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Asteroids.Game
 {
     public sealed class GameSceneController : SceneController, ICoroutineRunner
     {
+        [SerializeField] private ConfigData _configData;
+
         private IGame _game;
 
         private IUpdater _updater;
+
+        private IConfigInitializer _configInitializer;
+        private IFactoryInitializer _factoryInitializer;
+        private IServiceInitializer _serviceInitializer;
 
         public override void Run(IGameData gameData)
         {
@@ -20,7 +24,14 @@ namespace Asteroids.Game
 
             _game = new Game(gameData, _updater);
 
-            InitScreenSystem();
+            _configInitializer = new ConfigInitializer(_game, _configData);
+            _configInitializer.Initialize();
+
+            _factoryInitializer = new FactoryInitializer(_game);
+            _factoryInitializer.Initialize();
+
+            _serviceInitializer = new ServiceInitializer(_game);
+            _serviceInitializer.Initialize();
 
             _game.Run();
         }
@@ -38,52 +49,6 @@ namespace Asteroids.Game
         private void Update()
         {
             _updater.Tick(Time.deltaTime);
-        }
-
-        private void InitScreenSystem()
-        {
-            var canvas = CreateCanvas();
-
-            var uiServices = _game.GameData.ConfigStorage.GetUiServiceConfig().UiServices;
-            var screenSystem = uiServices.FirstOrDefault(service => service.UiServiceType == UiServiceType.ScreenSystem) as IScreenSystem;
-            screenSystem.Init(_game.GameData, canvas);
-
-            _game.GameData.ServiceStorage.AddService(screenSystem);
-        }
-
-        private Transform CreateCanvas()
-        {
-            var canvasConfig = _game.GameData.ConfigStorage.GetCanvasConfig();
-
-            var canvasObject = new GameObject();
-            canvasObject.name = canvasConfig.Name;
-
-            AddCanvas(canvasConfig, canvasObject);
-            AddCanvasScaler(canvasConfig, canvasObject);
-            AddGraphicRaycaster(canvasObject);
-
-            return canvasObject.transform;
-        }
-
-        private void AddCanvas(ICanvasConfig canvasConfig, GameObject canvasObject)
-        {
-            var canvas = canvasObject.AddComponent<Canvas>();
-            canvas.renderMode = canvasConfig.RenderMode;
-            canvas.worldCamera = Camera.main;
-        }
-
-        private void AddCanvasScaler(ICanvasConfig canvasConfig, GameObject canvasObject)
-        {
-            var canvasScaler = canvasObject.AddComponent<CanvasScaler>();
-            canvasScaler.uiScaleMode = canvasConfig.ScaleMode;
-            canvasScaler.referenceResolution = canvasConfig.ReferenceResolution;
-            canvasScaler.matchWidthOrHeight = canvasConfig.MatchWidthOrHeight;
-            canvasScaler.referencePixelsPerUnit = canvasConfig.ReferencePixelsPerUnit;
-        }
-
-        private void AddGraphicRaycaster(GameObject canvasObject)
-        {
-            canvasObject.AddComponent<GraphicRaycaster>();
         }
     }
 }

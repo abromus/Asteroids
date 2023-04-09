@@ -7,12 +7,8 @@ namespace Asteroids.Core.Settings
     [CreateAssetMenu(fileName = "ConfigStorage", menuName = "Settings/ConfigStorage")]
     public sealed class ConfigStorage : ScriptableObject, IConfigStorage
     {
-        [SerializeField] private AsteroidConfig _asteroidConfig;
         [SerializeField] private CanvasConfig _canvasConfig;
-        [SerializeField] private FlyingSaucerConfig _flyingSaucerConfig;
-        [SerializeField] private InputConfig _inputConfig;
         [SerializeField] private ScreenConfig _screenConfig;
-        [SerializeField] private ShipConfig _shipConfig;
         [SerializeField] private UiFactoryConfig _uiFactoryConfig;
         [SerializeField] private UiServiceConfig _uiServiceConfig;
 
@@ -22,15 +18,20 @@ namespace Asteroids.Core.Settings
         {
             _configs = new Dictionary<Type, IConfig>()
             {
-                [typeof(IAsteroidConfig)] = _asteroidConfig,
                 [typeof(ICanvasConfig)] = _canvasConfig,
-                [typeof(IFlyingSaucerConfig)] = _flyingSaucerConfig,
-                [typeof(IInputConfig)] = _inputConfig,
                 [typeof(IScreenConfig)] = _screenConfig,
-                [typeof(IShipConfig)] = _shipConfig,
                 [typeof(IUiFactoryConfig)] = _uiFactoryConfig,
                 [typeof(IUiServiceConfig)] = _uiServiceConfig,
             };
+        }
+        public void AddConfig<TConfig>(TConfig config) where TConfig : class, IConfig
+        {
+            var type = typeof(TConfig);
+
+            if (_configs.ContainsKey(type))
+                _configs[type] = config;
+            else
+                _configs.Add(type, config);
         }
 
         public TConfig GetConfig<TConfig>() where TConfig : class, IConfig

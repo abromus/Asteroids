@@ -1,6 +1,5 @@
 ﻿using Asteroids.Core.Services;
-using Asteroids.Core.Settings;
-using UnityEngine.PlayerLoop;
+using Asteroids.Game.Settings;
 
 namespace Asteroids.Game.Factory
 {
@@ -21,7 +20,7 @@ namespace Asteroids.Game.Factory
             _inputConfig = inputConfig;
         }
 
-        public ShipPresenter Create()
+        public IShipPresenter Create()
         {
             var model = new ShipModel();
             var view = _viewFactory.Create(_inputConfig);

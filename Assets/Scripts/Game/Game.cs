@@ -1,8 +1,6 @@
-using System.Linq;
 using Asteroids.Core;
-using Asteroids.Core.Services;
-using Asteroids.Core.Settings;
 using Asteroids.Game.Factory;
+using Asteroids.Game.Settings;
 
 namespace Asteroids.Game
 {
@@ -11,10 +9,9 @@ namespace Asteroids.Game
         private readonly IGameData _gameData;
         private readonly IUpdater _updater;
 
-        private ShipPresenter _shipPresenter;
-
-        private AsteroidPresenter _asteroidPresenter;
-        private FlyingSaucerPresenter _flyingSaucerPresenter;
+        private IShipPresenter _shipPresenter;
+        private IAsteroidPresenter _asteroidPresenter;
+        private IFlyingSaucerPresenter _flyingSaucerPresenter;
 
         public IGameData GameData => _gameData;
 
@@ -27,29 +24,14 @@ namespace Asteroids.Game
         public void Destroy()
         {
             _shipPresenter.Destroy();
+            _asteroidPresenter.Destroy();
+            _flyingSaucerPresenter.Destroy();
         }
 
         public void Run()
         {
-            /*_stateMachine = new StateMachine();
-            _stateMachine.Add(new ShipState());
-            _stateMachine.Add(new EnemiesState());
-            _stateMachine.Add(new UiState());
-            _stateMachine.Add(new NewGameState());*/
-
-            var uiFactories = _gameData.ConfigStorage.GetUiFactoryConfig().UiFactories;
-            var shipViewFactory = uiFactories.FirstOrDefault(factory => factory.UiFactoryType == UiFactoryType.ShipViewFactory) as IShipViewFactory;
-            _gameData.FactoryStorage.AddFactory(shipViewFactory);
-
-            var asteroidViewFactory = uiFactories.FirstOrDefault(factory => factory.UiFactoryType == UiFactoryType.AsteroidViewFactory) as IAsteroidViewFactory;
-            _gameData.FactoryStorage.AddFactory(asteroidViewFactory);
-
-            var flyingSaucerViewFactory = uiFactories.FirstOrDefault(factory => factory.UiFactoryType == UiFactoryType.FlyingSaucerViewFactory) as IFlyingSaucerViewFactory;
-            _gameData.FactoryStorage.AddFactory(flyingSaucerViewFactory);
-
             CreateShip();
             CreateEnemies();
-            //ShowUi();
         }
 
         private void CreateShip()
@@ -60,7 +42,7 @@ namespace Asteroids.Game
             var config = _gameData.ConfigStorage.GetShipConfig();
 
             var factory = new ShipFactory(_updater, viewFactory, config, inputSystem, inputConfig);
-            
+
             _shipPresenter = factory.Create();
             _shipPresenter.Enable();
         }

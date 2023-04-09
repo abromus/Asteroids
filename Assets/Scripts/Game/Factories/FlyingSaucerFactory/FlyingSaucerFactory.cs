@@ -1,4 +1,4 @@
-﻿using Asteroids.Core.Settings;
+﻿using Asteroids.Game.Settings;
 
 namespace Asteroids.Game.Factory
 {
@@ -15,7 +15,7 @@ namespace Asteroids.Game.Factory
             _config = config;
         }
 
-        public FlyingSaucerPresenter Create()
+        public IFlyingSaucerPresenter Create()
         {
             var model = new FlyingSaucerModel();
             var view = _viewFactory.Create();

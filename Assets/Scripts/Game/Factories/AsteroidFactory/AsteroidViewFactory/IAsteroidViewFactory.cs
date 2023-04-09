@@ -4,6 +4,6 @@ namespace Asteroids.Game.Factory
 {
     public interface IAsteroidViewFactory : IFactory
     {
-        public AsteroidView Create();
+        public IAsteroidView Create();
     }
 }

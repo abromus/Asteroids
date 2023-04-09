@@ -5,7 +5,7 @@ using UnityEditor.SceneManagement;
 namespace Asteroids.Core
 {
     [InitializeOnLoad]
-    public class BootstrapSceneManagement
+    public sealed class BootstrapSceneManagement
     {
         static BootstrapSceneManagement()
         {

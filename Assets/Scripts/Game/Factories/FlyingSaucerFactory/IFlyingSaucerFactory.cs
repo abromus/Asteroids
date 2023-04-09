@@ -4,6 +4,6 @@ namespace Asteroids.Game.Factory
 {
     public interface IFlyingSaucerFactory : IFactory
     {
-        public FlyingSaucerPresenter Create();
+        public IFlyingSaucerPresenter Create();
     }
 }
