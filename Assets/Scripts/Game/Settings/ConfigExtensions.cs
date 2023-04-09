@@ -9,6 +9,11 @@ namespace Asteroids.Game.Settings
             return configStorage.GetConfig<IAsteroidConfig>();
         }
 
+        public static IBulletConfig GetBulletConfig(this IConfigStorage configStorage)
+        {
+            return configStorage.GetConfig<IBulletConfig>();
+        }
+
         public static IFlyingSaucerConfig GetFlyingSaucerConfig(this IConfigStorage configStorage)
         {
             return configStorage.GetConfig<IFlyingSaucerConfig>();

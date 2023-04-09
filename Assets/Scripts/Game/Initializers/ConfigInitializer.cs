@@ -22,6 +22,7 @@ namespace Asteroids.Game.Initializers
         private void InitConfigs()
         {
             _game.GameData.ConfigStorage.AddConfig(_configData.AsteroidConfig);
+            _game.GameData.ConfigStorage.AddConfig(_configData.BulletConfig);
             _game.GameData.ConfigStorage.AddConfig(_configData.FlyingSaucerConfig);
             _game.GameData.ConfigStorage.AddConfig(_configData.InputConfig);
             _game.GameData.ConfigStorage.AddConfig(_configData.ShipConfig);

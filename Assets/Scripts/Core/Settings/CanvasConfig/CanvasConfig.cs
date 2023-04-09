@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace Asteroids.Core.Settings
 {
-    [CreateAssetMenu(fileName = "CanvasConfig", menuName = "Settings/CanvasConfig")]
+    [CreateAssetMenu(fileName = "CanvasConfig", menuName = "Settings/Core/CanvasConfig")]
     public sealed class CanvasConfig : ScriptableObject, ICanvasConfig
     {
         [SerializeField] private string _name;

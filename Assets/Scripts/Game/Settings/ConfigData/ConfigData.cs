@@ -2,15 +2,18 @@ using UnityEngine;
 
 namespace Asteroids.Game.Settings
 {
-    [CreateAssetMenu(fileName = "ConfigData", menuName = "Settings/ConfigData")]
+    [CreateAssetMenu(fileName = "ConfigData", menuName = "Settings/Game/ConfigData")]
     public sealed class ConfigData : ScriptableObject, IConfigData
     {
         [SerializeField] private AsteroidConfig _asteroidConfig;
+        [SerializeField] private BulletConfig _bulletConfig;
         [SerializeField] private FlyingSaucerConfig _flyingSaucerConfig;
         [SerializeField] private InputConfig _inputConfig;
         [SerializeField] private ShipConfig _shipConfig;
 
         public IAsteroidConfig AsteroidConfig => _asteroidConfig;
+
+        public IBulletConfig BulletConfig => _bulletConfig;
 
         public IFlyingSaucerConfig FlyingSaucerConfig => _flyingSaucerConfig;
 

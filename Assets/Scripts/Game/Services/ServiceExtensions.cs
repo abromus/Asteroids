@@ -15,12 +15,23 @@ namespace Asteroids.Game
 
         public static IInputSystem GetInputSystem(this IReadOnlyList<IUiService> uiServices)
         {
-            return uiServices.FirstOrDefault(service => service.UiServiceType == UiServiceType.InputSystem) as IInputSystem;
+            return uiServices.GetService<IInputSystem>(UiServiceType.InputSystem);
         }
 
         public static IScreenSystem GetScreenSystem(this IServiceStorage serviceStorage)
         {
             return serviceStorage.GetService<IScreenSystem>();
+        }
+
+        public static IScreenSystem GetScreenSystem(this IReadOnlyList<IUiService> uiServices)
+        {
+            return uiServices.GetService<IScreenSystem>(UiServiceType.ScreenSystem);
+        }
+
+        private static TService GetService<TService>(this IReadOnlyList<IUiService> uiServices, UiServiceType serviceType)
+            where TService : class, IService
+        {
+            return uiServices.FirstOrDefault(service => service.UiServiceType == serviceType) as TService;
         }
     }
 }

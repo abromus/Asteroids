@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Asteroids.Core.Settings
 {
-    [CreateAssetMenu(fileName = "UiServiceConfig", menuName = "Settings/UiServiceConfig")]
+    [CreateAssetMenu(fileName = "UiServiceConfig", menuName = "Settings/Core/UiServiceConfig")]
     public sealed class UiServiceConfig : ScriptableObject, IUiServiceConfig
     {
         [SerializeField] private List<UiService> _uiServices;

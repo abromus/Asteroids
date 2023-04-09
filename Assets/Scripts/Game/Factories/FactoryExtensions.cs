@@ -8,6 +8,11 @@ namespace Asteroids.Game
 {
     public static class FactoryExtensions
     {
+        public static IAsteroidFactory GetAsteroidFactory(this IFactoryStorage factoryStorage)
+        {
+            return factoryStorage.GetFactory<IAsteroidFactory>();
+        }
+
         public static IAsteroidViewFactory GetAsteroidViewFactory(this IFactoryStorage factoryStorage)
         {
             return factoryStorage.GetFactory<IAsteroidViewFactory>();
@@ -16,6 +21,26 @@ namespace Asteroids.Game
         public static IAsteroidViewFactory GetAsteroidViewFactory(this IReadOnlyList<IUiFactory> uiFactories)
         {
             return uiFactories.GetFactory<IAsteroidViewFactory>(UiFactoryType.AsteroidViewFactory);
+        }
+
+        public static IBulletFactory GetBulletFactory(this IFactoryStorage factoryStorage)
+        {
+            return factoryStorage.GetFactory<IBulletFactory>();
+        }
+
+        public static IBulletViewFactory GetBulletViewFactory(this IFactoryStorage factoryStorage)
+        {
+            return factoryStorage.GetFactory<IBulletViewFactory>();
+        }
+
+        public static IBulletViewFactory GetBulletViewFactory(this IReadOnlyList<IUiFactory> uiFactories)
+        {
+            return uiFactories.GetFactory<IBulletViewFactory>(UiFactoryType.BulletViewFactory);
+        }
+
+        public static IFlyingSaucerFactory GetFlyingSaucerFactory(this IFactoryStorage factoryStorage)
+        {
+            return factoryStorage.GetFactory<IFlyingSaucerFactory>();
         }
 
         public static IFlyingSaucerViewFactory GetFlyingSaucerViewFactory(this IFactoryStorage factoryStorage)
@@ -28,6 +53,11 @@ namespace Asteroids.Game
             return uiFactories.GetFactory<IFlyingSaucerViewFactory>(UiFactoryType.FlyingSaucerViewFactory);
         }
 
+        public static IShipFactory GetShipFactory(this IFactoryStorage factoryStorage)
+        {
+            return factoryStorage.GetFactory<IShipFactory>();
+        }
+
         public static IShipViewFactory GetShipViewFactory(this IFactoryStorage factoryStorage)
         {
             return factoryStorage.GetFactory<IShipViewFactory>();
@@ -38,7 +68,8 @@ namespace Asteroids.Game
             return uiFactories.GetFactory<IShipViewFactory>(UiFactoryType.ShipViewFactory);
         }
 
-        private static TFactory GetFactory<TFactory>(this IReadOnlyList<IUiFactory> uiFactories, UiFactoryType factoryType) where TFactory : class, IFactory
+        private static TFactory GetFactory<TFactory>(this IReadOnlyList<IUiFactory> uiFactories, UiFactoryType factoryType)
+            where TFactory : class, IFactory
         {
             return uiFactories.FirstOrDefault(factory => factory.UiFactoryType == factoryType) as TFactory;
         }

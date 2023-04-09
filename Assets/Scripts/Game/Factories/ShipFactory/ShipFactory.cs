@@ -10,21 +10,23 @@ namespace Asteroids.Game.Factory
         private readonly IShipConfig _config;
         private readonly IInputSystem _inputSystem;
         private readonly IInputConfig _inputConfig;
+        private readonly IBulletFactory _bulletFactory;
 
-        public ShipFactory(IUpdater updater, IShipViewFactory viewFactory, IShipConfig config, IInputSystem inputSystem, IInputConfig inputConfig)
+        public ShipFactory(IUpdater updater, IShipViewFactory viewFactory, IShipConfig config, IInputSystem inputSystem, IInputConfig inputConfig, IBulletFactory bulletFactory)
         {
             _updater = updater;
             _viewFactory = viewFactory;
             _config = config;
             _inputSystem = inputSystem;
             _inputConfig = inputConfig;
+            _bulletFactory = bulletFactory;
         }
 
         public IShipPresenter Create()
         {
             var model = new ShipModel();
             var view = _viewFactory.Create(_inputConfig);
-            var presenter = new ShipPresenter(_updater, model, view, _config, _inputSystem);
+            var presenter = new ShipPresenter(_updater, model, view, _config, _inputSystem, _bulletFactory);
 
             return presenter;
         }

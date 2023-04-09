@@ -1,6 +1,4 @@
 using Asteroids.Core;
-using Asteroids.Game.Factory;
-using Asteroids.Game.Settings;
 
 namespace Asteroids.Game
 {
@@ -15,10 +13,9 @@ namespace Asteroids.Game
 
         public IGameData GameData => _gameData;
 
-        public Game(IGameData gameData, IUpdater updater)
+        public Game(IGameData gameData)
         {
             _gameData = gameData;
-            _updater = updater;
         }
 
         public void Destroy()
@@ -36,12 +33,7 @@ namespace Asteroids.Game
 
         private void CreateShip()
         {
-            var viewFactory = _gameData.FactoryStorage.GetShipViewFactory();
-            var inputSystem = _gameData.ServiceStorage.GetInputSystem();
-            var inputConfig = _gameData.ConfigStorage.GetInputConfig();
-            var config = _gameData.ConfigStorage.GetShipConfig();
-
-            var factory = new ShipFactory(_updater, viewFactory, config, inputSystem, inputConfig);
+            var factory = _gameData.FactoryStorage.GetShipFactory();
 
             _shipPresenter = factory.Create();
             _shipPresenter.Enable();
@@ -55,10 +47,7 @@ namespace Asteroids.Game
 
         private void CreateAsteroids()
         {
-            var viewFactory = _gameData.FactoryStorage.GetAsteroidViewFactory();
-            var config = _gameData.ConfigStorage.GetAsteroidConfig();
-
-            var factory = new AsteroidFactory(_updater, viewFactory, config);
+            var factory = _gameData.FactoryStorage.GetAsteroidFactory();
 
             _asteroidPresenter = factory.Create();
             _asteroidPresenter.Enable();
@@ -66,10 +55,7 @@ namespace Asteroids.Game
 
         private void CreateFlyingSaucers()
         {
-            var viewFactory = _gameData.FactoryStorage.GetFlyingSaucerViewFactory();
-            var config = _gameData.ConfigStorage.GetFlyingSaucerConfig();
-
-            var factory = new FlyingSaucerFactory(_updater, viewFactory, config);
+            var factory = _gameData.FactoryStorage.GetFlyingSaucerFactory();
 
             _flyingSaucerPresenter = factory.Create();
             _flyingSaucerPresenter.Enable();

@@ -1,4 +1,5 @@
 using Asteroids.Core.Services;
+using Asteroids.Game.Factory;
 using Asteroids.Game.Settings;
 using Asteroids.Inputs;
 using UnityEngine;
@@ -13,9 +14,11 @@ namespace Asteroids.Game
         private readonly IShipView _view;
         private readonly IShipConfig _config;
         private readonly IInputSystem _inputSystem;
+        private readonly IBulletFactory _bulletFactory;
+
         private readonly PlayerInputActions.PlayerActions _inputActions;
 
-        public ShipPresenter(IUpdater updater, IShipModel model, IShipView view, IShipConfig config, IInputSystem inputSystem)
+        public ShipPresenter(IUpdater updater, IShipModel model, IShipView view, IShipConfig config, IInputSystem inputSystem, IBulletFactory bulletFactory)
         {
             _updater = updater;
             _model = model;
@@ -24,6 +27,8 @@ namespace Asteroids.Game
 
             _inputSystem = inputSystem;
             _inputActions = _inputSystem.InputActions;
+
+            _bulletFactory = bulletFactory;
 
             _model.OnMovementChanged += _view.Move;
             _model.OnRotationChanged += _view.Rotate;

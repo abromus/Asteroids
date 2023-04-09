@@ -15,23 +15,23 @@ namespace Asteroids.Game
         private IUpdater _updater;
 
         private IConfigInitializer _configInitializer;
-        private IFactoryInitializer _factoryInitializer;
         private IServiceInitializer _serviceInitializer;
+        private IFactoryInitializer _factoryInitializer;
 
         public override void Run(IGameData gameData)
         {
             base.Run(gameData);
 
-            _game = new Game(gameData, _updater);
+            _game = new Game(gameData);
 
             _configInitializer = new ConfigInitializer(_game, _configData);
             _configInitializer.Initialize();
 
-            _factoryInitializer = new FactoryInitializer(_game);
-            _factoryInitializer.Initialize();
-
             _serviceInitializer = new ServiceInitializer(_game);
             _serviceInitializer.Initialize();
+
+            _factoryInitializer = new FactoryInitializer(_game, _updater);
+            _factoryInitializer.Initialize();
 
             _game.Run();
         }

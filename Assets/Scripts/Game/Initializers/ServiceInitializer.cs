@@ -32,7 +32,7 @@ namespace Asteroids.Game.Initializers
         private void InitInputSystem()
         {
             var uiServices = _game.GameData.ConfigStorage.GetUiServiceConfig().UiServices;
-            var inputSystem = uiServices.FirstOrDefault(service => service.UiServiceType == UiServiceType.InputSystem) as IInputSystem;
+            var inputSystem = uiServices.GetInputSystem();
             inputSystem.Init();
 
             _game.GameData.ServiceStorage.AddService(inputSystem);
@@ -43,7 +43,7 @@ namespace Asteroids.Game.Initializers
             var canvas = CreateCanvas();
 
             var uiServices = _game.GameData.ConfigStorage.GetUiServiceConfig().UiServices;
-            var screenSystem = uiServices.FirstOrDefault(service => service.UiServiceType == UiServiceType.ScreenSystem) as IScreenSystem;
+            var screenSystem = uiServices.GetScreenSystem();
             screenSystem.Init(_game.GameData, canvas);
 
             _game.GameData.ServiceStorage.AddService(screenSystem);

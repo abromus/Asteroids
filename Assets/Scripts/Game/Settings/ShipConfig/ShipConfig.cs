@@ -2,7 +2,7 @@
 
 namespace Asteroids.Game.Settings
 {
-    [CreateAssetMenu(fileName = "ShipConfig", menuName = "Settings/ShipConfig")]
+    [CreateAssetMenu(fileName = "ShipConfig", menuName = "Settings/Game/ShipConfig")]
     public sealed class ShipConfig : ScriptableObject, IShipConfig
     {
         [SerializeField] private float _damping;

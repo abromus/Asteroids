@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 namespace Asteroids.Game.Settings
 {
-    [CreateAssetMenu(fileName = "InputConfig", menuName = "Settings/InputConfig")]
+    [CreateAssetMenu(fileName = "InputConfig", menuName = "Settings/Game/InputConfig")]
     public sealed class InputConfig : ScriptableObject, IInputConfig
     {
         [SerializeField] private InputActionAsset _actions;
