@@ -5,6 +5,6 @@ namespace Asteroids.Game.Factory
 {
     public interface IShipViewFactory : IFactory
     {
-        public IShipView Create(IInputConfig inputConfig);
+        public IShipView Create(IInputConfig inputConfig, IMachineGunView machineGunView);
     }
 }

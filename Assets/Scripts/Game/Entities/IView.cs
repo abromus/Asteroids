@@ -1,11 +1,11 @@
-﻿using UnityEngine;
+﻿using Asteroids.Core;
 
 namespace Asteroids.Game
 {
     public interface IView
     {
-        public void Move(Vector2 value);
+        public void Move(Float3 value);
 
-        public void Rotate(Vector3 value);
+        public void Rotate(Float3 value);
     }
 }

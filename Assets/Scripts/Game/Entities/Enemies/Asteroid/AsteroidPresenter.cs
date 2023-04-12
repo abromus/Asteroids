@@ -16,8 +16,8 @@ namespace Asteroids.Game
             _view = view;
             _config = config;
 
-            _model.OnMovementChanged += _view.Move;
-            _model.OnRotationChanged += _view.Rotate;
+            //_model.Position.OnChanged += _view.ChangePosition;
+            //_model.Rotation.OnChanged += _view.Rotate;
         }
 
         public void Enable()

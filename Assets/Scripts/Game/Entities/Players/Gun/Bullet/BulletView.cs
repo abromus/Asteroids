@@ -1,4 +1,4 @@
-using UnityEngine;
+using Asteroids.Core;
 
 namespace Asteroids.Game
 {
@@ -6,14 +6,19 @@ namespace Asteroids.Game
     {
         public void Init() { }
 
-        public void Move(Vector2 value)
+        public void Move(Float3 value)
         {
-            transform.Translate(value);
+            transform.Translate(value.ToVector3());
         }
 
-        public void Rotate(Vector3 value)
+        public void Move(Float2 value)
         {
-            transform.Rotate(value);
+            transform.Translate(value.ToVector2());
+        }
+
+        public void Rotate(Float3 value)
+        {
+            transform.Rotate(value.ToVector3());
         }
     }
 }

@@ -25,10 +25,19 @@ namespace Asteroids.Game.Factory
         public IShipPresenter Create()
         {
             var model = new ShipModel();
-            var view = _viewFactory.Create(_inputConfig);
-            var presenter = new ShipPresenter(_updater, model, view, _config, _inputSystem, _machineGunFactory);
+            var machineGunPresenter = CreateMachineGun();
+            var view = _viewFactory.Create(_inputConfig, machineGunPresenter.View);
+            var presenter = new ShipPresenter(_updater, model, view, _config, _inputSystem, machineGunPresenter);
 
             return presenter;
+        }
+
+        private IMachineGunPresenter CreateMachineGun()
+        {
+            var machineGunPresenter = _machineGunFactory.Create();
+            machineGunPresenter.Enable();
+
+            return machineGunPresenter;
         }
     }
 }

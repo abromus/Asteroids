@@ -1,4 +1,5 @@
 using Asteroids.Game.Settings;
+using UnityEngine;
 
 namespace Asteroids.Game
 {
@@ -16,8 +17,8 @@ namespace Asteroids.Game
             _view = view;
             _config = config;
 
-            _model.OnMovementChanged += _view.Move;
-            _model.OnRotationChanged += _view.Rotate;
+            //_model.OnMovementChanged += _view.Move;
+            //_model.OnRotationChanged += _view.Rotate;
         }
 
         public void Enable()
@@ -37,6 +38,22 @@ namespace Asteroids.Game
 
         public void Tick(float deltaTime)
         {
+            Move(deltaTime);
+        }
+
+        public void SetPosition(Vector3 position)
+        {
+            //_model.SetPosition(position);
+        }
+
+        public void SetRotate(Vector3 rotation)
+        {
+            //_model.Rotation = Quaternion.Euler(rotation).eulerAngles;
+        }
+
+        private void Move(float deltaTime)
+        {
+            //_model.Movement = _config.Speed * deltaTime * Vector2.up;
         }
     }
 }

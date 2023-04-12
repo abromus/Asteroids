@@ -1,16 +1,11 @@
-﻿using System;
-using UnityEngine;
+﻿using Asteroids.Core;
 
 namespace Asteroids.Game
 {
     public interface IModel
     {
-        public Action<Vector2> OnMovementChanged { get; set; }
+        public IReactiveProperty<Float3> Position { get; set; }
 
-        public Action<Vector3> OnRotationChanged { get; set; }
-
-        public Vector2 Movement { get; set; }
-
-        public Vector3 Rotation { get; set; }
+        public IReactiveProperty<Float3> Rotation { get; set; }
     }
 }

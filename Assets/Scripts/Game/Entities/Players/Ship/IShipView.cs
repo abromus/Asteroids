@@ -4,6 +4,6 @@ namespace Asteroids.Game
 {
     public interface IShipView : IView
     {
-        public void Init(IInputConfig inputConfig);
+        public void Init(IInputConfig inputConfig, IMachineGunView machineGunView);
     }
 }

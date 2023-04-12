@@ -18,7 +18,8 @@ namespace Asteroids.Game
 
         public void Tick(float deltaTime)
         {
-            _updatables.ForEach(updatable => updatable.Tick(deltaTime));
+            for (int i = 0; i < _updatables.Count; i++)
+                _updatables[i].Tick(deltaTime);
         }
     }
 }

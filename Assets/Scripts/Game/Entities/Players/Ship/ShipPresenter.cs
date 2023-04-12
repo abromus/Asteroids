@@ -1,5 +1,5 @@
+using Asteroids.Core;
 using Asteroids.Core.Services;
-using Asteroids.Game.Factory;
 using Asteroids.Game.Settings;
 using Asteroids.Inputs;
 using UnityEngine;
@@ -14,11 +14,11 @@ namespace Asteroids.Game
         private readonly IShipView _view;
         private readonly IShipConfig _config;
         private readonly IInputSystem _inputSystem;
-        private readonly IMachineGunFactory _machineGunFactory;
+        private readonly IMachineGunPresenter _machineGunPresenter;
 
         private readonly PlayerInputActions.PlayerActions _inputActions;
 
-        public ShipPresenter(IUpdater updater, IShipModel model, IShipView view, IShipConfig config, IInputSystem inputSystem, IMachineGunFactory machineGunFactory)
+        public ShipPresenter(IUpdater updater, IShipModel model, IShipView view, IShipConfig config, IInputSystem inputSystem, IMachineGunPresenter machineGunPresenter)
         {
             _updater = updater;
             _model = model;
@@ -28,10 +28,10 @@ namespace Asteroids.Game
             _inputSystem = inputSystem;
             _inputActions = _inputSystem.InputActions;
 
-            _machineGunFactory = machineGunFactory;
+            _machineGunPresenter = machineGunPresenter;
 
-            _model.OnMovementChanged += _view.Move;
-            _model.OnRotationChanged += _view.Rotate;
+            _model.Position.OnChanged += _view.Move;
+            _model.Rotation.OnChanged += _view.Rotate;
         }
 
         public void Enable()
@@ -69,9 +69,9 @@ namespace Asteroids.Game
 
         private void Move(float deltaTime)
         {
-            var movementDirection = _inputActions.Move.ReadValue<Vector2>();
+            var delta = TransformDirection(_model.Rotation.Value);
 
-            _model.Movement = _config.Speed * deltaTime * movementDirection;
+            _model.Position.Value += _config.Speed * deltaTime * delta;
         }
 
         private void RotateLeft(float deltaTime)
@@ -90,14 +90,37 @@ namespace Asteroids.Game
 
         private void Rotate(float direction, float deltaTime)
         {
-            var rotation = Quaternion.Euler(0f, 0f, direction * _config.Damping * deltaTime);
+            var eulerAngles = new Vector3(0f, 0f, direction * _config.Damping * deltaTime);
+            var delta = Quaternion.Euler(eulerAngles);
 
-            _model.Rotation = rotation.eulerAngles;
+            var rotation = (_model.Rotation.Value + delta.eulerAngles.ToFloat3()) % MathUtils.FullAngle;
+
+            if (rotation.Z >= MathUtils.HalfAngle)
+                rotation.Z -= MathUtils.FullAngle;
+
+            _model.Rotation.Value = rotation;
+
+            _machineGunPresenter.Rotate(_model.Rotation.Value);
         }
 
         private void Shoot(float deltaTime)
         {
             Debug.LogError($"Shoot");
+
+            _machineGunPresenter.TryShoot();
+        }
+
+        private Float3 TransformDirection(Float3 angle)
+        {
+            var x = Mathf.Sin(angle.Z * Mathf.Deg2Rad);
+            var y = Mathf.Cos(angle.Z * Mathf.Deg2Rad);
+
+            if (Mathf.Abs(angle.Z) <= MathUtils.HalfAngle)
+                x = -x;
+
+            var result = new Float3(x, y);
+
+            return result;
         }
     }
 }
