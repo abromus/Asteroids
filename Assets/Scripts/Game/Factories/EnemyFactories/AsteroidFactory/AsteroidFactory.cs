@@ -1,4 +1,5 @@
-﻿using Asteroids.Game.Settings;
+﻿using Asteroids.Core;
+using Asteroids.Game.Settings;
 
 namespace Asteroids.Game.Factory
 {
@@ -20,6 +21,9 @@ namespace Asteroids.Game.Factory
             var model = new AsteroidModel();
             var view = _viewFactory.Create();
             var presenter = new AsteroidPresenter(_updater, model, view, _config);
+
+            var position = Float3.Zero;
+            presenter.Init(position);
 
             return presenter;
         }

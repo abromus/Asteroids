@@ -1,4 +1,5 @@
 using Asteroids.Core;
+using UnityEngine;
 
 namespace Asteroids.Game
 {
@@ -8,12 +9,12 @@ namespace Asteroids.Game
 
         public void Move(Float3 value)
         {
-            transform.Translate(value.ToVector3());
+            transform.position = value.ToVector3();
         }
 
         public void Rotate(Float3 value)
         {
-            transform.Rotate(value.ToVector3());
+            transform.rotation = Quaternion.Euler(value.ToVector3());
         }
     }
 }

@@ -9,6 +9,19 @@ namespace Asteroids.Core
 
         public const float HalfAngle = FullAngle / 2f;
 
+        public static Float3 CalculateRotation(float angle, Float3 offset)
+        {
+            var eulerAngles = new Vector3(0f, 0f, angle);
+            var delta = Quaternion.Euler(eulerAngles);
+
+            var rotation = (offset + delta.eulerAngles.ToFloat3()) % FullAngle;
+
+            if (rotation.Z >= HalfAngle)
+                rotation.Z -= FullAngle;
+
+            return rotation;
+        }
+
         public static float Distance(Float3 first, Float3 second)
         {
             var deltaX = first.X - second.X;

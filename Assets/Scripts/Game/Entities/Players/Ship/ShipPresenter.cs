@@ -94,37 +94,18 @@ namespace Asteroids.Game
 
         private void Rotate(float direction, float deltaTime)
         {
-            var rotation = CalculateRotation(direction, deltaTime);
-            var deltaPosition = CalculateRotationOffset(rotation);
+            var angle = direction * _config.Damping * deltaTime;
+            var rotation = MathUtils.CalculateRotation(angle, _model.Rotation.Value);
+            var deltaPosition = MathUtils.Rotate(
+                _model.Position.Value,
+                _machineGunPresenter.Position,
+                rotation.Z - _model.Rotation.Value.Z);
 
             _model.Rotation.Value = rotation;
 
             _machineGunPresenter.SetPosition(_model.Position.Value + deltaPosition - _machineGunPresenter.Offset);
 
             _machineGunPresenter.SetRotation(rotation);
-        }
-
-        private Float3 CalculateRotation(float direction, float deltaTime)
-        {
-            var eulerAngles = new Vector3(0f, 0f, direction * _config.Damping * deltaTime);
-            var delta = Quaternion.Euler(eulerAngles);
-
-            var rotation = (_model.Rotation.Value + delta.eulerAngles.ToFloat3()) % MathUtils.FullAngle;
-
-            if (rotation.Z >= MathUtils.HalfAngle)
-                rotation.Z -= MathUtils.FullAngle;
-
-            return rotation;
-        }
-
-        private Float3 CalculateRotationOffset(Float3 rotation)
-        {
-            var centralPoint = _model.Position.Value;
-            var pivotPoint = _machineGunPresenter.Position;
-
-            var deltaPosition = MathUtils.Rotate(centralPoint, pivotPoint, rotation.Z - _model.Rotation.Value.Z);
-            
-            return deltaPosition;
         }
 
         private void Shoot()

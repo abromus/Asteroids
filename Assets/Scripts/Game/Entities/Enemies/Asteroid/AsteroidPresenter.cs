@@ -1,4 +1,6 @@
+using Asteroids.Core;
 using Asteroids.Game.Settings;
+using UnityEngine;
 
 namespace Asteroids.Game
 {
@@ -16,8 +18,15 @@ namespace Asteroids.Game
             _view = view;
             _config = config;
 
-            //_model.Position.OnChanged += _view.ChangePosition;
-            //_model.Rotation.OnChanged += _view.Rotate;
+            _model.Position.OnChanged += _view.Move;
+            _model.Rotation.OnChanged += _view.Rotate;
+        }
+
+        public void Init(Float3 position)
+        {
+            _model.Position.Value = position;
+
+            Rotate();
         }
 
         public void Enable()
@@ -37,6 +46,25 @@ namespace Asteroids.Game
 
         public void Tick(float deltaTime)
         {
+            Move(deltaTime);
+        }
+
+        private void Move(float deltaTime)
+        {
+            var direction = MathUtils.TransformDirection(_model.Rotation.Value.Z);
+
+            var delta = _config.Speed * deltaTime * direction;
+
+            _model.Position.Value += delta;
+        }
+
+        private void Rotate()
+        {
+            var angle = Random.value * MathUtils.FullAngle;
+
+            var rotation = MathUtils.CalculateRotation(angle, _model.Rotation.Value);
+
+            _model.Rotation.Value = rotation;
         }
     }
 }
