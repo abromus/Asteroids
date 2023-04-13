@@ -1,4 +1,5 @@
-﻿using Asteroids.Core.Services;
+﻿using Asteroids.Core;
+using Asteroids.Core.Services;
 using Asteroids.Game.Settings;
 
 namespace Asteroids.Game.Factory
@@ -36,6 +37,7 @@ namespace Asteroids.Game.Factory
         {
             var machineGunPresenter = _machineGunFactory.Create();
             machineGunPresenter.Enable();
+            machineGunPresenter.SetPosition(Float3.Zero);
 
             return machineGunPresenter;
         }

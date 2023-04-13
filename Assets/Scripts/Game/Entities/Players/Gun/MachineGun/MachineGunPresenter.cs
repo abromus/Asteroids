@@ -12,6 +12,12 @@ namespace Asteroids.Game
         private readonly IMachineGunConfig _config;
         private readonly IBulletFactory _bulletFactory;
 
+        private Float3 _offset;
+
+        public Float3 Position => _model.Position.Value;
+
+        public Float3 Offset => _offset;
+
         public IMachineGunView View => _view;
 
         public MachineGunPresenter(IUpdater updater, IMachineGunModel model, IMachineGunView view, IMachineGunConfig config, IBulletFactory bulletFactory)
@@ -22,8 +28,7 @@ namespace Asteroids.Game
             _config = config;
             _bulletFactory = bulletFactory;
 
-            //_model.OnMovementChanged += _view.Move;
-            //_model.OnRotationChanged += _view.Rotate;
+            _offset = _config.Offset.ToFloat3();
         }
 
         public void Enable()
@@ -45,16 +50,21 @@ namespace Asteroids.Game
         {
         }
 
-        public void Rotate(Float3 rotation)
+        public void SetPosition(Float3 position)
         {
-            //_model.Rotation = rotation;
+            _model.Position.Value = position + _offset;
+        }
+
+        public void SetRotation(Float3 rotation)
+        {
+            _model.Rotation.Value = rotation;
         }
 
         public void TryShoot()
         {
             var bullet = _bulletFactory.Create();
-            //bullet.SetPosition(_model.Position);
-            //bullet.SetRotate(_model.Rotation);
+            bullet.SetRotate(_model.Rotation.Value);
+            bullet.SetPosition(_model.Position.Value);
             bullet.Enable();
         }
     }

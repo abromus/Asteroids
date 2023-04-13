@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: BulletConfig
   m_EditorClassIdentifier: 
   _speed: 3
+  _maxDistance: 5

@@ -3,5 +3,7 @@
     public interface IBulletView : IView
     {
         public void Init();
+
+        public void StartDestroy();
     }
 }

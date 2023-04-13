@@ -64,14 +64,18 @@ namespace Asteroids.Game
                 RotateRight(deltaTime);
 
             if (_inputActions.Shoot.phase == InputActionPhase.Performed)
-                Shoot(deltaTime);
+                Shoot();
         }
 
         private void Move(float deltaTime)
         {
-            var delta = TransformDirection(_model.Rotation.Value);
+            var direction = MathUtils.TransformDirection(_model.Rotation.Value.Z);
 
-            _model.Position.Value += _config.Speed * deltaTime * delta;
+            var delta = _config.Speed * deltaTime * direction;
+
+            _model.Position.Value += delta;
+
+            _machineGunPresenter.SetPosition(_machineGunPresenter.Position + delta - _machineGunPresenter.Offset);
         }
 
         private void RotateLeft(float deltaTime)
@@ -90,6 +94,18 @@ namespace Asteroids.Game
 
         private void Rotate(float direction, float deltaTime)
         {
+            var rotation = CalculateRotation(direction, deltaTime);
+            var deltaPosition = CalculateRotationOffset(rotation);
+
+            _model.Rotation.Value = rotation;
+
+            _machineGunPresenter.SetPosition(_model.Position.Value + deltaPosition - _machineGunPresenter.Offset);
+
+            _machineGunPresenter.SetRotation(rotation);
+        }
+
+        private Float3 CalculateRotation(float direction, float deltaTime)
+        {
             var eulerAngles = new Vector3(0f, 0f, direction * _config.Damping * deltaTime);
             var delta = Quaternion.Euler(eulerAngles);
 
@@ -98,29 +114,22 @@ namespace Asteroids.Game
             if (rotation.Z >= MathUtils.HalfAngle)
                 rotation.Z -= MathUtils.FullAngle;
 
-            _model.Rotation.Value = rotation;
-
-            _machineGunPresenter.Rotate(_model.Rotation.Value);
+            return rotation;
         }
 
-        private void Shoot(float deltaTime)
+        private Float3 CalculateRotationOffset(Float3 rotation)
         {
-            Debug.LogError($"Shoot");
+            var centralPoint = _model.Position.Value;
+            var pivotPoint = _machineGunPresenter.Position;
 
+            var deltaPosition = MathUtils.Rotate(centralPoint, pivotPoint, rotation.Z - _model.Rotation.Value.Z);
+            
+            return deltaPosition;
+        }
+
+        private void Shoot()
+        {
             _machineGunPresenter.TryShoot();
-        }
-
-        private Float3 TransformDirection(Float3 angle)
-        {
-            var x = Mathf.Sin(angle.Z * Mathf.Deg2Rad);
-            var y = Mathf.Cos(angle.Z * Mathf.Deg2Rad);
-
-            if (Mathf.Abs(angle.Z) <= MathUtils.HalfAngle)
-                x = -x;
-
-            var result = new Float3(x, y);
-
-            return result;
         }
     }
 }
