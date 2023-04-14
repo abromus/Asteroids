@@ -1,8 +1,8 @@
 using Asteroids.Core;
 using Asteroids.Core.Services;
+using Asteroids.Game.Services;
 using Asteroids.Game.Settings;
 using Asteroids.Inputs;
-using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Asteroids.Game
@@ -14,11 +14,12 @@ namespace Asteroids.Game
         private readonly IShipView _view;
         private readonly IShipConfig _config;
         private readonly IInputSystem _inputSystem;
+        private readonly IScreenSystem _screenSystem;
         private readonly IMachineGunPresenter _machineGunPresenter;
 
         private readonly PlayerInputActions.PlayerActions _inputActions;
 
-        public ShipPresenter(IUpdater updater, IShipModel model, IShipView view, IShipConfig config, IInputSystem inputSystem, IMachineGunPresenter machineGunPresenter)
+        public ShipPresenter(IUpdater updater, IShipModel model, IShipView view, IShipConfig config, IInputSystem inputSystem, IScreenSystem screenSystem, IMachineGunPresenter machineGunPresenter)
         {
             _updater = updater;
             _model = model;
@@ -27,6 +28,7 @@ namespace Asteroids.Game
 
             _inputSystem = inputSystem;
             _inputActions = _inputSystem.InputActions;
+            _screenSystem = screenSystem;
 
             _machineGunPresenter = machineGunPresenter;
 
@@ -73,9 +75,33 @@ namespace Asteroids.Game
 
             var delta = _config.Speed * deltaTime * direction;
 
-            _model.Position.Value += delta;
+            var modelPosition = CorrectPosition(_model.Position.Value + delta);
+            var machineGunPosition = CorrectPosition(_machineGunPresenter.Position + delta) - _machineGunPresenter.Offset;
 
-            _machineGunPresenter.SetPosition(_machineGunPresenter.Position + delta - _machineGunPresenter.Offset);
+            _model.Position.Value = modelPosition;
+
+            _machineGunPresenter.SetPosition(machineGunPosition);
+        }
+
+        private Float3 CorrectPosition(Float3 original)
+        {
+            var x = original.X > _screenSystem.Bounds.Right.X
+                ? _screenSystem.Bounds.Left.X
+                : original.X < _screenSystem.Bounds.Left.X
+                    ? _screenSystem.Bounds.Right.X
+                    : original.X;
+
+            var y = original.Y > _screenSystem.Bounds.Top.Y
+                ? _screenSystem.Bounds.Bottom.Y
+                : original.Y < _screenSystem.Bounds.Bottom.Y
+                    ? _screenSystem.Bounds.Top.Y
+                    : original.Y;
+
+            var z = original.Z;
+
+            var position = new Float3(x, y, z);
+
+            return position;
         }
 
         private void RotateLeft(float deltaTime)

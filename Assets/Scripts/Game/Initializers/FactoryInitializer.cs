@@ -80,8 +80,9 @@ namespace Asteroids.Game.Initializers
             var config = _game.GameData.ConfigStorage.GetShipConfig();
             var inputSystem = _game.GameData.ServiceStorage.GetInputSystem();
             var inputConfig = _game.GameData.ConfigStorage.GetInputConfig();
+            var screenSystem = _game.GameData.ServiceStorage.GetScreenSystem();
             var machineGunFactory = _game.GameData.FactoryStorage.GetMachineGunFactory();
-            var factory = new ShipFactory(_updater, viewFactory, config, inputSystem, inputConfig, machineGunFactory) as IShipFactory;
+            var factory = new ShipFactory(_updater, viewFactory, config, inputSystem, inputConfig, screenSystem, machineGunFactory) as IShipFactory;
 
             _game.GameData.FactoryStorage.AddFactory(viewFactory);
             _game.GameData.FactoryStorage.AddFactory(factory);

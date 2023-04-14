@@ -1,5 +1,6 @@
 ﻿using Asteroids.Core;
 using Asteroids.Core.Services;
+using Asteroids.Game.Services;
 using Asteroids.Game.Settings;
 
 namespace Asteroids.Game.Factory
@@ -11,15 +12,24 @@ namespace Asteroids.Game.Factory
         private readonly IShipConfig _config;
         private readonly IInputSystem _inputSystem;
         private readonly IInputConfig _inputConfig;
+        private readonly IScreenSystem _screenSystem;
         private readonly IMachineGunFactory _machineGunFactory;
 
-        public ShipFactory(IUpdater updater, IShipViewFactory viewFactory, IShipConfig config, IInputSystem inputSystem, IInputConfig inputConfig, IMachineGunFactory machineGunFactory)
+        public ShipFactory(
+            IUpdater updater,
+            IShipViewFactory viewFactory,
+            IShipConfig config,
+            IInputSystem inputSystem,
+            IInputConfig inputConfig,
+            IScreenSystem screenSystem,
+            IMachineGunFactory machineGunFactory)
         {
             _updater = updater;
             _viewFactory = viewFactory;
             _config = config;
             _inputSystem = inputSystem;
             _inputConfig = inputConfig;
+            _screenSystem = screenSystem;
             _machineGunFactory = machineGunFactory;
         }
 
@@ -28,7 +38,14 @@ namespace Asteroids.Game.Factory
             var model = new ShipModel();
             var machineGunPresenter = CreateMachineGun();
             var view = _viewFactory.Create(_inputConfig, machineGunPresenter.View);
-            var presenter = new ShipPresenter(_updater, model, view, _config, _inputSystem, machineGunPresenter);
+            var presenter = new ShipPresenter(
+                _updater,
+                model,
+                view,
+                _config,
+                _inputSystem,
+                _screenSystem,
+                machineGunPresenter);
 
             return presenter;
         }

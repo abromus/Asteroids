@@ -8,6 +8,10 @@ namespace Asteroids.Core
     {
         public static Float2 Zero = new Float2(0f, 0f);
 
+        public static Float2 One = new Float2(1f, 1f);
+
+        public static Float2 Right = new Float2(1f, 0f);
+
         public static Float2 Up = new Float2(0f, 1f);
 
         public float X { get; set; }

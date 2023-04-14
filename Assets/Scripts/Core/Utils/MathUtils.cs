@@ -9,6 +9,8 @@ namespace Asteroids.Core
 
         public const float HalfAngle = FullAngle / 2f;
 
+        public const float QuarterAngle = FullAngle / 4f;
+
         public static Float3 CalculateRotation(float angle, Float3 offset)
         {
             var eulerAngles = new Vector3(0f, 0f, angle);
@@ -56,6 +58,16 @@ namespace Asteroids.Core
             var result = new Float3(x, y);
 
             return result;
+        }
+
+        public static Float2 ToFloat2(this Float3 value)
+        {
+            return new Float2(value.X, value.Y);
+        }
+
+        public static Float3 ToFloat3(this Float2 value)
+        {
+            return new Float3(value.X, value.Y);
         }
     }
 }

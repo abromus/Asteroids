@@ -7,13 +7,10 @@ namespace Asteroids.Core.Services
 {
     public sealed class ServiceStorage : IServiceStorage
     {
-        private readonly IReadOnlyList<IUiService> _uiServices;
         private readonly Dictionary<Type, IService> _services;
 
         public ServiceStorage(ICoroutineRunner coroutineRunner, IGameData gameData, IConfigStorage configStorage)
         {
-            _uiServices = configStorage.GetUiServiceConfig().UiServices;
-
             var stateMachine = InitStateMachine(coroutineRunner, gameData);
 
             _services = new Dictionary<Type, IService>()

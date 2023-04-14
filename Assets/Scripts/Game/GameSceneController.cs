@@ -8,10 +8,12 @@ namespace Asteroids.Game
 {
     public sealed class GameSceneController : SceneController, ICoroutineRunner
     {
+        [SerializeField] private Camera _cameraPrefab;
         [SerializeField] private ConfigData _configData;
 
-        private IGame _game;
+        private Camera _camera;
 
+        private IGame _game;
         private IUpdater _updater;
 
         private IConfigInitializer _configInitializer;
@@ -27,7 +29,7 @@ namespace Asteroids.Game
             _configInitializer = new ConfigInitializer(_game, _configData);
             _configInitializer.Initialize();
 
-            _serviceInitializer = new ServiceInitializer(_game);
+            _serviceInitializer = new ServiceInitializer(_game, _camera);
             _serviceInitializer.Initialize();
 
             _factoryInitializer = new FactoryInitializer(_game, _updater);
@@ -38,6 +40,9 @@ namespace Asteroids.Game
 
         private void Awake()
         {
+            _camera = Instantiate(_cameraPrefab);
+            _camera.transform.SetAsFirstSibling();
+
             _updater = new Updater();
         }
 

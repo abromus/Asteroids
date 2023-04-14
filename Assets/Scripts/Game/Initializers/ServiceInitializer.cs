@@ -1,20 +1,20 @@
-﻿using System.Linq;
-using Asteroids.Core;
-using Asteroids.Core.Services;
+﻿using Asteroids.Core;
 using Asteroids.Core.Settings;
-using Asteroids.Game.Services;
 using UnityEngine;
 using UnityEngine.UI;
+using Bounds = Asteroids.Core.Bounds;
 
 namespace Asteroids.Game.Initializers
 {
     public sealed class ServiceInitializer : IServiceInitializer
     {
         private readonly IGame _game;
+        private readonly Camera _camera;
 
-        public ServiceInitializer(IGame game)
+        public ServiceInitializer(IGame game, Camera camera)
         {
             _game = game;
+            _camera = camera;
         }
 
         public void Initialize()
@@ -40,13 +40,31 @@ namespace Asteroids.Game.Initializers
 
         private void InitScreenSystem()
         {
+            var bounds = CalculateBounds();
+
             var canvas = CreateCanvas();
 
             var uiServices = _game.GameData.ConfigStorage.GetUiServiceConfig().UiServices;
             var screenSystem = uiServices.GetScreenSystem();
-            screenSystem.Init(_game.GameData, canvas);
+            screenSystem.Init(_game.GameData, bounds, canvas);
 
             _game.GameData.ServiceStorage.AddService(screenSystem);
+        }
+
+        private Bounds CalculateBounds()
+        {
+            var upVector = new Float3(0f, _camera.orthographicSize);
+            var rightVector = new Float3(_camera.orthographicSize * _camera.pixelWidth / _camera.scaledPixelHeight, 0f);
+            var cameraPosition = _camera.transform.position.ToFloat3();
+
+            var left = cameraPosition - rightVector;
+            var right = cameraPosition + rightVector;
+            var top = cameraPosition + upVector;
+            var bottom = cameraPosition - upVector;
+
+            var bounds = new Bounds(left, right, top, bottom);
+
+            return bounds;
         }
 
         private Transform CreateCanvas()
