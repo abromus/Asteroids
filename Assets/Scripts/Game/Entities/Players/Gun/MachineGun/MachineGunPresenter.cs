@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Asteroids.Core;
 using Asteroids.Game.Factory;
 using Asteroids.Game.Settings;
@@ -14,6 +15,8 @@ namespace Asteroids.Game
 
         private Float3 _offset;
 
+        private readonly List<IBulletPresenter> _bullets;
+
         public Float3 Position => _model.Position.Value;
 
         public Float3 Offset => _offset;
@@ -29,6 +32,7 @@ namespace Asteroids.Game
             _bulletFactory = bulletFactory;
 
             _offset = _config.Offset.ToFloat3();
+            _bullets = new List<IBulletPresenter>();
         }
 
         public void Enable()
@@ -48,6 +52,17 @@ namespace Asteroids.Game
 
         public void Tick(float deltaTime)
         {
+            for (int i = 0; i < _bullets.Count; i++)
+            {
+                var bullet = _bullets[i];
+
+                if (bullet.IsDestroyed)
+                {
+                    _bullets.RemoveAt(i);
+                    _bulletFactory.Release(bullet);
+                    i--;
+                }
+            }
         }
 
         public void SetPosition(Float3 position)
@@ -63,9 +78,11 @@ namespace Asteroids.Game
         public void TryShoot()
         {
             var bullet = _bulletFactory.Create();
-            bullet.SetRotate(_model.Rotation.Value);
+            bullet.SetRotation(_model.Rotation.Value);
             bullet.SetPosition(_model.Position.Value);
             bullet.Enable();
+
+            _bullets.Add(bullet);
         }
     }
 }

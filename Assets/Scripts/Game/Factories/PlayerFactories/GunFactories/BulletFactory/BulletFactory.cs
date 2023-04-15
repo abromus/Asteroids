@@ -1,4 +1,5 @@
-﻿using Asteroids.Game.Settings;
+﻿using Asteroids.Core;
+using Asteroids.Game.Settings;
 
 namespace Asteroids.Game.Factory
 {
@@ -8,14 +9,32 @@ namespace Asteroids.Game.Factory
         private readonly IBulletViewFactory _viewFactory;
         private readonly IBulletConfig _config;
 
+        private readonly IObjectPool<IBulletPresenter> _pool;
+
         public BulletFactory(IUpdater updater, IBulletViewFactory viewFactory, IBulletConfig config)
         {
             _updater = updater;
             _viewFactory = viewFactory;
             _config = config;
+
+            _pool = new ObjectPool<IBulletPresenter>(10, () => CreateBullet());
         }
 
         public IBulletPresenter Create()
+        {
+            var bullet = _pool.Get();
+
+            return bullet;
+        }
+
+        public void Release(IBulletPresenter presenter)
+        {
+            presenter.Clear();
+
+            _pool.Release(presenter);
+        }
+
+        private IBulletPresenter CreateBullet()
         {
             var model = new BulletModel();
             var view = _viewFactory.Create();

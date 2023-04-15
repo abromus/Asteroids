@@ -4,6 +4,8 @@
     {
         public void Init();
 
-        public void StartDestroy();
+        public void Activate();
+
+        public void Deactivate();
     }
 }
