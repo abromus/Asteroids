@@ -60,6 +60,15 @@ namespace Asteroids.Game
             _model.Rotation.Value = rotation;
         }
 
+        public void Clear()
+        {
+            _updater.Remove(this);
+
+            _view.Deactivate();
+
+            _isDestroyed = false;
+        }
+
         private void Move(float deltaTime)
         {
             var delta = MathUtils.TransformDirection(_model.Rotation.Value.Z);
@@ -68,15 +77,6 @@ namespace Asteroids.Game
 
             if (MathUtils.Distance(_startPosition, _model.Position.Value) > _config.MaxDistance)
                 _isDestroyed = true;
-        }
-
-        public void Clear()
-        {
-            _updater.Remove(this);
-
-            _view.Deactivate();
-
-            _isDestroyed = false;
         }
     }
 }

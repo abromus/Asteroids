@@ -32,21 +32,30 @@ namespace Asteroids.Game
         public void Enable()
         {
             _updater.Add(this);
+
+            _view.Activate();
         }
 
         public void Destroy()
         {
-            Disable();
+            Clear();
         }
 
         public void Disable()
         {
-            _updater.Remove(this);
+            Clear();
         }
 
         public void Tick(float deltaTime)
         {
             Move(deltaTime);
+        }
+
+        public void Clear()
+        {
+            _updater.Remove(this);
+
+            _view.Deactivate();
         }
 
         private void Move(float deltaTime)

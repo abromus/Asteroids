@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace Asteroids.Core
 {
-    public class ObjectPool<T> : IDisposable, IObjectPool<T> where T : class, IPoolable
+    public sealed class ObjectPool<T> : IDisposable, IObjectPool<T> where T : class, IPoolable
     {
         private readonly List<T> _objects;
         private readonly Func<T> _createFunc;
 
-        public ObjectPool(int capacity, Func<T> createFunc)
+        public ObjectPool(Func<T> createFunc, int capacity = 10)
         {
             _createFunc = createFunc ?? throw new ArgumentNullException(nameof(createFunc));
 

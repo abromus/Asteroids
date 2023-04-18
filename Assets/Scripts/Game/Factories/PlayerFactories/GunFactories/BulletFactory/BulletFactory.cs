@@ -17,7 +17,7 @@ namespace Asteroids.Game.Factory
             _viewFactory = viewFactory;
             _config = config;
 
-            _pool = new ObjectPool<IBulletPresenter>(10, () => CreateBullet());
+            _pool = new ObjectPool<IBulletPresenter>(() => CreateBullet());
         }
 
         public IBulletPresenter Create()

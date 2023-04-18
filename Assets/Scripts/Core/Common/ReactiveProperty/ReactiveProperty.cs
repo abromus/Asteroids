@@ -2,7 +2,7 @@
 
 namespace Asteroids.Core
 {
-    public class ReactiveProperty<T> : IReactiveProperty<T>
+    public sealed class ReactiveProperty<T> : IReactiveProperty<T>
     {
         private T _value;
 

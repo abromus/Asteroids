@@ -8,8 +8,8 @@ namespace Asteroids.Game
         private readonly IUpdater _updater;
 
         private IShipPresenter _shipPresenter;
-        private IAsteroidPresenter _asteroidPresenter;
         private IFlyingSaucerPresenter _flyingSaucerPresenter;
+        private IAsteroidSpawner<IAsteroidPresenter> _asteroidSpawner;
 
         public IGameData GameData => _gameData;
 
@@ -21,7 +21,6 @@ namespace Asteroids.Game
         public void Destroy()
         {
             _shipPresenter.Destroy();
-            _asteroidPresenter.Destroy();
             _flyingSaucerPresenter.Destroy();
         }
 
@@ -41,16 +40,10 @@ namespace Asteroids.Game
 
         private void CreateEnemies()
         {
-            CreateAsteroids();
+            var asteroidFactory = _gameData.FactoryStorage.GetAsteroidFactory();
+            _asteroidSpawner = new AsteroidSpawner(asteroidFactory);
+
             CreateFlyingSaucers();
-        }
-
-        private void CreateAsteroids()
-        {
-            var factory = _gameData.FactoryStorage.GetAsteroidFactory();
-
-            _asteroidPresenter = factory.Create();
-            _asteroidPresenter.Enable();
         }
 
         private void CreateFlyingSaucers()

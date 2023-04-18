@@ -16,5 +16,15 @@ namespace Asteroids.Game
         {
             transform.rotation = Quaternion.Euler(value.ToVector3());
         }
+
+        public void Activate()
+        {
+            gameObject.SetActive(true);
+        }
+
+        public void Deactivate()
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

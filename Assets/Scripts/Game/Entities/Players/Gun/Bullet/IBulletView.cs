@@ -1,11 +1,7 @@
 ﻿namespace Asteroids.Game
 {
-    public interface IBulletView : IView
+    public interface IBulletView : IView, IActivatable
     {
         public void Init();
-
-        public void Activate();
-
-        public void Deactivate();
     }
 }
