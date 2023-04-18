@@ -69,5 +69,13 @@ namespace Asteroids.Core
         {
             return new Float3(value.X, value.Y);
         }
+
+        public static float Inverse(float value)
+        {
+            var whole = 1f;
+            var result = whole / value;
+
+            return result;
+        }
     }
 }

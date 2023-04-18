@@ -13,9 +13,10 @@ namespace Asteroids.Game
         private readonly IMachineGunConfig _config;
         private readonly IBulletFactory _bulletFactory;
 
-        private Float3 _offset;
-
         private readonly List<IBulletPresenter> _bullets;
+
+        private Float3 _offset;
+        private ITimer _timer;
 
         public Float3 Position => _model.Position.Value;
 
@@ -33,6 +34,8 @@ namespace Asteroids.Game
 
             _offset = _config.Offset.ToFloat3();
             _bullets = new List<IBulletPresenter>();
+
+            _timer = new Timer(_updater);
         }
 
         public void Enable()
@@ -77,6 +80,13 @@ namespace Asteroids.Game
 
         public void TryShoot()
         {
+            if (_timer == null || !_timer.IsElapsed)
+                return;
+
+            var firingDelay = MathUtils.Inverse(_config.FiringRate);
+
+            _timer.UpdateTime(firingDelay);
+
             var bullet = _bulletFactory.Create();
             bullet.SetRotation(_model.Rotation.Value);
             bullet.SetPosition(_model.Position.Value);

@@ -8,12 +8,14 @@ namespace Asteroids.Game
 
         public void Add(IUpdatable updatable)
         {
-            _updatables.Add(updatable);
+            if (!_updatables.Contains(updatable))
+                _updatables.Add(updatable);
         }
 
         public void Remove(IUpdatable updatable)
         {
-            _updatables.Remove(updatable);
+            if (_updatables.Contains(updatable))
+                _updatables.Remove(updatable);
         }
 
         public void Tick(float deltaTime)
