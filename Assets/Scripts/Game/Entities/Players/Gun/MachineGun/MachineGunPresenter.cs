@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Asteroids.Core;
 using Asteroids.Game.Factory;
+using Asteroids.Game.Services;
 using Asteroids.Game.Settings;
 
 namespace Asteroids.Game
@@ -8,6 +9,7 @@ namespace Asteroids.Game
     public sealed class MachineGunPresenter : IMachineGunPresenter
     {
         private readonly IUpdater _updater;
+        private readonly ITimerService _timerService;
         private readonly IMachineGunModel _model;
         private readonly IMachineGunView _view;
         private readonly IMachineGunConfig _config;
@@ -24,9 +26,10 @@ namespace Asteroids.Game
 
         public IMachineGunView View => _view;
 
-        public MachineGunPresenter(IUpdater updater, IMachineGunModel model, IMachineGunView view, IMachineGunConfig config, IBulletFactory bulletFactory)
+        public MachineGunPresenter(IUpdater updater, ITimerService timerService, IMachineGunModel model, IMachineGunView view, IMachineGunConfig config, IBulletFactory bulletFactory)
         {
             _updater = updater;
+            _timerService = timerService;
             _model = model;
             _view = view;
             _config = config;
@@ -35,22 +38,29 @@ namespace Asteroids.Game
             _offset = _config.Offset.ToFloat3();
             _bullets = new List<IBulletPresenter>();
 
-            _timer = new Timer(_updater);
+
+            _timer = _timerService.CreateTimer();
         }
 
         public void Enable()
         {
             _updater.Add(this);
+
+            _timer?.Resume();
         }
 
         public void Destroy()
         {
             Disable();
+
+            _timerService.RemoveTimer(_timer);
         }
 
         public void Disable()
         {
             _updater.Remove(this);
+
+            _timer?.Pause();
         }
 
         public void Tick(float deltaTime)

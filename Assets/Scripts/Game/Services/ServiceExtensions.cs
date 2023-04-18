@@ -28,6 +28,11 @@ namespace Asteroids.Game
             return uiServices.GetService<IScreenSystem>(UiServiceType.ScreenSystem);
         }
 
+        public static ITimerService GetTimerService(this IServiceStorage serviceStorage)
+        {
+            return serviceStorage.GetService<ITimerService>();
+        }
+
         private static TService GetService<TService>(this IReadOnlyList<IUiService> uiServices, UiServiceType serviceType)
             where TService : class, IService
         {

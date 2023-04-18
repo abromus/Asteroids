@@ -4,11 +4,15 @@ namespace Asteroids.Game
 {
     public interface ITimer
     {
-        public float TimeLeft { get; }
-
         public bool IsElapsed { get; }
+        
+        public bool IsPaused { get; }
 
-        public Action Elapsed { get; set; }
+        public void Pause();
+
+        public void Resume();
+
+        public void Tick(float deltaTime);
 
         public void UpdateTime(float seconds);
     }

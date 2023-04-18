@@ -5,7 +5,6 @@ namespace Asteroids.Game
     public sealed class Game : IGame
     {
         private readonly IGameData _gameData;
-        private readonly IUpdater _updater;
 
         private IShipPresenter _shipPresenter;
         private IFlyingSaucerPresenter _flyingSaucerPresenter;

@@ -1,5 +1,6 @@
 ﻿using Asteroids.Core;
 using Asteroids.Core.Settings;
+using Asteroids.Game.Services;
 using UnityEngine;
 using UnityEngine.UI;
 using Bounds = Asteroids.Core.Bounds;
@@ -9,11 +10,13 @@ namespace Asteroids.Game.Initializers
     public sealed class ServiceInitializer : IServiceInitializer
     {
         private readonly IGame _game;
+        private readonly IUpdater _updater;
         private readonly Camera _camera;
 
-        public ServiceInitializer(IGame game, Camera camera)
+        public ServiceInitializer(IGame game, IUpdater updater, Camera camera)
         {
             _game = game;
+            _updater = updater;
             _camera = camera;
         }
 
@@ -27,6 +30,8 @@ namespace Asteroids.Game.Initializers
             InitInputSystem();
 
             InitScreenSystem();
+
+            InitTimerSystem();
         }
 
         private void InitInputSystem()
@@ -100,6 +105,15 @@ namespace Asteroids.Game.Initializers
         private void AddGraphicRaycaster(GameObject canvasObject)
         {
             canvasObject.AddComponent<GraphicRaycaster>();
+        }
+
+        private void InitTimerSystem()
+        {
+            var timerService = new TimerService();
+
+            _updater.Add(timerService);
+
+            _game.GameData.ServiceStorage.AddService(timerService as ITimerService);
         }
     }
 }

@@ -29,7 +29,7 @@ namespace Asteroids.Game
             _configInitializer = new ConfigInitializer(_game, _configData);
             _configInitializer.Initialize();
 
-            _serviceInitializer = new ServiceInitializer(_game, _camera);
+            _serviceInitializer = new ServiceInitializer(_game, _updater, _camera);
             _serviceInitializer.Initialize();
 
             _factoryInitializer = new FactoryInitializer(_game, _updater);
