@@ -1,4 +1,7 @@
-﻿namespace Asteroids.Game
+﻿using System;
+using Asteroids.Core;
+
+namespace Asteroids.Game
 {
     public sealed class Timer : ITimer
     {
@@ -7,7 +10,7 @@
 
         public bool IsElapsed => _seconds <= 0f;
 
-        public bool IsPaused => _isPaused;
+        public Action<ITimer> Elapsed { get; set; }
 
         public Timer(float seconds = 0f)
         {
@@ -16,7 +19,16 @@
 
         public void Tick(float deltaTime)
         {
+            if (_isPaused)
+                return;
+
             _seconds -= deltaTime;
+
+            if (_seconds <= 0f)
+            {
+                Elapsed.SafeInvoke(this);
+                Elapsed = null;
+            }
         }
 
         public void UpdateTime(float seconds)

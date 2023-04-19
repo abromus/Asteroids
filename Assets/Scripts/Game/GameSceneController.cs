@@ -24,7 +24,7 @@ namespace Asteroids.Game
         {
             base.Run(gameData);
 
-            _game = new Game(gameData);
+            _game = new Game(gameData, _updater);
 
             _configInitializer = new ConfigInitializer(_game, _configData);
             _configInitializer.Initialize();

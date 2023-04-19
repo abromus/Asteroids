@@ -6,6 +6,7 @@ namespace Asteroids.Game.Settings
     public sealed class ConfigData : ScriptableObject, IConfigData
     {
         [SerializeField] private AsteroidConfig _asteroidConfig;
+        [SerializeField] private AsteroidSpawnerConfig _asteroidSpawnerConfig;
         [SerializeField] private BulletConfig _bulletConfig;
         [SerializeField] private FlyingSaucerConfig _flyingSaucerConfig;
         [SerializeField] private InputConfig _inputConfig;
@@ -13,6 +14,8 @@ namespace Asteroids.Game.Settings
         [SerializeField] private ShipConfig _shipConfig;
 
         public IAsteroidConfig AsteroidConfig => _asteroidConfig;
+
+        public IAsteroidSpawnerConfig AsteroidSpawnerConfig => _asteroidSpawnerConfig;
 
         public IBulletConfig BulletConfig => _bulletConfig;
 

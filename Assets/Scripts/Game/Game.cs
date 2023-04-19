@@ -1,10 +1,12 @@
 using Asteroids.Core;
+using Asteroids.Game.Settings;
 
 namespace Asteroids.Game
 {
     public sealed class Game : IGame
     {
         private readonly IGameData _gameData;
+        private readonly IUpdater _updater;
 
         private IShipPresenter _shipPresenter;
         private IFlyingSaucerPresenter _flyingSaucerPresenter;
@@ -12,9 +14,10 @@ namespace Asteroids.Game
 
         public IGameData GameData => _gameData;
 
-        public Game(IGameData gameData)
+        public Game(IGameData gameData, IUpdater updater)
         {
             _gameData = gameData;
+            _updater = updater;
         }
 
         public void Destroy()
@@ -39,8 +42,14 @@ namespace Asteroids.Game
 
         private void CreateEnemies()
         {
+            var asteroidSpawnerConfig = _gameData.ConfigStorage.GetAsteroidSpawnerConfig();
             var asteroidFactory = _gameData.FactoryStorage.GetAsteroidFactory();
-            _asteroidSpawner = new AsteroidSpawner(asteroidFactory);
+            var positionCheckService = _gameData.ServiceStorage.GetPositionCheckService();
+            var timerService = _gameData.ServiceStorage.GetTimerService();
+            var bounds = _gameData.ServiceStorage.GetScreenSystem().Bounds;
+
+            _asteroidSpawner = new AsteroidSpawner(asteroidSpawnerConfig, asteroidFactory, positionCheckService, timerService, bounds);
+            _updater.Add(_asteroidSpawner);
 
             CreateFlyingSaucers();
         }

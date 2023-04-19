@@ -19,6 +19,8 @@ namespace Asteroids.Game
 
         private readonly PlayerInputActions.PlayerActions _inputActions;
 
+        public Float3 Position => _model.Position.Value;
+
         public ShipPresenter(IUpdater updater, IShipModel model, IShipView view, IShipConfig config, IInputSystem inputSystem, IScreenSystem screenSystem, IMachineGunPresenter machineGunPresenter)
         {
             _updater = updater;
@@ -75,33 +77,12 @@ namespace Asteroids.Game
 
             var delta = _config.Speed * deltaTime * direction;
 
-            var modelPosition = CorrectPosition(_model.Position.Value + delta);
-            var machineGunPosition = CorrectPosition(_machineGunPresenter.Position + delta) - _machineGunPresenter.Offset;
+            var modelPosition = MathUtils.CorrectPosition(_model.Position.Value + delta, _screenSystem.Bounds);
+            var machineGunPosition = MathUtils.CorrectPosition(_machineGunPresenter.Position + delta, _screenSystem.Bounds) - _machineGunPresenter.Offset;
 
             _model.Position.Value = modelPosition;
 
             _machineGunPresenter.SetPosition(machineGunPosition);
-        }
-
-        private Float3 CorrectPosition(Float3 original)
-        {
-            var x = original.X > _screenSystem.Bounds.Right.X
-                ? _screenSystem.Bounds.Left.X
-                : original.X < _screenSystem.Bounds.Left.X
-                    ? _screenSystem.Bounds.Right.X
-                    : original.X;
-
-            var y = original.Y > _screenSystem.Bounds.Top.Y
-                ? _screenSystem.Bounds.Bottom.Y
-                : original.Y < _screenSystem.Bounds.Bottom.Y
-                    ? _screenSystem.Bounds.Top.Y
-                    : original.Y;
-
-            var z = original.Z;
-
-            var position = new Float3(x, y, z);
-
-            return position;
         }
 
         private void RotateLeft(float deltaTime)

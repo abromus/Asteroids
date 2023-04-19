@@ -1,6 +1,7 @@
 using Asteroids.Core;
 using Asteroids.Game.Settings;
 using UnityEngine;
+using Bounds = Asteroids.Core.Bounds;
 
 namespace Asteroids.Game
 {
@@ -10,13 +11,21 @@ namespace Asteroids.Game
         private readonly IAsteroidModel _model;
         private readonly IAsteroidView _view;
         private readonly IAsteroidConfig _config;
+        private readonly Bounds _bounds;
 
-        public AsteroidPresenter(IUpdater updater, IAsteroidModel model, IAsteroidView view, IAsteroidConfig config)
+        private bool _isDestroyed;
+
+        public bool IsDestroyed => _isDestroyed;
+
+        public Float3 Position => _model.Position.Value;
+
+        public AsteroidPresenter(IUpdater updater, IAsteroidModel model, IAsteroidView view, IAsteroidConfig config, Bounds bounds)
         {
             _updater = updater;
             _model = model;
             _view = view;
             _config = config;
+            _bounds = bounds;
 
             _model.Position.OnChanged += _view.Move;
             _model.Rotation.OnChanged += _view.Rotate;
@@ -36,14 +45,16 @@ namespace Asteroids.Game
             _view.Activate();
         }
 
-        public void Destroy()
+        public void Disable()
         {
             Clear();
         }
 
-        public void Disable()
+        public void Destroy()
         {
             Clear();
+
+            _isDestroyed = true;
         }
 
         public void Tick(float deltaTime)
@@ -55,7 +66,18 @@ namespace Asteroids.Game
         {
             _updater.Remove(this);
 
+            _model.Position.Value = Float3.Zero;
+            _model.Rotation.Value = Float3.Zero;
+
             _view.Deactivate();
+
+            _isDestroyed = false;
+        }
+
+        public void TakeDamage(IDamaging damaging)
+        {
+            if (damaging is IBulletPresenter)
+                Destroy();
         }
 
         private void Move(float deltaTime)
@@ -64,7 +86,12 @@ namespace Asteroids.Game
 
             var delta = _config.Speed * deltaTime * direction;
 
-            _model.Position.Value += delta;
+            var modelPosition = MathUtils.CorrectPosition(_model.Position.Value + delta, _bounds);
+
+            if (_model.Position.Value + delta == modelPosition)
+                _model.Position.Value += delta;
+            else
+                Destroy();
         }
 
         private void Rotate()

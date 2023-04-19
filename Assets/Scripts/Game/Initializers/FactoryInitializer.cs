@@ -37,7 +37,8 @@ namespace Asteroids.Game.Initializers
         {
             var viewFactory = uiFactories.GetAsteroidViewFactory();
             var config = _game.GameData.ConfigStorage.GetAsteroidConfig();
-            var factory = new AsteroidFactory(_updater, viewFactory, config) as IAsteroidFactory;
+            var bounds = _game.GameData.ServiceStorage.GetScreenSystem().Bounds;
+            var factory = new AsteroidFactory(_updater, viewFactory, config, bounds) as IAsteroidFactory;
 
             _game.GameData.FactoryStorage.AddFactory(viewFactory);
             _game.GameData.FactoryStorage.AddFactory(factory);
@@ -65,11 +66,12 @@ namespace Asteroids.Game.Initializers
 
         private void InitMachineGunFactory(IReadOnlyList<IUiFactory> uiFactories)
         {
+            var positionCheckService = _game.GameData.ServiceStorage.GetPositionCheckService();
             var timerService = _game.GameData.ServiceStorage.GetTimerService();
             var viewFactory = uiFactories.GetMachineGunViewFactory();
             var config = _game.GameData.ConfigStorage.GetMachineGunConfig();
             var bulletFactory = _game.GameData.FactoryStorage.GetBulletFactory();
-            var factory = new MachineGunFactory(_updater, timerService, viewFactory, config, bulletFactory) as IMachineGunFactory;
+            var factory = new MachineGunFactory(_updater, timerService, positionCheckService, viewFactory, config, bulletFactory) as IMachineGunFactory;
 
             _game.GameData.FactoryStorage.AddFactory(viewFactory);
             _game.GameData.FactoryStorage.AddFactory(factory);

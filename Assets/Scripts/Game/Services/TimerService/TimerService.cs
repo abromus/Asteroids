@@ -28,9 +28,8 @@ namespace Asteroids.Game.Services
 
         public void Tick(float deltaTime)
         {
-            foreach (var timer in _timers)
-                if (!timer.IsPaused)
-                    timer.Tick(deltaTime);
+            for (int i = 0; i < _timers.Count; i++)
+                _timers[i].Tick(deltaTime);
         }
     }
 }

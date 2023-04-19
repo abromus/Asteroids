@@ -15,6 +15,8 @@ namespace Asteroids.Game
 
         public bool IsDestroyed => _isDestroyed;
 
+        public Float3 Position => _model.Position.Value;
+
         public BulletPresenter(IUpdater updater, IBulletModel model, IBulletView view, IBulletConfig config)
         {
             _updater = updater;
@@ -36,6 +38,8 @@ namespace Asteroids.Game
         public void Destroy()
         {
             Clear();
+
+            _isDestroyed = true;
         }
 
         public void Disable()
@@ -64,6 +68,9 @@ namespace Asteroids.Game
         {
             _updater.Remove(this);
 
+            _model.Position.Value = Float3.Zero;
+            _model.Rotation.Value = Float3.Zero;
+
             _view.Deactivate();
 
             _isDestroyed = false;
@@ -75,7 +82,9 @@ namespace Asteroids.Game
 
             _model.Position.Value += _config.Speed * deltaTime * delta;
 
-            if (MathUtils.Distance(_startPosition, _model.Position.Value) > _config.MaxDistance)
+            var distance = MathUtils.Distance(_startPosition, _model.Position.Value);
+
+            if (distance >= _config.MaxDistance)
                 _isDestroyed = true;
         }
     }

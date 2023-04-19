@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Asteroids.Core
 {
@@ -10,6 +11,10 @@ namespace Asteroids.Core
         public const float HalfAngle = FullAngle / 2f;
 
         public const float QuarterAngle = FullAngle / 4f;
+
+        public const float ZeroAngle = 0f;
+
+        public static float Value => Random.value;
 
         public static Float3 CalculateRotation(float angle, Float3 offset)
         {
@@ -76,6 +81,27 @@ namespace Asteroids.Core
             var result = whole / value;
 
             return result;
+        }
+
+        public static Float3 CorrectPosition(Float3 original, Bounds bounds)
+        {
+            var x = original.X > bounds.Max.X
+                ? bounds.Min.X
+                : original.X < bounds.Min.X
+                    ? bounds.Max.X
+                    : original.X;
+
+            var y = original.Y > bounds.Max.Y
+                ? bounds.Min.Y
+                : original.Y < bounds.Min.Y
+                    ? bounds.Max.Y
+                    : original.Y;
+
+            var z = original.Z;
+
+            var position = new Float3(x, y, z);
+
+            return position;
         }
     }
 }

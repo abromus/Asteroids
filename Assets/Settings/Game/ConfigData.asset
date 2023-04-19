@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: ConfigData
   m_EditorClassIdentifier: 
   _asteroidConfig: {fileID: 11400000, guid: 989be436a8d781e49acf71bc21afef50, type: 2}
+  _asteroidSpawnerConfig: {fileID: 11400000, guid: 086adb50d1d157e47b579cd4f6b83d33, type: 2}
   _bulletConfig: {fileID: 11400000, guid: b0cc08530c19a634d84f9167bb9cdce1, type: 2}
   _flyingSaucerConfig: {fileID: 11400000, guid: 5bf6f2632e5f3d84dbdc5441293a27d4, type: 2}
   _inputConfig: {fileID: 11400000, guid: a9ffc5349c81a1445a0640ebd3916774, type: 2}

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: AsteroidConfig
   m_EditorClassIdentifier: 
   _damping: 30
-  _speed: 3
+  _speed: 5

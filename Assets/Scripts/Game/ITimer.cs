@@ -5,8 +5,8 @@ namespace Asteroids.Game
     public interface ITimer
     {
         public bool IsElapsed { get; }
-        
-        public bool IsPaused { get; }
+
+        public Action<ITimer> Elapsed { get; set; }
 
         public void Pause();
 

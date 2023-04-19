@@ -4,6 +4,8 @@
     {
         public IAsteroidConfig AsteroidConfig { get; }
 
+        public IAsteroidSpawnerConfig AsteroidSpawnerConfig { get; }
+
         public IBulletConfig BulletConfig { get; }
 
         public IFlyingSaucerConfig FlyingSaucerConfig { get; }

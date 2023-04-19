@@ -2,7 +2,7 @@
 
 namespace Asteroids.Game
 {
-    public interface IBulletPresenter : IPresenter, IPoolable
+    public interface IBulletPresenter : IPresenter, IPoolable, IDamaging
     {
         public bool IsDestroyed { get; }
 

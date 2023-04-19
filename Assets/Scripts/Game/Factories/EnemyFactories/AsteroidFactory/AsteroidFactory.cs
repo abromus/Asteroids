@@ -8,14 +8,16 @@ namespace Asteroids.Game.Factory
         private readonly IUpdater _updater;
         private readonly IAsteroidViewFactory _viewFactory;
         private readonly IAsteroidConfig _config;
+        private readonly Bounds _bounds;
 
         private readonly IObjectPool<IAsteroidPresenter> _pool;
 
-        public AsteroidFactory(IUpdater updater, IAsteroidViewFactory viewFactory, IAsteroidConfig config)
+        public AsteroidFactory(IUpdater updater, IAsteroidViewFactory viewFactory, IAsteroidConfig config, Bounds bounds)
         {
             _updater = updater;
             _viewFactory = viewFactory;
             _config = config;
+            _bounds = bounds;
 
             _pool = new ObjectPool<IAsteroidPresenter>(() => CreateAsteroid());
         }
@@ -38,7 +40,7 @@ namespace Asteroids.Game.Factory
         {
             var model = new AsteroidModel();
             var view = _viewFactory.Create();
-            var presenter = new AsteroidPresenter(_updater, model, view, _config);
+            var presenter = new AsteroidPresenter(_updater, model, view, _config, _bounds);
 
             return presenter;
         }

@@ -31,6 +31,8 @@ namespace Asteroids.Game.Initializers
 
             InitScreenSystem();
 
+            InitPositionCheckService();
+
             InitTimerSystem();
         }
 
@@ -58,16 +60,13 @@ namespace Asteroids.Game.Initializers
 
         private Bounds CalculateBounds()
         {
-            var upVector = new Float3(0f, _camera.orthographicSize);
-            var rightVector = new Float3(_camera.orthographicSize * _camera.pixelWidth / _camera.scaledPixelHeight, 0f);
             var cameraPosition = _camera.transform.position.ToFloat3();
 
-            var left = cameraPosition - rightVector;
-            var right = cameraPosition + rightVector;
-            var top = cameraPosition + upVector;
-            var bottom = cameraPosition - upVector;
+            var width = _camera.orthographicSize * _camera.pixelWidth / _camera.scaledPixelHeight * 2f;
+            var height = _camera.orthographicSize * 2f;
+            var size = new Float3(width, height);
 
-            var bounds = new Bounds(left, right, top, bottom);
+            var bounds = new Bounds(cameraPosition, size);
 
             return bounds;
         }
@@ -105,6 +104,15 @@ namespace Asteroids.Game.Initializers
         private void AddGraphicRaycaster(GameObject canvasObject)
         {
             canvasObject.AddComponent<GraphicRaycaster>();
+        }
+
+        private void InitPositionCheckService()
+        {
+            var positionCheckService = new PositionCheckService();
+
+            _updater.Add(positionCheckService);
+
+            _game.GameData.ServiceStorage.AddService(positionCheckService as IPositionCheckService);
         }
 
         private void InitTimerSystem()

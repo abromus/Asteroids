@@ -1,3 +1,4 @@
+using Asteroids.Core;
 using Asteroids.Game.Settings;
 
 namespace Asteroids.Game
@@ -8,6 +9,8 @@ namespace Asteroids.Game
         private readonly IFlyingSaucerModel _model;
         private readonly IFlyingSaucerView _view;
         private readonly IFlyingSaucerConfig _config;
+
+        public Float3 Position => _model.Position.Value;
 
         public FlyingSaucerPresenter(IUpdater updater, IFlyingSaucerModel model, IFlyingSaucerView view, IFlyingSaucerConfig config)
         {

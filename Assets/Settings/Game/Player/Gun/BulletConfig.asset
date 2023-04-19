@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f543d0081ff8ba342982cf0d14f6858d, type: 3}
   m_Name: BulletConfig
   m_EditorClassIdentifier: 
-  _speed: 3
-  _maxDistance: 5
+  _speed: 20
+  _maxDistance: 30

@@ -10,15 +10,16 @@ namespace Asteroids.Game
     {
         private readonly IUpdater _updater;
         private readonly ITimerService _timerService;
+        private readonly IPositionCheckService _positionCheckService;
         private readonly IMachineGunModel _model;
         private readonly IMachineGunView _view;
         private readonly IMachineGunConfig _config;
         private readonly IBulletFactory _bulletFactory;
 
         private readonly List<IBulletPresenter> _bullets;
+        private readonly ITimer _timer;
 
         private Float3 _offset;
-        private ITimer _timer;
 
         public Float3 Position => _model.Position.Value;
 
@@ -26,10 +27,18 @@ namespace Asteroids.Game
 
         public IMachineGunView View => _view;
 
-        public MachineGunPresenter(IUpdater updater, ITimerService timerService, IMachineGunModel model, IMachineGunView view, IMachineGunConfig config, IBulletFactory bulletFactory)
+        public MachineGunPresenter(
+            IUpdater updater,
+            ITimerService timerService,
+            IPositionCheckService positionCheckService,
+            IMachineGunModel model,
+            IMachineGunView view,
+            IMachineGunConfig config,
+            IBulletFactory bulletFactory)
         {
             _updater = updater;
             _timerService = timerService;
+            _positionCheckService = positionCheckService;
             _model = model;
             _view = view;
             _config = config;
@@ -73,6 +82,8 @@ namespace Asteroids.Game
                 {
                     _bullets.RemoveAt(i);
                     _bulletFactory.Release(bullet);
+
+                    _positionCheckService.RemoveDamaging(bullet);
                     i--;
                 }
             }
@@ -101,6 +112,8 @@ namespace Asteroids.Game
             bullet.SetRotation(_model.Rotation.Value);
             bullet.SetPosition(_model.Position.Value);
             bullet.Enable();
+
+            _positionCheckService.AddDamaging(bullet);
 
             _bullets.Add(bullet);
         }
