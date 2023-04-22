@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3512234f6d427194ab88e0a85b98a6af, type: 3}
   m_Name: LaserGunConfig
   m_EditorClassIdentifier: 
+  _capacity: 5
   _firingRate: 1
+  _regenerateTime: 2
+  _reloadTime: 3
   _offset: {x: 0.2, y: 0.6, z: 0}

@@ -17,9 +17,13 @@ namespace Asteroids.Game
         private readonly ILaserFactory _laserFactory;
 
         private readonly List<ILaserPresenter> _lasers;
-        private readonly ITimer _timer;
+        private readonly ITimer _firingTimer;
+        private readonly ITimer _reloadTimer;
+        private readonly ITimer _regenerateTimer;
 
         private Float3 _offset;
+        private int _currentLasers;
+        private bool _isReload;
 
         public Float3 Position => _model.Position.Value;
 
@@ -46,29 +50,38 @@ namespace Asteroids.Game
 
             _offset = _config.Offset.ToFloat3();
             _lasers = new List<ILaserPresenter>();
+            _currentLasers = _config.Capacity;
 
-            _timer = _timerService.CreateTimer();
+            _firingTimer = _timerService.CreateTimer();
+            _reloadTimer = _timerService.CreateTimer();
+            _regenerateTimer = _timerService.CreateTimer();
         }
 
         public void Enable()
         {
             _updater.Add(this);
 
-            _timer?.Resume();
+            _firingTimer?.Resume();
+            _reloadTimer?.Resume();
+            _regenerateTimer?.Resume();
         }
 
         public void Destroy()
         {
             Disable();
 
-            _timerService.RemoveTimer(_timer);
+            _timerService.RemoveTimer(_firingTimer);
+            _timerService.RemoveTimer(_reloadTimer);
+            _timerService.RemoveTimer(_regenerateTimer);
         }
 
         public void Disable()
         {
             _updater.Remove(this);
 
-            _timer?.Pause();
+            _firingTimer?.Pause();
+            _reloadTimer?.Pause();
+            _regenerateTimer?.Pause();
         }
 
         public void Tick(float deltaTime)
@@ -100,12 +113,39 @@ namespace Asteroids.Game
 
         public void TryShoot()
         {
-            if (_timer == null || !_timer.IsElapsed)
+            if (_currentLasers <= MathUtils.Zero && !_isReload)
+                Reload();
+
+            if (!CanShoot())
                 return;
 
+            Shoot();
+        }
+
+        private bool CanShoot()
+        {
+            return !(_isReload || _currentLasers <= MathUtils.Zero || _firingTimer == null || !_firingTimer.IsElapsed);
+        }
+
+        private void Reload()
+        {
+            _isReload = true;
+
+            _reloadTimer.UpdateTime(_config.ReloadTime);
+            _reloadTimer.Elapsed += AfterReload;
+        }
+
+        private void AfterReload(ITimer timer)
+        {
+            _currentLasers = _config.Capacity;
+            _isReload = false;
+        }
+
+        private void Shoot()
+        {
             var firingDelay = MathUtils.Inverse(_config.FiringRate);
 
-            _timer.UpdateTime(firingDelay);
+            _firingTimer.UpdateTime(firingDelay);
 
             var laser = _laserFactory.Create();
             laser.SetRotation(_model.Rotation.Value);
@@ -115,6 +155,23 @@ namespace Asteroids.Game
             _positionCheckService.AddDamaging(laser);
 
             _lasers.Add(laser);
+            _currentLasers--;
+
+            RegenerateLaser();
+        }
+
+        private void RegenerateLaser()
+        {
+            if (_regenerateTimer.IsElapsed)
+                _regenerateTimer.Elapsed += AfterRegenerateLaser;
+
+            _regenerateTimer.UpdateTime(_config.RegenerateTime);
+        }
+
+        private void AfterRegenerateLaser(ITimer timer)
+        {
+            if (!_isReload)
+                _currentLasers++;
         }
     }
 }
