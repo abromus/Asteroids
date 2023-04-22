@@ -80,6 +80,8 @@ namespace Asteroids.Game
         {
             if (damaging is IBulletPresenter)
                 Destroy();
+            else if(damaging is ILaserPresenter)
+                Destroy();
         }
 
         private void Move(float deltaTime)

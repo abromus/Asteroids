@@ -11,6 +11,8 @@ namespace Asteroids.Game.Settings
         [SerializeField] private FlyingSaucerConfig _flyingSaucerConfig;
         [SerializeField] private FlyingSaucerSpawnerConfig _flyingSaucerSpawnerConfig;
         [SerializeField] private InputConfig _inputConfig;
+        [SerializeField] private LaserConfig _laserConfig;
+        [SerializeField] private LaserGunConfig _laserGunConfig;
         [SerializeField] private MachineGunConfig _machineGunConfig;
         [SerializeField] private ShipConfig _shipConfig;
 
@@ -25,6 +27,10 @@ namespace Asteroids.Game.Settings
         public IFlyingSaucerSpawnerConfig FlyingSaucerSpawnerConfig => _flyingSaucerSpawnerConfig;
 
         public IInputConfig InputConfig => _inputConfig;
+
+        public ILaserConfig LaserConfig => _laserConfig;
+
+        public ILaserGunConfig LaserGunConfig => _laserGunConfig;
 
         public IMachineGunConfig MachineGunConfig => _machineGunConfig;
 

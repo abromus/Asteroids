@@ -31,6 +31,8 @@ namespace Asteroids.Game.Initializers
             InitAsteroidFactory(uiFactories, bounds);
             InitBulletFactory(uiFactories);
             InitFlyingSaucerFactory(uiFactories, bounds);
+            InitLaserFactory(uiFactories);
+            InitLaserGunFactory(uiFactories);
             InitMachineGunFactory(uiFactories);
             InitShipFactory(uiFactories, screenSystem);
         }
@@ -65,6 +67,29 @@ namespace Asteroids.Game.Initializers
             _game.GameData.FactoryStorage.AddFactory(factory);
         }
 
+        private void InitLaserFactory(IReadOnlyList<IUiFactory> uiFactories)
+        {
+            var viewFactory = uiFactories.GetLaserViewFactory();
+            var config = _game.GameData.ConfigStorage.GetLaserConfig();
+            var factory = new LaserFactory(_updater, viewFactory, config) as ILaserFactory;
+
+            _game.GameData.FactoryStorage.AddFactory(viewFactory);
+            _game.GameData.FactoryStorage.AddFactory(factory);
+        }
+
+        private void InitLaserGunFactory(IReadOnlyList<IUiFactory> uiFactories)
+        {
+            var positionCheckService = _game.GameData.ServiceStorage.GetPositionCheckService();
+            var timerService = _game.GameData.ServiceStorage.GetTimerService();
+            var viewFactory = uiFactories.GetLaserGunViewFactory();
+            var config = _game.GameData.ConfigStorage.GetLaserGunConfig();
+            var laserFactory = _game.GameData.FactoryStorage.GetLaserFactory();
+            var factory = new LaserGunFactory(_updater, timerService, positionCheckService, viewFactory, config, laserFactory) as ILaserGunFactory;
+
+            _game.GameData.FactoryStorage.AddFactory(viewFactory);
+            _game.GameData.FactoryStorage.AddFactory(factory);
+        }
+
         private void InitMachineGunFactory(IReadOnlyList<IUiFactory> uiFactories)
         {
             var positionCheckService = _game.GameData.ServiceStorage.GetPositionCheckService();
@@ -84,8 +109,9 @@ namespace Asteroids.Game.Initializers
             var config = _game.GameData.ConfigStorage.GetShipConfig();
             var inputSystem = _game.GameData.ServiceStorage.GetInputSystem();
             var inputConfig = _game.GameData.ConfigStorage.GetInputConfig();
+            var laserGunFactory = _game.GameData.FactoryStorage.GetLaserGunFactory();
             var machineGunFactory = _game.GameData.FactoryStorage.GetMachineGunFactory();
-            var factory = new ShipFactory(_updater, viewFactory, config, inputSystem, inputConfig, screenSystem, machineGunFactory) as IShipFactory;
+            var factory = new ShipFactory(_updater, viewFactory, config, inputSystem, inputConfig, screenSystem, laserGunFactory, machineGunFactory) as IShipFactory;
 
             _game.GameData.FactoryStorage.AddFactory(viewFactory);
             _game.GameData.FactoryStorage.AddFactory(factory);

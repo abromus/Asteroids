@@ -13,6 +13,7 @@ namespace Asteroids.Game.Factory
         private readonly IInputSystem _inputSystem;
         private readonly IInputConfig _inputConfig;
         private readonly IScreenSystem _screenSystem;
+        private readonly ILaserGunFactory _laserGunFactory;
         private readonly IMachineGunFactory _machineGunFactory;
 
         public ShipFactory(
@@ -22,6 +23,7 @@ namespace Asteroids.Game.Factory
             IInputSystem inputSystem,
             IInputConfig inputConfig,
             IScreenSystem screenSystem,
+            ILaserGunFactory laserGunFactory,
             IMachineGunFactory machineGunFactory)
         {
             _updater = updater;
@@ -30,6 +32,7 @@ namespace Asteroids.Game.Factory
             _inputSystem = inputSystem;
             _inputConfig = inputConfig;
             _screenSystem = screenSystem;
+            _laserGunFactory = laserGunFactory;
             _machineGunFactory = machineGunFactory;
         }
 
@@ -37,7 +40,8 @@ namespace Asteroids.Game.Factory
         {
             var model = new ShipModel();
             var machineGunPresenter = CreateMachineGun();
-            var view = _viewFactory.Create(_inputConfig, machineGunPresenter.View);
+            var laserGunPresenter = CreateLaserGun();
+            var view = _viewFactory.Create(_inputConfig, laserGunPresenter.View, machineGunPresenter.View);
             var presenter = new ShipPresenter(
                 _updater,
                 model,
@@ -45,9 +49,19 @@ namespace Asteroids.Game.Factory
                 _config,
                 _inputSystem,
                 _screenSystem,
+                laserGunPresenter,
                 machineGunPresenter);
 
             return presenter;
+        }
+
+        private ILaserGunPresenter CreateLaserGun()
+        {
+            var laserGunPresenter = _laserGunFactory.Create();
+            laserGunPresenter.Enable();
+            laserGunPresenter.SetPosition(Float3.Zero);
+
+            return laserGunPresenter;
         }
 
         private IMachineGunPresenter CreateMachineGun()

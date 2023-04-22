@@ -47,7 +47,6 @@ namespace Asteroids.Game
             _offset = _config.Offset.ToFloat3();
             _bullets = new List<IBulletPresenter>();
 
-
             _timer = _timerService.CreateTimer();
         }
 

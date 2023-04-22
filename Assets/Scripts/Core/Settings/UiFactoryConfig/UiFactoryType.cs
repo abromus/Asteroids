@@ -5,6 +5,8 @@
         AsteroidViewFactory,
         BulletViewFactory,
         FlyingSaucerViewFactory,
+        LaserGunViewFactory,
+        LaserViewFactory,
         MachineGunViewFactory,
         GameSceneControllerFactory,
         ShipViewFactory,

@@ -14,6 +14,10 @@
 
         public IInputConfig InputConfig { get; }
 
+        public ILaserConfig LaserConfig { get; }
+
+        public ILaserGunConfig LaserGunConfig { get; }
+
         public IMachineGunConfig MachineGunConfig { get; }
 
         public IShipConfig ShipConfig { get; }

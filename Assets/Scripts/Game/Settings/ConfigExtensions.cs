@@ -34,6 +34,16 @@ namespace Asteroids.Game.Settings
             return configStorage.GetConfig<IInputConfig>();
         }
 
+        public static ILaserConfig GetLaserConfig(this IConfigStorage configStorage)
+        {
+            return configStorage.GetConfig<ILaserConfig>();
+        }
+
+        public static ILaserGunConfig GetLaserGunConfig(this IConfigStorage configStorage)
+        {
+            return configStorage.GetConfig<ILaserGunConfig>();
+        }
+
         public static IMachineGunConfig GetMachineGunConfig(this IConfigStorage configStorage)
         {
             return configStorage.GetConfig<IMachineGunConfig>();

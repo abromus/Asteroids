@@ -15,6 +15,7 @@ namespace Asteroids.Game
         private readonly IShipConfig _config;
         private readonly IInputSystem _inputSystem;
         private readonly IScreenSystem _screenSystem;
+        private readonly ILaserGunPresenter _laserGunPresenter;
         private readonly IMachineGunPresenter _machineGunPresenter;
 
         private readonly PlayerInputActions.PlayerActions _inputActions;
@@ -22,7 +23,15 @@ namespace Asteroids.Game
 
         public Float3 Position => _model.Position.Value;
 
-        public ShipPresenter(IUpdater updater, IShipModel model, IShipView view, IShipConfig config, IInputSystem inputSystem, IScreenSystem screenSystem, IMachineGunPresenter machineGunPresenter)
+        public ShipPresenter(
+            IUpdater updater,
+            IShipModel model,
+            IShipView view,
+            IShipConfig config,
+            IInputSystem inputSystem,
+            IScreenSystem screenSystem,
+            ILaserGunPresenter laserGunPresenter,
+            IMachineGunPresenter machineGunPresenter)
         {
             _updater = updater;
             _model = model;
@@ -33,6 +42,7 @@ namespace Asteroids.Game
             _inputActions = _inputSystem.InputActions;
             _screenSystem = screenSystem;
 
+            _laserGunPresenter = laserGunPresenter;
             _machineGunPresenter = machineGunPresenter;
             _acceleration = new Acceleration(_config.Speed);
 
@@ -84,10 +94,12 @@ namespace Asteroids.Game
             var delta = _acceleration.Speed * deltaTime * direction;
 
             var modelPosition = MathUtils.CorrectPosition(_model.Position.Value + delta, _screenSystem.Bounds);
-            var machineGunPosition = MathUtils.CorrectPosition(_machineGunPresenter.Position + delta, _screenSystem.Bounds) - _machineGunPresenter.Offset;
-
             _model.Position.Value = modelPosition;
 
+            var laserGunPosition = MathUtils.CorrectPosition(_laserGunPresenter.Position + delta, _screenSystem.Bounds) - _laserGunPresenter.Offset;
+            _laserGunPresenter.SetPosition(laserGunPosition);
+
+            var machineGunPosition = MathUtils.CorrectPosition(_machineGunPresenter.Position + delta, _screenSystem.Bounds) - _machineGunPresenter.Offset;
             _machineGunPresenter.SetPosition(machineGunPosition);
         }
 
@@ -109,20 +121,27 @@ namespace Asteroids.Game
         {
             var angle = direction * _config.Damping * deltaTime;
             var rotation = MathUtils.CalculateRotation(angle, _model.Rotation.Value);
-            var deltaPosition = MathUtils.Rotate(
+            var deltaMachineGunPosition = MathUtils.Rotate(
                 _model.Position.Value,
                 _machineGunPresenter.Position,
+                rotation.Z - _model.Rotation.Value.Z);
+            var deltaLaserGunPosition = MathUtils.Rotate(
+                _model.Position.Value,
+                _laserGunPresenter.Position,
                 rotation.Z - _model.Rotation.Value.Z);
 
             _model.Rotation.Value = rotation;
 
-            _machineGunPresenter.SetPosition(_model.Position.Value + deltaPosition - _machineGunPresenter.Offset);
+            _laserGunPresenter.SetPosition(_model.Position.Value + deltaLaserGunPosition - _laserGunPresenter.Offset);
+            _laserGunPresenter.SetRotation(rotation);
 
+            _machineGunPresenter.SetPosition(_model.Position.Value + deltaMachineGunPosition - _machineGunPresenter.Offset);
             _machineGunPresenter.SetRotation(rotation);
         }
 
         private void Shoot()
         {
+            _laserGunPresenter.TryShoot();
             _machineGunPresenter.TryShoot();
         }
     }

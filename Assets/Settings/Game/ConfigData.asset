@@ -18,5 +18,7 @@ MonoBehaviour:
   _flyingSaucerConfig: {fileID: 11400000, guid: 5bf6f2632e5f3d84dbdc5441293a27d4, type: 2}
   _flyingSaucerSpawnerConfig: {fileID: 11400000, guid: 579a06464074ecc4ebeae5f64593f439, type: 2}
   _inputConfig: {fileID: 11400000, guid: a9ffc5349c81a1445a0640ebd3916774, type: 2}
+  _laserConfig: {fileID: 11400000, guid: 84e0d8b70ffc9b74b8c1d0bf6f779c18, type: 2}
+  _laserGunConfig: {fileID: 11400000, guid: 389097bf4b04f6847a66cc46c72cfe3b, type: 2}
   _machineGunConfig: {fileID: 11400000, guid: 81bb53feea1865141aa60f6ff1becd21, type: 2}
   _shipConfig: {fileID: 11400000, guid: e973cd7167e3efe4287876579a3a8621, type: 2}

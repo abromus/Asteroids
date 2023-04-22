@@ -28,11 +28,6 @@ namespace Asteroids.Game
             return factoryStorage.GetFactory<IBulletFactory>();
         }
 
-        public static IBulletViewFactory GetBulletViewFactory(this IFactoryStorage factoryStorage)
-        {
-            return factoryStorage.GetFactory<IBulletViewFactory>();
-        }
-
         public static IBulletViewFactory GetBulletViewFactory(this IReadOnlyList<IUiFactory> uiFactories)
         {
             return uiFactories.GetFactory<IBulletViewFactory>(UiFactoryType.BulletViewFactory);
@@ -43,24 +38,34 @@ namespace Asteroids.Game
             return factoryStorage.GetFactory<IFlyingSaucerFactory>();
         }
 
-        public static IFlyingSaucerViewFactory GetFlyingSaucerViewFactory(this IFactoryStorage factoryStorage)
-        {
-            return factoryStorage.GetFactory<IFlyingSaucerViewFactory>();
-        }
-
         public static IFlyingSaucerViewFactory GetFlyingSaucerViewFactory(this IReadOnlyList<IUiFactory> uiFactories)
         {
             return uiFactories.GetFactory<IFlyingSaucerViewFactory>(UiFactoryType.FlyingSaucerViewFactory);
         }
 
+        public static ILaserFactory GetLaserFactory(this IFactoryStorage factoryStorage)
+        {
+            return factoryStorage.GetFactory<ILaserFactory>();
+        }
+
+        public static ILaserViewFactory GetLaserViewFactory(this IReadOnlyList<IUiFactory> uiFactories)
+        {
+            return uiFactories.GetFactory<ILaserViewFactory>(UiFactoryType.LaserViewFactory);
+        }
+
+        public static ILaserGunFactory GetLaserGunFactory(this IFactoryStorage factoryStorage)
+        {
+            return factoryStorage.GetFactory<ILaserGunFactory>();
+        }
+
+        public static ILaserGunViewFactory GetLaserGunViewFactory(this IReadOnlyList<IUiFactory> uiFactories)
+        {
+            return uiFactories.GetFactory<ILaserGunViewFactory>(UiFactoryType.LaserGunViewFactory);
+        }
+
         public static IMachineGunFactory GetMachineGunFactory(this IFactoryStorage factoryStorage)
         {
             return factoryStorage.GetFactory<IMachineGunFactory>();
-        }
-
-        public static IMachineGunViewFactory GetMachineGunViewFactory(this IFactoryStorage factoryStorage)
-        {
-            return factoryStorage.GetFactory<IMachineGunViewFactory>();
         }
 
         public static IMachineGunViewFactory GetMachineGunViewFactory(this IReadOnlyList<IUiFactory> uiFactories)
@@ -71,11 +76,6 @@ namespace Asteroids.Game
         public static IShipFactory GetShipFactory(this IFactoryStorage factoryStorage)
         {
             return factoryStorage.GetFactory<IShipFactory>();
-        }
-
-        public static IShipViewFactory GetShipViewFactory(this IFactoryStorage factoryStorage)
-        {
-            return factoryStorage.GetFactory<IShipViewFactory>();
         }
 
         public static IShipViewFactory GetShipViewFactory(this IReadOnlyList<IUiFactory> uiFactories)
