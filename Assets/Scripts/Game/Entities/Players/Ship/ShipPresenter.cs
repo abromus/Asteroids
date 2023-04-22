@@ -18,6 +18,7 @@ namespace Asteroids.Game
         private readonly IMachineGunPresenter _machineGunPresenter;
 
         private readonly PlayerInputActions.PlayerActions _inputActions;
+        private readonly IAcceleration _acceleration;
 
         public Float3 Position => _model.Position.Value;
 
@@ -33,6 +34,7 @@ namespace Asteroids.Game
             _screenSystem = screenSystem;
 
             _machineGunPresenter = machineGunPresenter;
+            _acceleration = new Acceleration(_config.Speed);
 
             _model.Position.OnChanged += _view.Move;
             _model.Rotation.OnChanged += _view.Rotate;
@@ -60,7 +62,11 @@ namespace Asteroids.Game
         public void Tick(float deltaTime)
         {
             if (_inputActions.Move.phase == InputActionPhase.Started)
-                Move(deltaTime);
+                _acceleration.SpeedUp(deltaTime);
+            else
+                _acceleration.SlowDown(deltaTime);
+
+            Move(deltaTime);
 
             if (_inputActions.RotateLeft.phase == InputActionPhase.Started)
                 RotateLeft(deltaTime);
@@ -75,7 +81,7 @@ namespace Asteroids.Game
         {
             var direction = MathUtils.TransformDirection(_model.Rotation.Value.Z);
 
-            var delta = _config.Speed * deltaTime * direction;
+            var delta = _acceleration.Speed * deltaTime * direction;
 
             var modelPosition = MathUtils.CorrectPosition(_model.Position.Value + delta, _screenSystem.Bounds);
             var machineGunPosition = MathUtils.CorrectPosition(_machineGunPresenter.Position + delta, _screenSystem.Bounds) - _machineGunPresenter.Offset;
