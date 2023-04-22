@@ -16,6 +16,7 @@ namespace Asteroids.Game
 
         private readonly IList<IAsteroidPresenter> _asteroids;
         private readonly ISpawnerHelper _spawnerHelper;
+        private readonly IList<ITimer> _timers;
 
         public AsteroidSpawner(IAsteroidSpawnerConfig config, IAsteroidFactory factory, IPositionCheckService positionCheckService, ITimerService timerService, Bounds bounds)
         {
@@ -27,6 +28,7 @@ namespace Asteroids.Game
 
             _asteroids = new List<IAsteroidPresenter>();
             _spawnerHelper = new SpawnerHelper(_bounds);
+            _timers = new List<ITimer>();
 
             for (int i = 0; i < _config.MaxCount; i++)
                 Spawn();
@@ -40,6 +42,13 @@ namespace Asteroids.Game
             return asteroidPresenter;
         }
 
+        public void Destroy()
+        {
+            DestroyTimers();
+
+            DestroyAsteroids();
+        }
+
         public void Tick(float deltaTime)
         {
             for (int i = 0; i < _asteroids.Count; i++)
@@ -51,7 +60,9 @@ namespace Asteroids.Game
 
                 DestroyAsteroid(asteroidPresenter);
 
-                _timerService.CreateTimer(_config.SpawnDelay).Elapsed += OnElapsed;
+                var timer = _timerService.CreateTimer(_config.SpawnDelay);
+                timer.Elapsed += OnElapsed;
+                _timers.Add(timer);
 
                 i--;
             }
@@ -75,6 +86,8 @@ namespace Asteroids.Game
 
         private void DestroyAsteroid(IAsteroidPresenter asteroidPresenter)
         {
+            asteroidPresenter.Disable();
+
             _asteroids.Remove(asteroidPresenter);
             _positionCheckService.RemoveDamagable(asteroidPresenter);
             _asteroids.Remove(asteroidPresenter);
@@ -83,6 +96,7 @@ namespace Asteroids.Game
 
         private void OnElapsed(ITimer timer)
         {
+            _timers.Remove(timer);
             _timerService.RemoveTimer(timer);
 
             Spawn();
@@ -95,6 +109,29 @@ namespace Asteroids.Game
             var rotation = MathUtils.CalculateRotation(angle, Float3.Zero);
 
             return rotation;
+        }
+
+        private void DestroyTimers()
+        {
+            for (int i = _timers.Count - 1; i >= 0; i--)
+            {
+                var timer = _timers[i];
+                _timers.Remove(timer);
+                _timerService.RemoveTimer(timer);
+
+                timer.Destroy();
+            }
+        }
+        
+        private void DestroyAsteroids()
+        {
+            for (int i = _asteroids.Count - 1; i >= 0; i--)
+            {
+                var asteroid = _asteroids[i];
+                DestroyAsteroid(asteroid);
+            }
+
+            _asteroids.Clear();
         }
     }
 }

@@ -5,8 +5,6 @@ namespace Asteroids.Game
 {
     public sealed class AsteroidView : View, IAsteroidView
     {
-        public void Init() { }
-
         public void Move(Float3 value)
         {
             transform.position = value.ToVector3();
@@ -24,7 +22,8 @@ namespace Asteroids.Game
 
         public void Deactivate()
         {
-            gameObject.SetActive(false);
+            if (gameObject != null)
+                gameObject.SetActive(false);
         }
     }
 }

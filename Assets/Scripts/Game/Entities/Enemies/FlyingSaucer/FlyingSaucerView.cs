@@ -1,19 +1,29 @@
 using Asteroids.Core;
+using UnityEngine;
 
 namespace Asteroids.Game
 {
     public sealed class FlyingSaucerView : View, IFlyingSaucerView
     {
-        public void Init() { }
-
         public void Move(Float3 value)
         {
-            transform.Translate(value.ToVector3());
+            transform.position = value.ToVector3();
         }
 
         public void Rotate(Float3 value)
         {
-            transform.Rotate(value.ToVector3());
+            transform.rotation = Quaternion.Euler(value.ToVector3());
+        }
+
+        public void Activate()
+        {
+            gameObject.SetActive(true);
+        }
+
+        public void Deactivate()
+        {
+            if (gameObject != null)
+                gameObject.SetActive(false);
         }
     }
 }

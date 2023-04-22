@@ -12,7 +12,6 @@ namespace Asteroids.Game.Factory
         public IFlyingSaucerView Create()
         {
             var flyingSaucer = Instantiate(_prefab);
-            flyingSaucer.Init();
 
             return flyingSaucer;
         }

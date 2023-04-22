@@ -16,6 +16,7 @@ MonoBehaviour:
   _asteroidSpawnerConfig: {fileID: 11400000, guid: 086adb50d1d157e47b579cd4f6b83d33, type: 2}
   _bulletConfig: {fileID: 11400000, guid: b0cc08530c19a634d84f9167bb9cdce1, type: 2}
   _flyingSaucerConfig: {fileID: 11400000, guid: 5bf6f2632e5f3d84dbdc5441293a27d4, type: 2}
+  _flyingSaucerSpawnerConfig: {fileID: 11400000, guid: 579a06464074ecc4ebeae5f64593f439, type: 2}
   _inputConfig: {fileID: 11400000, guid: a9ffc5349c81a1445a0640ebd3916774, type: 2}
   _machineGunConfig: {fileID: 11400000, guid: 81bb53feea1865141aa60f6ff1becd21, type: 2}
   _shipConfig: {fileID: 11400000, guid: e973cd7167e3efe4287876579a3a8621, type: 2}

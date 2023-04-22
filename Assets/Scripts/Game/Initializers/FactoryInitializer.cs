@@ -25,19 +25,20 @@ namespace Asteroids.Game.Initializers
         private void InitFactories()
         {
             var uiFactories = _game.GameData.ConfigStorage.GetUiFactoryConfig().UiFactories;
+            var screenSystem = _game.GameData.ServiceStorage.GetScreenSystem();
+            var bounds = screenSystem.Bounds;
 
-            InitAsteroidFactory(uiFactories);
+            InitAsteroidFactory(uiFactories, bounds);
             InitBulletFactory(uiFactories);
-            InitFlyingSaucerFactory(uiFactories);
+            InitFlyingSaucerFactory(uiFactories, bounds);
             InitMachineGunFactory(uiFactories);
-            InitShipFactory(uiFactories);
+            InitShipFactory(uiFactories, screenSystem);
         }
 
-        private void InitAsteroidFactory(IReadOnlyList<IUiFactory> uiFactories)
+        private void InitAsteroidFactory(IReadOnlyList<IUiFactory> uiFactories, Bounds bounds)
         {
             var viewFactory = uiFactories.GetAsteroidViewFactory();
             var config = _game.GameData.ConfigStorage.GetAsteroidConfig();
-            var bounds = _game.GameData.ServiceStorage.GetScreenSystem().Bounds;
             var factory = new AsteroidFactory(_updater, viewFactory, config, bounds) as IAsteroidFactory;
 
             _game.GameData.FactoryStorage.AddFactory(viewFactory);
@@ -54,11 +55,11 @@ namespace Asteroids.Game.Initializers
             _game.GameData.FactoryStorage.AddFactory(factory);
         }
 
-        private void InitFlyingSaucerFactory(IReadOnlyList<IUiFactory> uiFactories)
+        private void InitFlyingSaucerFactory(IReadOnlyList<IUiFactory> uiFactories, Bounds bounds)
         {
             var viewFactory = uiFactories.GetFlyingSaucerViewFactory();
             var config = _game.GameData.ConfigStorage.GetFlyingSaucerConfig();
-            var factory = new FlyingSaucerFactory(_updater, viewFactory, config) as IFlyingSaucerFactory;
+            var factory = new FlyingSaucerFactory(_updater, viewFactory, config, bounds) as IFlyingSaucerFactory;
 
             _game.GameData.FactoryStorage.AddFactory(viewFactory);
             _game.GameData.FactoryStorage.AddFactory(factory);
@@ -77,13 +78,12 @@ namespace Asteroids.Game.Initializers
             _game.GameData.FactoryStorage.AddFactory(factory);
         }
 
-        private void InitShipFactory(IReadOnlyList<IUiFactory> uiFactories)
+        private void InitShipFactory(IReadOnlyList<IUiFactory> uiFactories, Services.IScreenSystem screenSystem)
         {
             var viewFactory = uiFactories.GetShipViewFactory();
             var config = _game.GameData.ConfigStorage.GetShipConfig();
             var inputSystem = _game.GameData.ServiceStorage.GetInputSystem();
             var inputConfig = _game.GameData.ConfigStorage.GetInputConfig();
-            var screenSystem = _game.GameData.ServiceStorage.GetScreenSystem();
             var machineGunFactory = _game.GameData.FactoryStorage.GetMachineGunFactory();
             var factory = new ShipFactory(_updater, viewFactory, config, inputSystem, inputConfig, screenSystem, machineGunFactory) as IShipFactory;
 

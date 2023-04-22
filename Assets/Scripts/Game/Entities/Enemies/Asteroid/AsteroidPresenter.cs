@@ -1,6 +1,5 @@
 using Asteroids.Core;
 using Asteroids.Game.Settings;
-using UnityEngine;
 using Bounds = Asteroids.Core.Bounds;
 
 namespace Asteroids.Game
@@ -26,9 +25,6 @@ namespace Asteroids.Game
             _view = view;
             _config = config;
             _bounds = bounds;
-
-            _model.Position.OnChanged += _view.Move;
-            _model.Rotation.OnChanged += _view.Rotate;
         }
 
         public void Init(Float3 position)
@@ -40,6 +36,9 @@ namespace Asteroids.Game
 
         public void Enable()
         {
+            _model.Position.OnChanged += _view.Move;
+            _model.Rotation.OnChanged += _view.Rotate;
+
             _updater.Add(this);
 
             _view.Activate();
@@ -47,6 +46,9 @@ namespace Asteroids.Game
 
         public void Disable()
         {
+            _model.Position.OnChanged -= _view.Move;
+            _model.Rotation.OnChanged -= _view.Rotate;
+
             Clear();
         }
 
@@ -69,7 +71,7 @@ namespace Asteroids.Game
             _model.Position.Value = Float3.Zero;
             _model.Rotation.Value = Float3.Zero;
 
-            _view.Deactivate();
+            _view?.Deactivate();
 
             _isDestroyed = false;
         }
@@ -96,7 +98,7 @@ namespace Asteroids.Game
 
         private void Rotate()
         {
-            var angle = Random.value * MathUtils.FullAngle;
+            var angle = MathUtils.Value * MathUtils.FullAngle;
 
             var rotation = MathUtils.CalculateRotation(angle, _model.Rotation.Value);
 

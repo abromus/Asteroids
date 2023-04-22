@@ -1,4 +1,5 @@
 using Asteroids.Core;
+using Asteroids.Game.Services;
 using Asteroids.Game.Settings;
 
 namespace Asteroids.Game
@@ -9,8 +10,8 @@ namespace Asteroids.Game
         private readonly IUpdater _updater;
 
         private IShipPresenter _shipPresenter;
-        private IFlyingSaucerPresenter _flyingSaucerPresenter;
         private IAsteroidSpawner<IAsteroidPresenter> _asteroidSpawner;
+        private IFlyingSaucerSpawner<IFlyingSaucerPresenter> _flyingSaucerSpawner;
 
         public IGameData GameData => _gameData;
 
@@ -23,7 +24,8 @@ namespace Asteroids.Game
         public void Destroy()
         {
             _shipPresenter.Destroy();
-            _flyingSaucerPresenter.Destroy();
+            _asteroidSpawner.Destroy();
+            _flyingSaucerSpawner.Destroy();
         }
 
         public void Run()
@@ -42,24 +44,31 @@ namespace Asteroids.Game
 
         private void CreateEnemies()
         {
-            var asteroidSpawnerConfig = _gameData.ConfigStorage.GetAsteroidSpawnerConfig();
-            var asteroidFactory = _gameData.FactoryStorage.GetAsteroidFactory();
             var positionCheckService = _gameData.ServiceStorage.GetPositionCheckService();
             var timerService = _gameData.ServiceStorage.GetTimerService();
             var bounds = _gameData.ServiceStorage.GetScreenSystem().Bounds;
 
-            _asteroidSpawner = new AsteroidSpawner(asteroidSpawnerConfig, asteroidFactory, positionCheckService, timerService, bounds);
-            _updater.Add(_asteroidSpawner);
+            CreateAsteroids(positionCheckService, timerService, bounds);
 
-            CreateFlyingSaucers();
+            CreateFlyingSaucers(positionCheckService, timerService, bounds);
         }
 
-        private void CreateFlyingSaucers()
+        private void CreateAsteroids(IPositionCheckService positionCheckService, ITimerService timerService, Bounds bounds)
         {
-            var factory = _gameData.FactoryStorage.GetFlyingSaucerFactory();
+            var asteroidSpawnerConfig = _gameData.ConfigStorage.GetAsteroidSpawnerConfig();
+            var asteroidFactory = _gameData.FactoryStorage.GetAsteroidFactory();
 
-            _flyingSaucerPresenter = factory.Create();
-            _flyingSaucerPresenter.Enable();
+            _asteroidSpawner = new AsteroidSpawner(asteroidSpawnerConfig, asteroidFactory, positionCheckService, timerService, bounds);
+            _updater.Add(_asteroidSpawner);
+        }
+
+        private void CreateFlyingSaucers(IPositionCheckService positionCheckService, ITimerService timerService, Bounds bounds)
+        {
+            var flyingSaucerSpawnerConfig = _gameData.ConfigStorage.GetFlyingSaucerSpawnerConfig();
+            var flyingSaucerFactory = _gameData.FactoryStorage.GetFlyingSaucerFactory();
+
+            _flyingSaucerSpawner = new FlyingSaucerSpawner(flyingSaucerSpawnerConfig, flyingSaucerFactory, positionCheckService, timerService, bounds, _shipPresenter);
+            _updater.Add(_flyingSaucerSpawner);
         }
     }
 }

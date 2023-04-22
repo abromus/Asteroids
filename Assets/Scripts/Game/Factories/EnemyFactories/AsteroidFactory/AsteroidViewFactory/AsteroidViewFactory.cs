@@ -12,7 +12,6 @@ namespace Asteroids.Game.Factory
         public IAsteroidView Create()
         {
             var asteroid = Instantiate(_prefab);
-            asteroid.Init();
 
             return asteroid;
         }

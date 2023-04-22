@@ -30,7 +30,7 @@ namespace Asteroids.Game
 
         private IQuarterStrategy GetStrategy(float angle)
         {
-            var strategy = angle >= MathUtils.ZeroAngle && angle <= MathUtils.QuarterAngle
+            var strategy = angle >= MathUtils.Zero && angle <= MathUtils.QuarterAngle
                 ? _firstQuarter
                 : angle >= MathUtils.QuarterAngle && angle <= MathUtils.HalfAngle
                     ? _secondsQuarter

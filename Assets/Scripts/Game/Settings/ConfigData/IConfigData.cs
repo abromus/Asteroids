@@ -10,6 +10,8 @@
 
         public IFlyingSaucerConfig FlyingSaucerConfig { get; }
 
+        public IFlyingSaucerSpawnerConfig FlyingSaucerSpawnerConfig { get; }
+
         public IInputConfig InputConfig { get; }
 
         public IMachineGunConfig MachineGunConfig { get; }

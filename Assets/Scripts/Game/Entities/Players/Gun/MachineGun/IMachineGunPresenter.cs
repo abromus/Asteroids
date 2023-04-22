@@ -6,8 +6,6 @@ namespace Asteroids.Game
     {
         public Float3 Offset { get; }
 
-        public Float3 Position { get; }
-
         public IMachineGunView View { get; }
 
         public void SetPosition(Float3 position);

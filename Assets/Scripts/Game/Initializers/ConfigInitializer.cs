@@ -25,6 +25,7 @@ namespace Asteroids.Game.Initializers
             _game.GameData.ConfigStorage.AddConfig(_configData.AsteroidSpawnerConfig);
             _game.GameData.ConfigStorage.AddConfig(_configData.BulletConfig);
             _game.GameData.ConfigStorage.AddConfig(_configData.FlyingSaucerConfig);
+            _game.GameData.ConfigStorage.AddConfig(_configData.FlyingSaucerSpawnerConfig);
             _game.GameData.ConfigStorage.AddConfig(_configData.InputConfig);
             _game.GameData.ConfigStorage.AddConfig(_configData.MachineGunConfig);
             _game.GameData.ConfigStorage.AddConfig(_configData.ShipConfig);

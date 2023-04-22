@@ -1,7 +1,4 @@
 ﻿namespace Asteroids.Game
 {
-    public interface IFlyingSaucerView : IView
-    {
-        public void Init();
-    }
+    public interface IFlyingSaucerView : IView, IActivatable { }
 }

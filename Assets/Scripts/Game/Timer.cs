@@ -5,14 +5,16 @@ namespace Asteroids.Game
 {
     public sealed class Timer : ITimer
     {
+        private const float ZeroSeconds = 0f;
+
         private float _seconds;
         private bool _isPaused;
 
-        public bool IsElapsed => _seconds <= 0f;
+        public bool IsElapsed => _seconds <= ZeroSeconds;
 
         public Action<ITimer> Elapsed { get; set; }
 
-        public Timer(float seconds = 0f)
+        public Timer(float seconds = ZeroSeconds)
         {
             UpdateTime(seconds);
         }
@@ -44,6 +46,15 @@ namespace Asteroids.Game
         public void Resume()
         {
             _isPaused = false;
+        }
+
+        public void Destroy()
+        {
+            Elapsed = null;
+
+            Pause();
+
+            _seconds = ZeroSeconds;
         }
     }
 }

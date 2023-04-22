@@ -24,6 +24,11 @@ namespace Asteroids.Game.Settings
             return configStorage.GetConfig<IFlyingSaucerConfig>();
         }
 
+        public static IFlyingSaucerSpawnerConfig GetFlyingSaucerSpawnerConfig(this IConfigStorage configStorage)
+        {
+            return configStorage.GetConfig<IFlyingSaucerSpawnerConfig>();
+        }
+
         public static IInputConfig GetInputConfig(this IConfigStorage configStorage)
         {
             return configStorage.GetConfig<IInputConfig>();

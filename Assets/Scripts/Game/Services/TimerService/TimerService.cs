@@ -22,6 +22,8 @@ namespace Asteroids.Game.Services
 
         public void RemoveTimer(ITimer timer)
         {
+            timer.Destroy();
+
             if (_timers.Contains(timer))
                 _timers.Remove(timer);
         }

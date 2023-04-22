@@ -8,6 +8,8 @@ namespace Asteroids.Game
 
         public Action<ITimer> Elapsed { get; set; }
 
+        public void Destroy();
+
         public void Pause();
 
         public void Resume();
