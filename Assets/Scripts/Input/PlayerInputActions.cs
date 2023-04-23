@@ -97,7 +97,7 @@ namespace Asteroids.Inputs
                 {
                     ""name"": """",
                     ""id"": ""46d6c087-dcfb-45a2-b684-75a742e371d9"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -108,7 +108,7 @@ namespace Asteroids.Inputs
                 {
                     ""name"": """",
                     ""id"": ""bba99583-af84-43ef-9d99-634cd85aca6a"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": ""Invert"",
                     ""groups"": """",

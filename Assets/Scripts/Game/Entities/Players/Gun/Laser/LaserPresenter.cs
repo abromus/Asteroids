@@ -37,6 +37,11 @@ namespace Asteroids.Game
 
         public void Destroy()
         {
+            var distance = MathUtils.Distance(_startPosition, _model.Position.Value);
+
+            if (distance < _config.MaxDistance)
+                return;
+
             Clear();
 
             _isDestroyed = true;
