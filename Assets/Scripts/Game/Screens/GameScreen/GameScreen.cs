@@ -28,7 +28,7 @@ namespace Asteroids.Game.Screens
             UpdateView();
         }
 
-        public void Close()
+        public override void Close()
         {
             Closed.SafeInvoke(this);
         }

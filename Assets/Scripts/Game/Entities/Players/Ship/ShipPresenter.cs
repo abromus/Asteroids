@@ -1,3 +1,4 @@
+using System;
 using Asteroids.Core;
 using Asteroids.Core.Services;
 using Asteroids.Game.Services;
@@ -21,6 +22,8 @@ namespace Asteroids.Game
         private readonly PlayerInputActions.PlayerActions _inputActions;
         private readonly IAcceleration _acceleration;
 
+        private bool _isDestroyed;
+
         public float Acceleration => _acceleration.Speed;
 
         public int LasersCount => _laserGunPresenter.LasersCount;
@@ -30,6 +33,10 @@ namespace Asteroids.Game
         public Float3 Position => _model.Position.Value;
 
         public Float3 Rotation => _model.Rotation.Value;
+
+        public bool IsDestroyed => _isDestroyed;
+
+        public Action Destroyed { get; set; }
 
         public ShipPresenter(
             IUpdater updater,
@@ -68,6 +75,13 @@ namespace Asteroids.Game
         public void Destroy()
         {
             Disable();
+
+            _view.DestroyView();
+
+            _isDestroyed = true;
+
+            Destroyed.SafeInvoke();
+            Destroyed = null;
         }
 
         public void Disable()
@@ -93,6 +107,12 @@ namespace Asteroids.Game
 
             if (_inputActions.Shoot.phase == InputActionPhase.Performed)
                 Shoot();
+        }
+
+        public void TakeDamage(IDamaging damaging)
+        {
+            if (damaging is IAsteroidPresenter || damaging is IFlyingSaucerPresenter)
+                Destroy();
         }
 
         private void Move(float deltaTime)

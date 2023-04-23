@@ -9,6 +9,8 @@ namespace Asteroids.Core.Screens
 
         public Action<IScreen> Closed { get; set; }
 
+        public abstract void Close();
+
         public abstract void Init(Options options = null);
 
         public abstract void Tick(float deltaTime);

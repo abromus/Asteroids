@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: FlyingSaucerConfig
   m_EditorClassIdentifier: 
   _damping: 90
-  _speed: 7
+  _speed: 4

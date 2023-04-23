@@ -8,6 +8,8 @@ namespace Asteroids.Core.Screens
 
         public Action<IScreen> Closed { get; set; }
 
+        public void Close();
+
         public void Init(Options options);
     }
 }

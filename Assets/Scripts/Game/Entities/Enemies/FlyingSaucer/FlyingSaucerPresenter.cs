@@ -122,11 +122,7 @@ namespace Asteroids.Game
             var destroyDistance = 0.5f;
 
             if (MathUtils.Distance(_shipPresenter.Position, _model.Position.Value) <= destroyDistance)
-            {
-                Destroy();
-
                 return;
-            }
 
             var direction = MathUtils.TransformDirection(_model.Rotation.Value.Z);
             var angle = MathUtils.CalculateAngle(direction, _shipPresenter.Position - _model.Position.Value);

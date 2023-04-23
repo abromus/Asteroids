@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5d600b89c877c84fa81d0802e008493, type: 3}
   m_Name: FlyingSaucerSpawnerConfig
   m_EditorClassIdentifier: 
-  _maxCount: 6
+  _maxCount: 2
   _spawnDelay: 3

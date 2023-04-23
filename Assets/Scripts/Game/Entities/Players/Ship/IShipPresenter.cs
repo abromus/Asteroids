@@ -1,8 +1,9 @@
-﻿using Asteroids.Core;
+﻿using System;
+using Asteroids.Core;
 
 namespace Asteroids.Game
 {
-    public interface IShipPresenter : IPresenter
+    public interface IShipPresenter : IPresenter, IDamaging
     {
         public float Acceleration { get; }
 
@@ -11,5 +12,7 @@ namespace Asteroids.Game
         public float LasersReloadTime { get; }
 
         public Float3 Rotation { get; }
+
+        public Action Destroyed { get; set; }
     }
 }

@@ -106,6 +106,7 @@ namespace Asteroids.Game
             var firingDelay = MathUtils.Inverse(_config.FiringRate);
 
             _timer.UpdateTime(firingDelay);
+            _timer.Resume();
 
             var bullet = _bulletFactory.Create();
             bullet.SetRotation(_model.Rotation.Value);

@@ -30,5 +30,11 @@ namespace Asteroids.Game
         {
             transform.rotation = Quaternion.Euler(value.ToVector3());
         }
+
+        public void DestroyView()
+        {
+            if (this != null && gameObject != null)
+                Destroy(gameObject);
+        }
     }
 }

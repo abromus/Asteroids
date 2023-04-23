@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Asteroids.Core;
 using Asteroids.Game.Factory;
 using Asteroids.Game.Services;
@@ -18,6 +19,10 @@ namespace Asteroids.Game
         private readonly IList<IAsteroidFragmentPresenter> _asteroidFragments;
         private readonly ISpawnerHelper _spawnerHelper;
         private readonly IList<ITimer> _timers;
+
+        public Action AsteroidDestroyed { get; set; }
+
+        public Action AsteroidFragmentDestroyed { get; set; }
 
         public AsteroidSpawner(IAsteroidSpawnerConfig config, IAsteroidFactory factory, IPositionCheckService positionCheckService, ITimerService timerService, Bounds bounds)
         {
@@ -46,6 +51,9 @@ namespace Asteroids.Game
 
         public void Destroy()
         {
+            AsteroidDestroyed = null;
+            AsteroidFragmentDestroyed = null;
+
             DestroyTimers();
 
             DestroyAsteroids();
@@ -168,11 +176,15 @@ namespace Asteroids.Game
             _asteroidFragments.Remove(asteroidFragmentPresenter);
             _positionCheckService.RemoveDamagable(asteroidFragmentPresenter);
             _factory.ReleaseFragment(asteroidFragmentPresenter);
+
+            AsteroidFragmentDestroyed.SafeInvoke();
         }
 
         private void OnAsteroidDestroyed(IAsteroidPresenter asteroidPresenter)
         {
             asteroidPresenter.Destroyed -= OnAsteroidDestroyed;
+
+            AsteroidDestroyed.SafeInvoke();
 
             CreateAsteroidFragments(asteroidPresenter.Position);
         }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Asteroids.Core;
 using Asteroids.Game.Factory;
 using Asteroids.Game.Services;
@@ -18,6 +19,8 @@ namespace Asteroids.Game
         private readonly IList<IFlyingSaucerPresenter> _flyingSaucers;
         private readonly ISpawnerHelper _spawnerHelper;
         private readonly IList<ITimer> _timers;
+
+        public Action FlyingSaucerDestroyed { get; set; }
 
         public FlyingSaucerSpawner(
             IFlyingSaucerSpawnerConfig config,
@@ -52,6 +55,8 @@ namespace Asteroids.Game
 
         public void Destroy()
         {
+            FlyingSaucerDestroyed = null;
+
             DestroyTimers();
 
             DestroyFlyingSaucers();
@@ -99,6 +104,8 @@ namespace Asteroids.Game
             _positionCheckService.RemoveDamagable(flyingSaucerPresenter);
             _flyingSaucers.Remove(flyingSaucerPresenter);
             _factory.Release(flyingSaucerPresenter);
+
+            FlyingSaucerDestroyed.SafeInvoke();
         }
 
         private void OnElapsed(ITimer timer)

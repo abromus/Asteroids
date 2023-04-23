@@ -32,6 +32,21 @@ namespace Asteroids.Game.Services
             _activeScreens = new List<IScreen>();
         }
 
+        public void CloseScreen(IScreen screen)
+        {
+            screen.Close();
+        }
+
+        public void CloseAllScreens()
+        {
+            for (int i = _activeScreens.Count - 1; i >= 0; i--)
+            {
+                var screen = _activeScreens[i];
+                screen.Close();
+                OnClosed(screen);
+            }
+        }
+
         public void ShowGame(IShipPresenter shipPresenter)
         {
             var screenPrefab = _gameData.ConfigStorage.GetScreenConfig().Screens
@@ -51,13 +66,13 @@ namespace Asteroids.Game.Services
             _updater.Add(screen);
         }
 
-        public void ShowGameOver(int score)
+        public IGameOverScreen ShowGameOver(int score)
         {
             var screenPrefab = _gameData.ConfigStorage.GetScreenConfig().Screens
                 .FirstOrDefault(screen => screen.ScreenType == ScreenType.GameOver);
 
             if (screenPrefab == null)
-                return;
+                return null;
 
             var screen = Instantiate(screenPrefab, _transform);
 
@@ -68,6 +83,8 @@ namespace Asteroids.Game.Services
 
             _activeScreens.Add(screen);
             _updater.Add(screen);
+
+            return screen as IGameOverScreen;
         }
 
         private void OnClosed(IScreen screen)
@@ -77,7 +94,8 @@ namespace Asteroids.Game.Services
             _activeScreens.Remove(screen);
             _updater.Remove(screen);
 
-            Destroy((screen as MonoBehaviour).gameObject);
+            if (screen != null)
+                Destroy((screen as MonoBehaviour).gameObject);
         }
     }
 }
