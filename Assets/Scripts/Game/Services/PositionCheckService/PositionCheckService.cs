@@ -40,13 +40,16 @@ namespace Asteroids.Game.Services
 
         public void Tick(float deltaTime)
         {
-            foreach (var damaging in _damagings)
+            for (int i = 0; i < _damagings.Count; i++)
             {
+                var damaging = _damagings[i];
+
                 if (damaging.IsDestroyed)
                     continue;
 
-                foreach (var damagable in _damagables)
+                for (int j = 0; j < _damagables.Count; j++)
                 {
+                    var damagable = _damagables[j];
                     var needDestroy = IsNeedDestroy(damaging, damagable);
 
                     if (!needDestroy)

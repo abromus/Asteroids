@@ -1,3 +1,4 @@
+using System;
 using Asteroids.Core;
 using Asteroids.Game.Settings;
 using Bounds = Asteroids.Core.Bounds;
@@ -17,6 +18,8 @@ namespace Asteroids.Game
         public bool IsDestroyed => _isDestroyed;
 
         public Float3 Position => _model.Position.Value;
+
+        public Action<IAsteroidPresenter> Destroyed { get; set; }
 
         public AsteroidPresenter(IUpdater updater, IAsteroidModel model, IAsteroidView view, IAsteroidConfig config, Bounds bounds)
         {
@@ -56,6 +59,11 @@ namespace Asteroids.Game
         {
             Clear();
 
+            _model.Position.Value = Float3.Zero;
+            _model.Rotation.Value = Float3.Zero;
+
+            Destroyed = null;
+
             _isDestroyed = true;
         }
 
@@ -68,9 +76,6 @@ namespace Asteroids.Game
         {
             _updater.Remove(this);
 
-            _model.Position.Value = Float3.Zero;
-            _model.Rotation.Value = Float3.Zero;
-
             _view?.Deactivate();
 
             _isDestroyed = false;
@@ -79,9 +84,15 @@ namespace Asteroids.Game
         public void TakeDamage(IDamaging damaging)
         {
             if (damaging is IBulletPresenter)
+            {
+                Destroyed?.SafeInvoke(this);
+
                 Destroy();
+            }
             else if(damaging is ILaserPresenter)
+            {
                 Destroy();
+            }
         }
 
         private void Move(float deltaTime)

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Asteroids.Game
 {
-    public sealed class AsteroidView : View, IAsteroidView
+    public sealed class AsteroidFragmentView : View, IAsteroidFragmentView
     {
         public void Move(Float3 value)
         {
@@ -22,7 +22,7 @@ namespace Asteroids.Game
 
         public void Deactivate()
         {
-            if (gameObject != null)
+            if (this != null && gameObject != null)
                 gameObject.SetActive(false);
         }
     }

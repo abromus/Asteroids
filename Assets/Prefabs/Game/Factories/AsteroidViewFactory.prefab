@@ -45,3 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prefab: {fileID: -6433006607684130588, guid: 6d0a19961b1abf64e961681e93b4c5df, type: 3}
+  _fragmentPrefab: {fileID: 2238145967059137809, guid: 5236806cd120edc46ab13dc78b2a582c, type: 3}

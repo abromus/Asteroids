@@ -11,6 +11,7 @@ namespace Asteroids.Game.Factory
         private readonly Bounds _bounds;
 
         private readonly IObjectPool<IAsteroidPresenter> _pool;
+        private readonly IObjectPool<IAsteroidFragmentPresenter> _fragmentPool;
 
         public AsteroidFactory(IUpdater updater, IAsteroidViewFactory viewFactory, IAsteroidConfig config, Bounds bounds)
         {
@@ -20,6 +21,7 @@ namespace Asteroids.Game.Factory
             _bounds = bounds;
 
             _pool = new ObjectPool<IAsteroidPresenter>(() => CreateAsteroid());
+            _fragmentPool = new ObjectPool<IAsteroidFragmentPresenter>(() => CreateAsteroidFragment());
         }
 
         public IAsteroidPresenter Create()
@@ -29,6 +31,13 @@ namespace Asteroids.Game.Factory
             return asteroid;
         }
 
+        public IAsteroidFragmentPresenter CreateFragment()
+        {
+            var asteroidFragment = _fragmentPool.Get();
+
+            return asteroidFragment;
+        }
+
         public void Release(IAsteroidPresenter presenter)
         {
             presenter.Clear();
@@ -36,11 +45,27 @@ namespace Asteroids.Game.Factory
             _pool.Release(presenter);
         }
 
+        public void ReleaseFragment(IAsteroidFragmentPresenter presenter)
+        {
+            presenter.Clear();
+
+            _fragmentPool.Release(presenter);
+        }
+
         private IAsteroidPresenter CreateAsteroid()
         {
             var model = new AsteroidModel();
             var view = _viewFactory.Create();
             var presenter = new AsteroidPresenter(_updater, model, view, _config, _bounds);
+
+            return presenter;
+        }
+
+        private IAsteroidFragmentPresenter CreateAsteroidFragment()
+        {
+            var model = new AsteroidFragmentModel();
+            var view = _viewFactory.CreateFragment();
+            var presenter = new AsteroidFragmentPresenter(_updater, model, view, _config, _bounds);
 
             return presenter;
         }

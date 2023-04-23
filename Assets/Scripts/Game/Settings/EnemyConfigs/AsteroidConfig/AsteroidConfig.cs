@@ -7,6 +7,9 @@ namespace Asteroids.Game.Settings
     {
         [SerializeField] private float _damping;
         [SerializeField] private float _speed;
+        [SerializeField] private float _fragmentSpeed;
+
+        public float FragmentSpeed => _fragmentSpeed;
 
         public float Damping => _damping;
 

@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc0cedef86e0ef84882f4d3f9b9331bb, type: 3}
   m_Name: AsteroidSpawnerConfig
   m_EditorClassIdentifier: 
+  _fragmentCount: 4
   _maxCount: 15
   _spawnDelay: 3

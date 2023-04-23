@@ -15,6 +15,7 @@ namespace Asteroids.Game
         private readonly Bounds _bounds;
 
         private readonly IList<IAsteroidPresenter> _asteroids;
+        private readonly IList<IAsteroidFragmentPresenter> _asteroidFragments;
         private readonly ISpawnerHelper _spawnerHelper;
         private readonly IList<ITimer> _timers;
 
@@ -27,6 +28,7 @@ namespace Asteroids.Game
             _bounds = bounds;
 
             _asteroids = new List<IAsteroidPresenter>();
+            _asteroidFragments = new List<IAsteroidFragmentPresenter>();
             _spawnerHelper = new SpawnerHelper(_bounds);
             _timers = new List<ITimer>();
 
@@ -66,6 +68,18 @@ namespace Asteroids.Game
 
                 i--;
             }
+
+            for (int i = 0; i < _asteroidFragments.Count; i++)
+            {
+                var asteroidFragmentPresenter = _asteroidFragments[i];
+
+                if (!asteroidFragmentPresenter.IsDestroyed)
+                    continue;
+
+                DestroyAsteroidFragment(asteroidFragmentPresenter);
+
+                i--;
+            }
         }
 
         private IAsteroidPresenter CreateAsteroid()
@@ -76,8 +90,8 @@ namespace Asteroids.Game
             var position = _spawnerHelper.CalculatePosition(rotation);
 
             asteroidPresenter.Init(position);
-
             asteroidPresenter.Enable();
+            asteroidPresenter.Destroyed += OnAsteroidDestroyed;
 
             _positionCheckService.AddDamagable(asteroidPresenter);
 
@@ -90,7 +104,6 @@ namespace Asteroids.Game
 
             _asteroids.Remove(asteroidPresenter);
             _positionCheckService.RemoveDamagable(asteroidPresenter);
-            _asteroids.Remove(asteroidPresenter);
             _factory.Release(asteroidPresenter);
         }
 
@@ -122,7 +135,7 @@ namespace Asteroids.Game
                 timer.Destroy();
             }
         }
-        
+
         private void DestroyAsteroids()
         {
             for (int i = _asteroids.Count - 1; i >= 0; i--)
@@ -132,6 +145,35 @@ namespace Asteroids.Game
             }
 
             _asteroids.Clear();
+        }
+
+        private void CreateAsteroidFragments(Float3 position)
+        {
+            for (int i = 0; i < _config.FragmentCount; i++)
+            {
+                var asteroidFragmentPresenter = _factory.CreateFragment();
+                asteroidFragmentPresenter.Init(position);
+                asteroidFragmentPresenter.Enable();
+
+                _positionCheckService.AddDamagable(asteroidFragmentPresenter);
+                _asteroidFragments.Add(asteroidFragmentPresenter);
+            }
+        }
+
+        private void DestroyAsteroidFragment(IAsteroidFragmentPresenter asteroidFragmentPresenter)
+        {
+            asteroidFragmentPresenter.Disable();
+
+            _asteroidFragments.Remove(asteroidFragmentPresenter);
+            _positionCheckService.RemoveDamagable(asteroidFragmentPresenter);
+            _factory.ReleaseFragment(asteroidFragmentPresenter);
+        }
+
+        private void OnAsteroidDestroyed(IAsteroidPresenter asteroidPresenter)
+        {
+            asteroidPresenter.Destroyed -= OnAsteroidDestroyed;
+
+            CreateAsteroidFragments(asteroidPresenter.Position);
         }
     }
 }

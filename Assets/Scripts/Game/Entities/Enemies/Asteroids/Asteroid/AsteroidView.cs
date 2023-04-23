@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Asteroids.Game
 {
-    public sealed class FlyingSaucerView : View, IFlyingSaucerView
+    public sealed class AsteroidView : View, IAsteroidView
     {
         public void Move(Float3 value)
         {
