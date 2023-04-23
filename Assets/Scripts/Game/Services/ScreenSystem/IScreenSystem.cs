@@ -11,6 +11,8 @@ namespace Asteroids.Game.Services
 
         public void Init(IGameData gameData, IUpdater updater, Bounds bounds, Transform transform);
 
+        public void ShowGameOver(int score);
+
         public void ShowGame(IShipPresenter shipPresenter);
     }
 }

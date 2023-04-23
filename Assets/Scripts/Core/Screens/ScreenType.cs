@@ -2,6 +2,7 @@
 {
     public enum ScreenType
     {
+        GameOver,
         Game,
     }
 }

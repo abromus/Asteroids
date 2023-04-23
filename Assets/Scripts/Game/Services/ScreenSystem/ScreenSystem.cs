@@ -51,6 +51,25 @@ namespace Asteroids.Game.Services
             _updater.Add(screen);
         }
 
+        public void ShowGameOver(int score)
+        {
+            var screenPrefab = _gameData.ConfigStorage.GetScreenConfig().Screens
+                .FirstOrDefault(screen => screen.ScreenType == ScreenType.GameOver);
+
+            if (screenPrefab == null)
+                return;
+
+            var screen = Instantiate(screenPrefab, _transform);
+
+            var options = new GameOverScreenOptions(_gameData.ConfigStorage.GetUiFactoryConfig().UiFactories, score);
+
+            screen.Init(options);
+            screen.Closed += OnClosed;
+
+            _activeScreens.Add(screen);
+            _updater.Add(screen);
+        }
+
         private void OnClosed(IScreen screen)
         {
             screen.Closed -= OnClosed;
