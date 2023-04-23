@@ -1,4 +1,6 @@
-﻿namespace Asteroids.Game
+﻿using Asteroids.Core;
+
+namespace Asteroids.Game
 {
     public interface IUpdater
     {

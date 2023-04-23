@@ -53,7 +53,7 @@ namespace Asteroids.Game.Initializers
 
             var uiServices = _game.GameData.ConfigStorage.GetUiServiceConfig().UiServices;
             var screenSystem = uiServices.GetScreenSystem();
-            screenSystem.Init(_game.GameData, bounds, canvas);
+            screenSystem.Init(_game.GameData, _updater, bounds, canvas);
 
             _game.GameData.ServiceStorage.AddService(screenSystem);
         }

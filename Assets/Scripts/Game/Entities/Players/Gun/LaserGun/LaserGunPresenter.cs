@@ -25,9 +25,13 @@ namespace Asteroids.Game
         private int _currentLasers;
         private bool _isReload;
 
-        public Float3 Position => _model.Position.Value;
+        public int LasersCount => _isReload ? (int)MathUtils.Zero : _currentLasers;
+
+        public float ReloadTime => _isReload ? _reloadTimer.TimeLeft : _regenerateTimer.TimeLeft;
 
         public Float3 Offset => _offset;
+
+        public Float3 Position => _model.Position.Value;
 
         public ILaserGunView View => _view;
 
@@ -52,9 +56,9 @@ namespace Asteroids.Game
             _lasers = new List<ILaserPresenter>();
             _currentLasers = _config.Capacity;
 
-            _firingTimer = _timerService.CreateTimer();
-            _reloadTimer = _timerService.CreateTimer();
-            _regenerateTimer = _timerService.CreateTimer();
+            _firingTimer = CreateTimer();
+            _reloadTimer = CreateTimer();
+            _regenerateTimer = CreateTimer();
         }
 
         public void Enable()
@@ -122,6 +126,14 @@ namespace Asteroids.Game
             Shoot();
         }
 
+        private ITimer CreateTimer()
+        {
+            var timer = _timerService.CreateTimer();
+            timer.Pause();
+
+            return timer;
+        }
+
         private bool CanShoot()
         {
             return !(_isReload || _currentLasers <= MathUtils.Zero || _firingTimer == null || !_firingTimer.IsElapsed);
@@ -131,12 +143,18 @@ namespace Asteroids.Game
         {
             _isReload = true;
 
+            _regenerateTimer.Elapsed -= AfterRegenerateLaser;
+            _regenerateTimer.UpdateTime(MathUtils.Zero);
+            _regenerateTimer.Pause();
+
             _reloadTimer.UpdateTime(_config.ReloadTime);
+            _reloadTimer.Resume();
             _reloadTimer.Elapsed += AfterReload;
         }
 
         private void AfterReload(ITimer timer)
         {
+            timer.Elapsed -= AfterReload;
             _currentLasers = _config.Capacity;
             _isReload = false;
         }
@@ -146,6 +164,7 @@ namespace Asteroids.Game
             var firingDelay = MathUtils.Inverse(_config.FiringRate);
 
             _firingTimer.UpdateTime(firingDelay);
+            _firingTimer.Resume();
 
             var laser = _laserFactory.Create();
             laser.SetRotation(_model.Rotation.Value);
@@ -166,12 +185,20 @@ namespace Asteroids.Game
                 _regenerateTimer.Elapsed += AfterRegenerateLaser;
 
             _regenerateTimer.UpdateTime(_config.RegenerateTime);
+            _regenerateTimer.Resume();
         }
 
         private void AfterRegenerateLaser(ITimer timer)
         {
+            timer.Elapsed -= AfterRegenerateLaser;
+
             if (!_isReload)
                 _currentLasers++;
+
+            if (_currentLasers >= _config.Capacity)
+                return;
+
+            RegenerateLaser();
         }
     }
 }

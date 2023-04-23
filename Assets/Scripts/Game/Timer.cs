@@ -12,6 +12,8 @@ namespace Asteroids.Game
 
         public bool IsElapsed => _seconds <= ZeroSeconds;
 
+        public float TimeLeft => _seconds;
+
         public Action<ITimer> Elapsed { get; set; }
 
         public Timer(float seconds = ZeroSeconds)
@@ -28,8 +30,9 @@ namespace Asteroids.Game
 
             if (_seconds <= 0f)
             {
+                _seconds = 0f;
+                _isPaused = true;
                 Elapsed.SafeInvoke(this);
-                Elapsed = null;
             }
         }
 

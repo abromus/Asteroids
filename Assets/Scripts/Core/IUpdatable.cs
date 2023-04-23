@@ -1,4 +1,4 @@
-﻿namespace Asteroids.Game
+﻿namespace Asteroids.Core
 {
     public interface IUpdatable
     {

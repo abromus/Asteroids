@@ -21,7 +21,15 @@ namespace Asteroids.Game
         private readonly PlayerInputActions.PlayerActions _inputActions;
         private readonly IAcceleration _acceleration;
 
+        public float Acceleration => _acceleration.Speed;
+
+        public int LasersCount => _laserGunPresenter.LasersCount;
+
+        public float LasersReloadTime => _laserGunPresenter.ReloadTime;
+
         public Float3 Position => _model.Position.Value;
+
+        public Float3 Rotation => _model.Rotation.Value;
 
         public ShipPresenter(
             IUpdater updater,

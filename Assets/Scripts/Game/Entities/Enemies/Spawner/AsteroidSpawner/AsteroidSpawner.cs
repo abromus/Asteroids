@@ -109,6 +109,7 @@ namespace Asteroids.Game
 
         private void OnElapsed(ITimer timer)
         {
+            timer.Elapsed -= OnElapsed;
             _timers.Remove(timer);
             _timerService.RemoveTimer(timer);
 

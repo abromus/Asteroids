@@ -6,6 +6,8 @@ namespace Asteroids.Game
     {
         public bool IsElapsed { get; }
 
+        public float TimeLeft { get; }
+
         public Action<ITimer> Elapsed { get; set; }
 
         public void Destroy();

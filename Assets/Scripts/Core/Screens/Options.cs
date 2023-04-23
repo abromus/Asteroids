@@ -3,7 +3,7 @@ using Asteroids.Core.Settings;
 
 namespace Asteroids.Core.Screens
 {
-    public sealed class Options
+    public class Options
     {
         private readonly IReadOnlyList<IUiFactory> _uiFactories;
 

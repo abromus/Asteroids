@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: ScreenConfig
   m_EditorClassIdentifier: 
   _screens:
-  - {fileID: -2839956519172829551, guid: d22f6f5a829b69c479d30095b9039e33, type: 3}
+  - {fileID: 1357381159115778715, guid: 5f4b1fd4027277d41ba39654ac12c6be, type: 3}

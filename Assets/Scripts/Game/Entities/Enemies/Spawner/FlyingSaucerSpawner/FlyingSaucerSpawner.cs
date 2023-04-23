@@ -103,6 +103,7 @@ namespace Asteroids.Game
 
         private void OnElapsed(ITimer timer)
         {
+            timer.Elapsed -= OnElapsed;
             _timerService.RemoveTimer(timer);
 
             Spawn();
@@ -122,6 +123,7 @@ namespace Asteroids.Game
             for (int i = _timers.Count - 1; i >= 0; i--)
             {
                 var timer = _timers[i];
+                timer.Elapsed -= OnElapsed;
                 _timers.Remove(timer);
                 _timerService.RemoveTimer(timer);
 

@@ -9,8 +9,8 @@ namespace Asteroids.Game.Services
     {
         public Bounds Bounds { get; }
 
-        public void Init(IGameData gameData, Bounds bounds, Transform transform);
+        public void Init(IGameData gameData, IUpdater updater, Bounds bounds, Transform transform);
 
-        public void ShowGame();
+        public void ShowGame(IShipPresenter shipPresenter);
     }
 }

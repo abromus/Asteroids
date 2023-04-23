@@ -32,6 +32,7 @@ namespace Asteroids.Game
         {
             CreateShip();
             CreateEnemies();
+            CreateHud();
         }
 
         private void CreateShip()
@@ -69,6 +70,12 @@ namespace Asteroids.Game
 
             _flyingSaucerSpawner = new FlyingSaucerSpawner(flyingSaucerSpawnerConfig, flyingSaucerFactory, positionCheckService, timerService, bounds, _shipPresenter);
             _updater.Add(_flyingSaucerSpawner);
+        }
+
+        private void CreateHud()
+        {
+            var screenSystem = _gameData.ServiceStorage.GetScreenSystem();
+            screenSystem.ShowGame(_shipPresenter);
         }
     }
 }
