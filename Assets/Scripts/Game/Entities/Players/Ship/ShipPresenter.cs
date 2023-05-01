@@ -118,17 +118,19 @@ namespace Asteroids.Game
         private void Move(float deltaTime)
         {
             var direction = MathUtils.TransformDirection(_model.Rotation.Value.Z);
-
             var delta = _acceleration.Speed * deltaTime * direction;
-
             var modelPosition = MathUtils.CorrectPosition(_model.Position.Value + delta, _screenSystem.Bounds);
-            _model.Position.Value = modelPosition;
 
-            var laserGunPosition = MathUtils.CorrectPosition(_laserGunPresenter.Position + delta, _screenSystem.Bounds) - _laserGunPresenter.Offset;
-            _laserGunPresenter.SetPosition(laserGunPosition);
-
-            var machineGunPosition = MathUtils.CorrectPosition(_machineGunPresenter.Position + delta, _screenSystem.Bounds) - _machineGunPresenter.Offset;
+            var machineGunPosition = _model.Position.Value + delta == modelPosition
+                ? _machineGunPresenter.Position - _machineGunPresenter.Offset + delta
+                : MathUtils.CorrectPosition(_machineGunPresenter.Position + delta, _screenSystem.Bounds) - _machineGunPresenter.Offset;
+            var laserGunPosition = _model.Position.Value + delta == modelPosition
+                ? _laserGunPresenter.Position - _laserGunPresenter.Offset + delta
+                : MathUtils.CorrectPosition(_laserGunPresenter.Position + delta, _screenSystem.Bounds) - _laserGunPresenter.Offset;
+            
             _machineGunPresenter.SetPosition(machineGunPosition);
+            _laserGunPresenter.SetPosition(laserGunPosition);
+            _model.Position.Value = modelPosition;
         }
 
         private void RotateLeft(float deltaTime)
@@ -149,10 +151,12 @@ namespace Asteroids.Game
         {
             var angle = direction * _config.Damping * deltaTime;
             var rotation = MathUtils.CalculateRotation(angle, _model.Rotation.Value);
+
             var deltaMachineGunPosition = MathUtils.Rotate(
                 _model.Position.Value,
                 _machineGunPresenter.Position,
                 rotation.Z - _model.Rotation.Value.Z);
+
             var deltaLaserGunPosition = MathUtils.Rotate(
                 _model.Position.Value,
                 _laserGunPresenter.Position,
@@ -160,11 +164,11 @@ namespace Asteroids.Game
 
             _model.Rotation.Value = rotation;
 
-            _laserGunPresenter.SetPosition(_model.Position.Value + deltaLaserGunPosition - _laserGunPresenter.Offset);
-            _laserGunPresenter.SetRotation(rotation);
-
             _machineGunPresenter.SetPosition(_model.Position.Value + deltaMachineGunPosition - _machineGunPresenter.Offset);
             _machineGunPresenter.SetRotation(rotation);
+
+            _laserGunPresenter.SetPosition(_model.Position.Value + deltaLaserGunPosition - _laserGunPresenter.Offset);
+            _laserGunPresenter.SetRotation(rotation);
         }
 
         private void Shoot()

@@ -133,15 +133,15 @@ namespace Asteroids.Core
         public static Float3 CorrectPosition(Float3 original, Bounds bounds)
         {
             var x = original.X > bounds.Max.X
-                ? bounds.Min.X
+                ? original.X - bounds.Size.X
                 : original.X < bounds.Min.X
-                    ? bounds.Max.X
+                    ? original.X + bounds.Size.X
                     : original.X;
 
             var y = original.Y > bounds.Max.Y
-                ? bounds.Min.Y
+                ? original.Y - bounds.Size.Y
                 : original.Y < bounds.Min.Y
-                    ? bounds.Max.Y
+                    ? original.Y + bounds.Size.Y
                     : original.Y;
 
             var z = original.Z;
