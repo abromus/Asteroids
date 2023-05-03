@@ -5,13 +5,13 @@ namespace Asteroids.Game
 {
     public sealed class LaserPresenter : ILaserPresenter
     {
+        private Float3 _startPosition;
+        private bool _isDestroyed;
+
         private readonly IUpdater _updater;
         private readonly ILaserModel _model;
         private readonly ILaserView _view;
         private readonly ILaserConfig _config;
-
-        private Float3 _startPosition;
-        private bool _isDestroyed;
 
         public bool IsDestroyed => _isDestroyed;
 

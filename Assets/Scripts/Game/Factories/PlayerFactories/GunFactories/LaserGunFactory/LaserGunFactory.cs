@@ -32,7 +32,14 @@ namespace Asteroids.Game.Factory
         {
             var model = new LaserGunModel();
             var view = _viewFactory.Create();
-            var presenter = new LaserGunPresenter(_updater, _timerService, _positionCheckService, model, view, _config, _laserFactory);
+            var presenter = new LaserGunPresenter(
+                _updater,
+                _timerService,
+                _positionCheckService,
+                model,
+                view,
+                _config,
+                _laserFactory);
 
             return presenter;
         }

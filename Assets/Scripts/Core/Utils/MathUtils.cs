@@ -39,15 +39,17 @@ namespace Asteroids.Core
             var firstMagnitude = Magnitude(first);
             var secondMagnitude = Magnitude(second);
 
-            if (firstMagnitude == 0f || secondMagnitude == 0f)
+            if (firstMagnitude == Zero || secondMagnitude == Zero)
                 return Zero;
 
             var modules = firstMagnitude * secondMagnitude;
 
-            if (modules == 0f || modules < EpsilonNormalSqrt)
-                return 0f;
+            if (modules == Zero || modules < EpsilonNormalSqrt)
+                return Zero;
 
-            var angle = Math.Clamp(dot / modules, -1f, 1f);
+            var min = -1f;
+            var max = 1f;
+            var angle = Math.Clamp(dot / modules, min, max);
             var result = (float)Math.Acos(angle) * Rad2Deg;
 
             return result;
@@ -65,7 +67,7 @@ namespace Asteroids.Core
 
         public static Float3 CalculateRotation(float angle, Float3 offset)
         {
-            var eulerAngles = new UnityEngine.Vector3(0f, 0f, angle % FullAngle);
+            var eulerAngles = new UnityEngine.Vector3(Zero, Zero, angle % FullAngle);
             var delta = UnityEngine.Quaternion.Euler(eulerAngles);
 
             var rotation = (offset + delta.eulerAngles.ToFloat3()) % FullAngle;
@@ -110,16 +112,6 @@ namespace Asteroids.Core
             var result = new Float3(x, y);
 
             return result;
-        }
-
-        public static Float2 ToFloat2(this Float3 value)
-        {
-            return new Float2(value.X, value.Y);
-        }
-
-        public static Float3 ToFloat3(this Float2 value)
-        {
-            return new Float3(value.X, value.Y);
         }
 
         public static float Inverse(float value)

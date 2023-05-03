@@ -11,18 +11,18 @@ namespace Asteroids.Core
 
         private IGameData _gameData;
 
-        private void Awake()
-        {
-            _configStorage.Init();
-
-            DontDestroyOnLoad(this);
-        }
-
         public void CreateGameData()
         {
             _gameData = new GameData(this, _configStorage);
 
             EnterInitState();
+        }
+
+        private void Awake()
+        {
+            _configStorage.Init();
+
+            DontDestroyOnLoad(this);
         }
 
         private void EnterInitState()

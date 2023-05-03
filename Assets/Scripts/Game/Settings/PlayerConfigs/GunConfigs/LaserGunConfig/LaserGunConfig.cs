@@ -2,7 +2,7 @@
 
 namespace Asteroids.Game.Settings
 {
-    [CreateAssetMenu(fileName = "LaserGunConfig", menuName = "Settings/Game/Player/Gun/LaserGunConfig")]
+    [CreateAssetMenu(fileName = nameof(LaserGunConfig), menuName = ConfigKeys.PlayerGunPathKey + nameof(LaserGunConfig))]
     public sealed class LaserGunConfig : ScriptableObject, ILaserGunConfig
     {
         [SerializeField] private int _capacity;

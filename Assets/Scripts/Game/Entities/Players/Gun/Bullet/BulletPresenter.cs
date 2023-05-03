@@ -5,13 +5,13 @@ namespace Asteroids.Game
 {
     public sealed class BulletPresenter : IBulletPresenter
     {
+        private Float3 _startPosition;
+        private bool _isDestroyed;
+
         private readonly IUpdater _updater;
         private readonly IBulletModel _model;
         private readonly IBulletView _view;
         private readonly IBulletConfig _config;
-
-        private Float3 _startPosition;
-        private bool _isDestroyed;
 
         public bool IsDestroyed => _isDestroyed;
 
@@ -37,6 +37,11 @@ namespace Asteroids.Game
 
         public void Destroy()
         {
+            var distance = MathUtils.Distance(_startPosition, _model.Position.Value);
+
+            if (distance < _config.MaxDistance)
+                return;
+
             Clear();
 
             _isDestroyed = true;

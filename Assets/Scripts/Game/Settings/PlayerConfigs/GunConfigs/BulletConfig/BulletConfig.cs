@@ -2,7 +2,7 @@
 
 namespace Asteroids.Game.Settings
 {
-    [CreateAssetMenu(fileName = "BulletConfig", menuName = "Settings/Game/Player/Gun/BulletConfig")]
+    [CreateAssetMenu(fileName = nameof(BulletConfig), menuName = ConfigKeys.PlayerGunPathKey + nameof(BulletConfig))]
     public sealed class BulletConfig : ScriptableObject, IBulletConfig
     {
         [SerializeField] private float _speed;

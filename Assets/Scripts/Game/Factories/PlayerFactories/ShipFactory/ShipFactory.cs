@@ -41,7 +41,7 @@ namespace Asteroids.Game.Factory
             var model = new ShipModel();
             var machineGunPresenter = CreateMachineGun();
             var laserGunPresenter = CreateLaserGun();
-            var view = _viewFactory.Create(_inputConfig, laserGunPresenter.View, machineGunPresenter.View);
+            var view = _viewFactory.Create(_inputConfig, machineGunPresenter.View, laserGunPresenter.View);
             var presenter = new ShipPresenter(
                 _updater,
                 model,
@@ -49,19 +49,10 @@ namespace Asteroids.Game.Factory
                 _config,
                 _inputSystem,
                 _screenSystem,
-                laserGunPresenter,
-                machineGunPresenter);
+                machineGunPresenter,
+                laserGunPresenter);
 
             return presenter;
-        }
-
-        private ILaserGunPresenter CreateLaserGun()
-        {
-            var laserGunPresenter = _laserGunFactory.Create();
-            laserGunPresenter.Enable();
-            laserGunPresenter.SetPosition(Float3.Zero);
-
-            return laserGunPresenter;
         }
 
         private IMachineGunPresenter CreateMachineGun()
@@ -71,6 +62,15 @@ namespace Asteroids.Game.Factory
             machineGunPresenter.SetPosition(Float3.Zero);
 
             return machineGunPresenter;
+        }
+
+        private ILaserGunPresenter CreateLaserGun()
+        {
+            var laserGunPresenter = _laserGunFactory.Create();
+            laserGunPresenter.Enable();
+            laserGunPresenter.SetPosition(Float3.Zero);
+
+            return laserGunPresenter;
         }
     }
 }

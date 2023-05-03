@@ -7,13 +7,13 @@ namespace Asteroids.Game
 {
     public sealed class AsteroidPresenter : IAsteroidPresenter
     {
+        private bool _isDestroyed;
+
         private readonly IUpdater _updater;
         private readonly IAsteroidModel _model;
         private readonly IAsteroidView _view;
         private readonly IAsteroidConfig _config;
         private readonly Bounds _bounds;
-
-        private bool _isDestroyed;
 
         public bool IsDestroyed => _isDestroyed;
 
@@ -98,9 +98,7 @@ namespace Asteroids.Game
         private void Move(float deltaTime)
         {
             var direction = MathUtils.TransformDirection(_model.Rotation.Value.Z);
-
             var delta = _config.Speed * deltaTime * direction;
-
             var modelPosition = MathUtils.CorrectPosition(_model.Position.Value + delta, _bounds);
 
             if (_model.Position.Value + delta == modelPosition)
@@ -112,7 +110,6 @@ namespace Asteroids.Game
         private void Rotate()
         {
             var angle = MathUtils.Value * MathUtils.FullAngle;
-
             var rotation = MathUtils.CalculateRotation(angle, _model.Rotation.Value);
 
             _model.Rotation.Value = rotation;

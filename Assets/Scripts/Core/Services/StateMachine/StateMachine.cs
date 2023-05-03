@@ -5,9 +5,9 @@ namespace Asteroids.Core.Services
 {
     public sealed class StateMachine : IStateMachine
     {
-        private readonly Dictionary<Type, IState> _states = new Dictionary<Type, IState>();
-
         private IExitState _currentState;
+
+        private readonly Dictionary<Type, IState> _states = new Dictionary<Type, IState>();
 
         public void Enter<TState>() where TState : class, IEnterState
         {

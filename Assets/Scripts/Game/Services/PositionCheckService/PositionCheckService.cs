@@ -45,7 +45,9 @@ namespace Asteroids.Game.Services
                 var damaging = _damagings[i];
 
                 if (damaging.IsDestroyed)
+                {
                     continue;
+                }
 
                 for (int j = 0; j < _damagables.Count; j++)
                 {

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Asteroids.Game.Settings
 {
-    [CreateAssetMenu(fileName = "ConfigData", menuName = "Settings/Game/ConfigData")]
+    [CreateAssetMenu(fileName = nameof(ConfigData), menuName = ConfigKeys.GamePathKey + nameof(ConfigData))]
     public sealed class ConfigData : ScriptableObject, IConfigData
     {
         [SerializeField] private AsteroidConfig _asteroidConfig;

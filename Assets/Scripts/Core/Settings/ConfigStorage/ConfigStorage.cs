@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Asteroids.Core.Settings
 {
-    [CreateAssetMenu(fileName = "ConfigStorage", menuName = "Settings/Core/ConfigStorage")]
+    [CreateAssetMenu(fileName = nameof(ConfigStorage), menuName = ConfigKeys.CorePathKey + nameof(ConfigStorage))]
     public sealed class ConfigStorage : ScriptableObject, IConfigStorage
     {
         [SerializeField] private CanvasConfig _canvasConfig;

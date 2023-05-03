@@ -8,13 +8,13 @@ namespace Asteroids.Game
 {
     public sealed class Scoreboard : IScoreboard
     {
+        private int _score;
+        private IGameOverScreen _screen;
+
         private readonly IScreenSystem _screenSystem;
         private readonly IShipPresenter _shipPresenter;
         private readonly IAsteroidSpawner<IAsteroidPresenter> _asteroidSpawner;
         private readonly IFlyingSaucerSpawner<IFlyingSaucerPresenter> _flyingSaucerSpawner;
-
-        private int _score;
-        private IGameOverScreen _screen;
 
         public Action Restarted { get; set; }
 

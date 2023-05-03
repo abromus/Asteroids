@@ -2,7 +2,7 @@
 
 namespace Asteroids.Game.Settings
 {
-    [CreateAssetMenu(fileName = "AsteroidSpawnerConfig", menuName = "Settings/Game/Enemies/AsteroidSpawnerConfig")]
+    [CreateAssetMenu(fileName = nameof(AsteroidSpawnerConfig), menuName = ConfigKeys.EnemiesPathKey + nameof(AsteroidSpawnerConfig))]
     public sealed class AsteroidSpawnerConfig : ScriptableObject, IAsteroidSpawnerConfig
     {
         [SerializeField] private int _fragmentCount;

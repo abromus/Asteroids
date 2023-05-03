@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Asteroids.Core.Screens;
-using Asteroids.Core.Settings;
+﻿using Asteroids.Core.Screens;
 
 namespace Asteroids.Game.Screens
 {
@@ -10,7 +8,7 @@ namespace Asteroids.Game.Screens
 
         public IShipPresenter ShipPresenter => _shipPresenter;
 
-        public GameScreenOptions(IReadOnlyList<IUiFactory> uiFactories, IShipPresenter shipPresenter) : base(uiFactories)
+        public GameScreenOptions(IShipPresenter shipPresenter)
         {
             _shipPresenter = shipPresenter;
         }

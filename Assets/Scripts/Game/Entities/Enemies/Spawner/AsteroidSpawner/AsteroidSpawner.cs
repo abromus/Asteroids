@@ -24,7 +24,12 @@ namespace Asteroids.Game
 
         public Action AsteroidFragmentDestroyed { get; set; }
 
-        public AsteroidSpawner(IAsteroidSpawnerConfig config, IAsteroidFactory factory, IPositionCheckService positionCheckService, ITimerService timerService, Bounds bounds)
+        public AsteroidSpawner(
+            IAsteroidSpawnerConfig config,
+            IAsteroidFactory factory,
+            IPositionCheckService positionCheckService,
+            ITimerService timerService,
+            Bounds bounds)
         {
             _config = config;
             _factory = factory;
@@ -61,7 +66,7 @@ namespace Asteroids.Game
 
         public void Tick(float deltaTime)
         {
-            for (int i = 0; i < _asteroids.Count; i++)
+            for (int i = _asteroids.Count - 1; i >= 0; i--)
             {
                 var asteroidPresenter = _asteroids[i];
 
@@ -73,11 +78,9 @@ namespace Asteroids.Game
                 var timer = _timerService.CreateTimer(_config.SpawnDelay);
                 timer.Elapsed += OnElapsed;
                 _timers.Add(timer);
-
-                i--;
             }
 
-            for (int i = 0; i < _asteroidFragments.Count; i++)
+            for (int i = _asteroidFragments.Count - 1; i >= 0; i--)
             {
                 var asteroidFragmentPresenter = _asteroidFragments[i];
 
@@ -85,8 +88,6 @@ namespace Asteroids.Game
                     continue;
 
                 DestroyAsteroidFragment(asteroidFragmentPresenter);
-
-                i--;
             }
         }
 
@@ -115,19 +116,9 @@ namespace Asteroids.Game
             _factory.Release(asteroidPresenter);
         }
 
-        private void OnElapsed(ITimer timer)
-        {
-            timer.Elapsed -= OnElapsed;
-            _timers.Remove(timer);
-            _timerService.RemoveTimer(timer);
-
-            Spawn();
-        }
-
         private Float3 GetRotation()
         {
             var angle = MathUtils.Value * MathUtils.FullAngle;
-
             var rotation = MathUtils.CalculateRotation(angle, Float3.Zero);
 
             return rotation;
@@ -138,6 +129,7 @@ namespace Asteroids.Game
             for (int i = _timers.Count - 1; i >= 0; i--)
             {
                 var timer = _timers[i];
+
                 _timers.Remove(timer);
                 _timerService.RemoveTimer(timer);
 
@@ -148,10 +140,7 @@ namespace Asteroids.Game
         private void DestroyAsteroids()
         {
             for (int i = _asteroids.Count - 1; i >= 0; i--)
-            {
-                var asteroid = _asteroids[i];
-                DestroyAsteroid(asteroid);
-            }
+                DestroyAsteroid(_asteroids[i]);
 
             _asteroids.Clear();
         }
@@ -178,6 +167,16 @@ namespace Asteroids.Game
             _factory.ReleaseFragment(asteroidFragmentPresenter);
 
             AsteroidFragmentDestroyed.SafeInvoke();
+        }
+
+        private void OnElapsed(ITimer timer)
+        {
+            timer.Elapsed -= OnElapsed;
+
+            _timers.Remove(timer);
+            _timerService.RemoveTimer(timer);
+
+            Spawn();
         }
 
         private void OnAsteroidDestroyed(IAsteroidPresenter asteroidPresenter)

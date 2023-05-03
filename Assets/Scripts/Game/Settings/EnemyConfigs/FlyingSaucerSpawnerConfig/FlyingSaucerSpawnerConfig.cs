@@ -2,7 +2,7 @@
 
 namespace Asteroids.Game.Settings
 {
-    [CreateAssetMenu(fileName = "FlyingSaucerSpawnerConfig", menuName = "Settings/Game/Enemies/FlyingSaucerSpawnerConfig")]
+    [CreateAssetMenu(fileName = nameof(FlyingSaucerSpawnerConfig), menuName = ConfigKeys.EnemiesPathKey + nameof(FlyingSaucerSpawnerConfig))]
     public sealed class FlyingSaucerSpawnerConfig : ScriptableObject, IFlyingSaucerSpawnerConfig
     {
         [SerializeField] private int _maxCount;

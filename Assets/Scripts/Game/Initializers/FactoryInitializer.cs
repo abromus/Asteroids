@@ -84,7 +84,13 @@ namespace Asteroids.Game.Initializers
             var viewFactory = uiFactories.GetLaserGunViewFactory();
             var config = _game.GameData.ConfigStorage.GetLaserGunConfig();
             var laserFactory = _game.GameData.FactoryStorage.GetLaserFactory();
-            var factory = new LaserGunFactory(_updater, timerService, positionCheckService, viewFactory, config, laserFactory) as ILaserGunFactory;
+            var factory = new LaserGunFactory(
+                _updater,
+                timerService,
+                positionCheckService,
+                viewFactory,
+                config,
+                laserFactory) as ILaserGunFactory;
 
             _game.GameData.FactoryStorage.AddFactory(viewFactory);
             _game.GameData.FactoryStorage.AddFactory(factory);
@@ -97,7 +103,13 @@ namespace Asteroids.Game.Initializers
             var viewFactory = uiFactories.GetMachineGunViewFactory();
             var config = _game.GameData.ConfigStorage.GetMachineGunConfig();
             var bulletFactory = _game.GameData.FactoryStorage.GetBulletFactory();
-            var factory = new MachineGunFactory(_updater, timerService, positionCheckService, viewFactory, config, bulletFactory) as IMachineGunFactory;
+            var factory = new MachineGunFactory(
+                _updater,
+                timerService,
+                positionCheckService,
+                viewFactory,
+                config,
+                bulletFactory) as IMachineGunFactory;
 
             _game.GameData.FactoryStorage.AddFactory(viewFactory);
             _game.GameData.FactoryStorage.AddFactory(factory);
@@ -111,7 +123,15 @@ namespace Asteroids.Game.Initializers
             var inputConfig = _game.GameData.ConfigStorage.GetInputConfig();
             var laserGunFactory = _game.GameData.FactoryStorage.GetLaserGunFactory();
             var machineGunFactory = _game.GameData.FactoryStorage.GetMachineGunFactory();
-            var factory = new ShipFactory(_updater, viewFactory, config, inputSystem, inputConfig, screenSystem, laserGunFactory, machineGunFactory) as IShipFactory;
+            var factory = new ShipFactory(
+                _updater,
+                viewFactory,
+                config,
+                inputSystem,
+                inputConfig,
+                screenSystem,
+                laserGunFactory,
+                machineGunFactory) as IShipFactory;
 
             _game.GameData.FactoryStorage.AddFactory(viewFactory);
             _game.GameData.FactoryStorage.AddFactory(factory);

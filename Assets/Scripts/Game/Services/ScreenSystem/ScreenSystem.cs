@@ -43,52 +43,49 @@ namespace Asteroids.Game.Services
             {
                 var screen = _activeScreens[i];
                 screen.Close();
+
                 OnClosed(screen);
             }
         }
 
         public void ShowGame(IShipPresenter shipPresenter)
         {
-            var screenPrefab = _gameData.ConfigStorage.GetScreenConfig().Screens
-                .FirstOrDefault(screen => screen.ScreenType == ScreenType.Game);
-
-            if (screenPrefab == null)
-                return;
-
-            var screen = Instantiate(screenPrefab, _transform);
-
-            var options = new GameScreenOptions(_gameData.ConfigStorage.GetUiFactoryConfig().UiFactories, shipPresenter);
-
-            screen.Init(options);
-            screen.Closed += OnClosed;
-
-            _activeScreens.Add(screen);
-            _updater.Add(screen);
+            var options = new GameScreenOptions(shipPresenter);
+            CreateScreen(ScreenType.Game, options);
         }
 
         public IGameOverScreen ShowGameOver(int score)
         {
+            var options = new GameOverScreenOptions(score);
+            var screen = CreateScreen(ScreenType.GameOver, options);
+
+            return screen as IGameOverScreen;
+        }
+
+        private IScreen CreateScreen(ScreenType type, Options options)
+        {
             var screenPrefab = _gameData.ConfigStorage.GetScreenConfig().Screens
-                .FirstOrDefault(screen => screen.ScreenType == ScreenType.GameOver);
+                .FirstOrDefault(screen => screen.ScreenType == type);
 
             if (screenPrefab == null)
                 return null;
 
             var screen = Instantiate(screenPrefab, _transform);
 
-            var options = new GameOverScreenOptions(_gameData.ConfigStorage.GetUiFactoryConfig().UiFactories, score);
-
             screen.Init(options);
             screen.Closed += OnClosed;
 
             _activeScreens.Add(screen);
             _updater.Add(screen);
 
-            return screen as IGameOverScreen;
+            return screen;
         }
 
         private void OnClosed(IScreen screen)
         {
+            if (this == null)
+                return;
+
             screen.Closed -= OnClosed;
 
             _activeScreens.Remove(screen);

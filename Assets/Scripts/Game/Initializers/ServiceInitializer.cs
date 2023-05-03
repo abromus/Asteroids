@@ -2,7 +2,6 @@
 using Asteroids.Core.Settings;
 using Asteroids.Game.Services;
 using UnityEngine;
-using UnityEngine.UI;
 using Bounds = Asteroids.Core.Bounds;
 
 namespace Asteroids.Game.Initializers
@@ -49,7 +48,7 @@ namespace Asteroids.Game.Initializers
         {
             var bounds = CalculateBounds();
 
-            var canvas = CreateCanvas();
+            var canvas = CanvasHelper.CreateCanvas(_game.GameData.ConfigStorage.GetCanvasConfig());
 
             var uiServices = _game.GameData.ConfigStorage.GetUiServiceConfig().UiServices;
             var screenSystem = uiServices.GetScreenSystem();
@@ -62,48 +61,14 @@ namespace Asteroids.Game.Initializers
         {
             var cameraPosition = _camera.transform.position.ToFloat3();
 
-            var width = _camera.orthographicSize * _camera.pixelWidth / _camera.scaledPixelHeight * 2f;
-            var height = _camera.orthographicSize * 2f;
+            var twice = 2f;
+            var width = _camera.orthographicSize * _camera.pixelWidth / _camera.scaledPixelHeight * twice;
+            var height = _camera.orthographicSize * twice;
             var size = new Float3(width, height);
 
             var bounds = new Bounds(cameraPosition, size);
 
             return bounds;
-        }
-
-        private Transform CreateCanvas()
-        {
-            var canvasConfig = _game.GameData.ConfigStorage.GetCanvasConfig();
-
-            var canvasObject = new GameObject();
-            canvasObject.name = canvasConfig.Name;
-
-            AddCanvas(canvasConfig, canvasObject);
-            AddCanvasScaler(canvasConfig, canvasObject);
-            AddGraphicRaycaster(canvasObject);
-
-            return canvasObject.transform;
-        }
-
-        private void AddCanvas(ICanvasConfig canvasConfig, GameObject canvasObject)
-        {
-            var canvas = canvasObject.AddComponent<Canvas>();
-            canvas.renderMode = canvasConfig.RenderMode;
-            canvas.worldCamera = Camera.main;
-        }
-
-        private void AddCanvasScaler(ICanvasConfig canvasConfig, GameObject canvasObject)
-        {
-            var canvasScaler = canvasObject.AddComponent<CanvasScaler>();
-            canvasScaler.uiScaleMode = canvasConfig.ScaleMode;
-            canvasScaler.referenceResolution = canvasConfig.ReferenceResolution;
-            canvasScaler.matchWidthOrHeight = canvasConfig.MatchWidthOrHeight;
-            canvasScaler.referencePixelsPerUnit = canvasConfig.ReferencePixelsPerUnit;
-        }
-
-        private void AddGraphicRaycaster(GameObject canvasObject)
-        {
-            canvasObject.AddComponent<GraphicRaycaster>();
         }
 
         private void InitPositionCheckService()

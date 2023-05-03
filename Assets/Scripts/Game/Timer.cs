@@ -24,13 +24,15 @@ namespace Asteroids.Game
         public void Tick(float deltaTime)
         {
             if (_isPaused)
+            {
                 return;
+            }
 
             _seconds -= deltaTime;
 
-            if (_seconds <= 0f)
+            if (_seconds <= ZeroSeconds)
             {
-                _seconds = 0f;
+                _seconds = ZeroSeconds;
                 _isPaused = true;
                 Elapsed.SafeInvoke(this);
             }

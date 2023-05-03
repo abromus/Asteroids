@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Asteroids.Core.Settings;
 using Asteroids.Core.States;
 
 namespace Asteroids.Core.Services
@@ -9,7 +8,7 @@ namespace Asteroids.Core.Services
     {
         private readonly Dictionary<Type, IService> _services;
 
-        public ServiceStorage(ICoroutineRunner coroutineRunner, IGameData gameData, IConfigStorage configStorage)
+        public ServiceStorage(ICoroutineRunner coroutineRunner, IGameData gameData)
         {
             var stateMachine = InitStateMachine(coroutineRunner, gameData);
 

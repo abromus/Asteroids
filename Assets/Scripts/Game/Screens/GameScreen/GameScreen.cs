@@ -44,11 +44,15 @@ namespace Asteroids.Game.Screens
                 GameScreenKeys.CoordinatesKey,
                 ToF2Format(_shipPresenter.Position.X),
                 ToF2Format(_shipPresenter.Position.Y));
+
             _rotation.text = string.Format(GameScreenKeys.RotationKey,
                 ToF2Format(_shipPresenter.Rotation.Z));
+
             _acceleration.text = string.Format(GameScreenKeys.AccelerationKey,
                 ToF2Format(_shipPresenter.Acceleration));
+
             _lasersCount.text = string.Format(GameScreenKeys.LasersCountKey, _shipPresenter.LasersCount);
+
             _lasersReloadTime.text = string.Format(GameScreenKeys.LasersReloadTimeKey,
                 ToF2Format(_shipPresenter.LasersReloadTime));
         }

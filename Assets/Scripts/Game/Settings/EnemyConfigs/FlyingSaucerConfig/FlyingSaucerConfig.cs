@@ -2,7 +2,7 @@
 
 namespace Asteroids.Game.Settings
 {
-    [CreateAssetMenu(fileName = "FlyingSaucerConfig", menuName = "Settings/Game/Enemies/FlyingSauceronfig")]
+    [CreateAssetMenu(fileName = nameof(FlyingSaucerConfig), menuName = ConfigKeys.EnemiesPathKey + nameof(FlyingSaucerConfig))]
     public sealed class FlyingSaucerConfig : ScriptableObject, IFlyingSaucerConfig
     {
         [SerializeField] private float _damping;

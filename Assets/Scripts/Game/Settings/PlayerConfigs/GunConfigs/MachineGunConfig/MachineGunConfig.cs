@@ -2,7 +2,7 @@
 
 namespace Asteroids.Game.Settings
 {
-    [CreateAssetMenu(fileName = "MachineGunConfig", menuName = "Settings/Game/Player/Gun/MachineGunConfig")]
+    [CreateAssetMenu(fileName = nameof(MachineGunConfig), menuName = ConfigKeys.PlayerGunPathKey + nameof(MachineGunConfig))]
     public sealed class MachineGunConfig : ScriptableObject, IMachineGunConfig
     {
         [SerializeField] private float _firingRate;

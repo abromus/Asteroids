@@ -8,6 +8,10 @@ namespace Asteroids.Game
 {
     public sealed class LaserGunPresenter : ILaserGunPresenter
     {
+        private Float3 _offset;
+        private int _currentLasers;
+        private bool _isReload;
+
         private readonly IUpdater _updater;
         private readonly ITimerService _timerService;
         private readonly IPositionCheckService _positionCheckService;
@@ -20,10 +24,6 @@ namespace Asteroids.Game
         private readonly ITimer _firingTimer;
         private readonly ITimer _reloadTimer;
         private readonly ITimer _regenerateTimer;
-
-        private Float3 _offset;
-        private int _currentLasers;
-        private bool _isReload;
 
         public int LasersCount => _isReload ? (int)MathUtils.Zero : _currentLasers;
 

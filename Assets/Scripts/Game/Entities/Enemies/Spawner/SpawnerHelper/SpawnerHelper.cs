@@ -20,9 +20,7 @@ namespace Asteroids.Game
         public Float3 CalculatePosition(Float3 rotation)
         {
             var angle = rotation.Z % MathUtils.FullAngle;
-
             var strategy = GetStrategy(angle);
-
             var position = strategy.CalculatePosition();
 
             return position;

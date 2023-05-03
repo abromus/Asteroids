@@ -6,13 +6,13 @@ namespace Asteroids.Game
 {
     public sealed class Game : IGame
     {
-        private readonly IGameData _gameData;
-        private readonly IUpdater _updater;
-
         private IShipPresenter _shipPresenter;
         private IAsteroidSpawner<IAsteroidPresenter> _asteroidSpawner;
         private IFlyingSaucerSpawner<IFlyingSaucerPresenter> _flyingSaucerSpawner;
         private IScoreboard _scoreboard;
+
+        private readonly IGameData _gameData;
+        private readonly IUpdater _updater;
 
         public IGameData GameData => _gameData;
 
@@ -76,7 +76,12 @@ namespace Asteroids.Game
             var asteroidSpawnerConfig = _gameData.ConfigStorage.GetAsteroidSpawnerConfig();
             var asteroidFactory = _gameData.FactoryStorage.GetAsteroidFactory();
 
-            _asteroidSpawner = new AsteroidSpawner(asteroidSpawnerConfig, asteroidFactory, positionCheckService, timerService, bounds);
+            _asteroidSpawner = new AsteroidSpawner(
+                asteroidSpawnerConfig,
+                asteroidFactory,
+                positionCheckService,
+                timerService,
+                bounds);
             _updater.Add(_asteroidSpawner);
         }
 
@@ -85,13 +90,23 @@ namespace Asteroids.Game
             var flyingSaucerSpawnerConfig = _gameData.ConfigStorage.GetFlyingSaucerSpawnerConfig();
             var flyingSaucerFactory = _gameData.FactoryStorage.GetFlyingSaucerFactory();
 
-            _flyingSaucerSpawner = new FlyingSaucerSpawner(flyingSaucerSpawnerConfig, flyingSaucerFactory, positionCheckService, timerService, bounds, _shipPresenter);
+            _flyingSaucerSpawner = new FlyingSaucerSpawner(
+                flyingSaucerSpawnerConfig,
+                flyingSaucerFactory,
+                positionCheckService,
+                timerService,
+                bounds,
+                _shipPresenter);
             _updater.Add(_flyingSaucerSpawner);
         }
 
         private void CreateScoreboard(IScreenSystem screenSystem)
         {
-            _scoreboard = new Scoreboard(screenSystem, _shipPresenter, _asteroidSpawner, _flyingSaucerSpawner);
+            _scoreboard = new Scoreboard(
+                screenSystem,
+                _shipPresenter,
+                _asteroidSpawner,
+                _flyingSaucerSpawner);
             _scoreboard.Restarted += OnRestarted;
         }
 

@@ -2,10 +2,11 @@
 
 namespace Asteroids.Game
 {
-    public class Acceleration : IAcceleration
+    public sealed class Acceleration : IAcceleration
     {
-        private float _defaultSpeed;
         private float _currentSpeed;
+
+        private readonly float _defaultSpeed;
 
         public float Speed => _currentSpeed;
 

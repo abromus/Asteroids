@@ -10,19 +10,19 @@ namespace Asteroids.Game
 {
     public sealed class ShipPresenter : IShipPresenter
     {
+        private bool _isDestroyed;
+
         private readonly IUpdater _updater;
         private readonly IShipModel _model;
         private readonly IShipView _view;
         private readonly IShipConfig _config;
         private readonly IInputSystem _inputSystem;
         private readonly IScreenSystem _screenSystem;
-        private readonly ILaserGunPresenter _laserGunPresenter;
         private readonly IMachineGunPresenter _machineGunPresenter;
+        private readonly ILaserGunPresenter _laserGunPresenter;
 
         private readonly PlayerInputActions.PlayerActions _inputActions;
         private readonly IAcceleration _acceleration;
-
-        private bool _isDestroyed;
 
         public float Acceleration => _acceleration.Speed;
 
@@ -45,8 +45,8 @@ namespace Asteroids.Game
             IShipConfig config,
             IInputSystem inputSystem,
             IScreenSystem screenSystem,
-            ILaserGunPresenter laserGunPresenter,
-            IMachineGunPresenter machineGunPresenter)
+            IMachineGunPresenter machineGunPresenter,
+            ILaserGunPresenter laserGunPresenter)
         {
             _updater = updater;
             _model = model;
@@ -57,8 +57,8 @@ namespace Asteroids.Game
             _inputActions = _inputSystem.InputActions;
             _screenSystem = screenSystem;
 
-            _laserGunPresenter = laserGunPresenter;
             _machineGunPresenter = machineGunPresenter;
+            _laserGunPresenter = laserGunPresenter;
             _acceleration = new Acceleration(_config.Speed);
 
             _model.Position.OnChanged += _view.Move;

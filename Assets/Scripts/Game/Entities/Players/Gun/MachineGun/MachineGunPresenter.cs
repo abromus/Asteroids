@@ -8,6 +8,8 @@ namespace Asteroids.Game
 {
     public sealed class MachineGunPresenter : IMachineGunPresenter
     {
+        private Float3 _offset;
+
         private readonly IUpdater _updater;
         private readonly ITimerService _timerService;
         private readonly IPositionCheckService _positionCheckService;
@@ -18,8 +20,6 @@ namespace Asteroids.Game
 
         private readonly List<IBulletPresenter> _bullets;
         private readonly ITimer _timer;
-
-        private Float3 _offset;
 
         public Float3 Position => _model.Position.Value;
 

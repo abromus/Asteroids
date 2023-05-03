@@ -22,7 +22,7 @@ namespace Asteroids.Core
 
             _factoryStorage = new FactoryStorage(configStorage);
 
-            _serviceStorage = new ServiceStorage(coroutineRunner, this, configStorage);
+            _serviceStorage = new ServiceStorage(coroutineRunner, this);
         }
     }
 }

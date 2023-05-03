@@ -6,6 +6,6 @@ namespace Asteroids.Game
     {
         public void DestroyView();
 
-        public void Init(IInputConfig inputConfig, ILaserGunView laserGunView, IMachineGunView machineGunView);
+        public void Init(IInputConfig inputConfig, IMachineGunView machineGunView, ILaserGunView laserGunView);
     }
 }

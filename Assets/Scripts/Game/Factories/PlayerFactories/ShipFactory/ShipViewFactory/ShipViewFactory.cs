@@ -10,10 +10,10 @@ namespace Asteroids.Game.Factory
 
         public override UiFactoryType UiFactoryType => UiFactoryType.ShipViewFactory;
 
-        public IShipView Create(IInputConfig inputConfig, ILaserGunView laserGunView, IMachineGunView machineGunView)
+        public IShipView Create(IInputConfig inputConfig, IMachineGunView machineGunView, ILaserGunView laserGunView)
         {
             var ship = Instantiate(_prefab);
-            ship.Init(inputConfig, laserGunView, machineGunView);
+            ship.Init(inputConfig, machineGunView, laserGunView);
 
             return ship;
         }
