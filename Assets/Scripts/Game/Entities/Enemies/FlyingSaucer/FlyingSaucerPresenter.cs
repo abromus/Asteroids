@@ -35,7 +35,12 @@ namespace Asteroids.Game
 
             _model.Position.Value = position;
 
-            var angle = MathUtils.CalculateAngle(Float3.Up, _shipPresenter.Position - _model.Position.Value);
+            var first = _shipPresenter.Position.X < _model.Position.Value.X ? _model.Position.Value : _shipPresenter.Position;
+            var second = _shipPresenter.Position.X < _model.Position.Value.X ? _shipPresenter.Position : _model.Position.Value;
+
+            var deltaPosition = first - second;
+            var angle = MathUtils.CalculateAngle(Float3.Up, deltaPosition);
+
             var rotation = MathUtils.CalculateRotation(-angle, Float3.Zero);
 
             _model.Rotation.Value = rotation;
@@ -116,14 +121,21 @@ namespace Asteroids.Game
         {
             var destroyDistance = 0.5f;
 
-            if (MathUtils.Distance(_shipPresenter.Position, _model.Position.Value) <= destroyDistance)
+            var first = _shipPresenter.Position.X < _model.Position.Value.X ? _model.Position.Value : _shipPresenter.Position;
+            var second = _shipPresenter.Position.X < _model.Position.Value.X ? _shipPresenter.Position : _model.Position.Value;
+
+            if (MathUtils.Distance(first, second) <= destroyDistance)
                 return;
 
-            var direction = MathUtils.TransformDirection(_model.Rotation.Value.Z);
-            var angle = MathUtils.CalculateAngle(direction, _shipPresenter.Position - _model.Position.Value);
-            var rotation = MathUtils.CalculateRotation(angle, Float3.Zero);
+            first = _shipPresenter.Position.X < _model.Position.Value.X ? _model.Position.Value : _shipPresenter.Position;
+            second = _shipPresenter.Position.X < _model.Position.Value.X ? _shipPresenter.Position : _model.Position.Value;
 
-            _model.Rotation.Value = _model.Rotation.Value + rotation;
+            var deltaPosition = first - second;
+            var angle = MathUtils.CalculateAngle(Float3.Up, deltaPosition);
+            var resultAngle = _shipPresenter.Position.X < _model.Position.Value.X ? MathUtils.HalfAngle - angle : -angle;
+            var rotation = MathUtils.CalculateRotation(resultAngle, Float3.Zero);
+
+            _model.Rotation.Value = rotation;
         }
     }
 }
