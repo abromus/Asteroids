@@ -1,5 +1,5 @@
 ﻿#if UNITY_EDITOR
-using Asteroids.Core.Services;
+using Asteroids.Game.Services;
 using Asteroids.Inputs;
 using UnityEngine.InputSystem;
 

@@ -1,11 +1,17 @@
 ﻿using Asteroids.Core.Settings;
 using Asteroids.Inputs;
+using UnityEngine;
 
-namespace Asteroids.Core.Services
+namespace Asteroids.Game.Services
 {
     public sealed class InputSystem : UiService, IInputSystem
     {
+        [SerializeField] private GameObject _editorView;
+        [SerializeField] private GameObject _defaultView;
+
+        private Transform _parent;
         private PlayerInputActions _playerInputActions;
+        private GameObject _view;
 
         public override UiServiceType UiServiceType => UiServiceType.InputSystem;
 
@@ -15,19 +21,29 @@ namespace Asteroids.Core.Services
         public PlayerInputActions.JoystickActions InputActions  => _playerInputActions.Joystick;
 #endif
 
-        public void Init()
+        public void Init(Transform parent)
         {
+            _parent = parent;
+
             _playerInputActions = new PlayerInputActions();
         }
 
-        public void Enable()
+        public void Show()
         {
-            _playerInputActions.Enable();
+            var prefab = _defaultView;
+
+#if UNITY_EDITOR
+            prefab = _editorView;
+#endif
+
+            if (prefab != null)
+                _view = Instantiate(prefab, _parent);
         }
 
-        public void Disable()
+        public void Hide()
         {
-            _playerInputActions.Disable();
+            if (_view != null)
+                Destroy(_view);
         }
     }
 }

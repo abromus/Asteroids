@@ -27,6 +27,9 @@ namespace Asteroids.Game
             var positionCheckService = _gameData.ServiceStorage.GetPositionCheckService();
             positionCheckService.RemoveDamaging(_shipPresenter);
 
+            var inputSystem = _gameData.ServiceStorage.GetInputSystem();
+            inputSystem.Hide();
+
             (_shipPresenter as IPresenter).Destroy();
             _shipPresenter = null;
 
@@ -43,12 +46,13 @@ namespace Asteroids.Game
         public void Run()
         {
             var positionCheckService = _gameData.ServiceStorage.GetPositionCheckService();
+            var inputSystem = _gameData.ServiceStorage.GetInputSystem();
             var screenSystem = _gameData.ServiceStorage.GetScreenSystem();
 
             CreateShip(positionCheckService);
             CreateEnemies(positionCheckService);
             CreateScoreboard(screenSystem);
-            CreateHud(screenSystem);
+            CreateHud(inputSystem, screenSystem);
         }
 
         private void CreateShip(IPositionCheckService positionCheckService)
@@ -110,8 +114,10 @@ namespace Asteroids.Game
             _scoreboard.Restarted += OnRestarted;
         }
 
-        private void CreateHud(IScreenSystem screenSystem)
+        private void CreateHud(IInputSystem inputSystem, IScreenSystem screenSystem)
         {
+            inputSystem.Show();
+
             screenSystem.ShowGame(_shipPresenter);
         }
 

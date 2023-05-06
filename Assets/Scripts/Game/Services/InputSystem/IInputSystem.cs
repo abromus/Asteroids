@@ -1,6 +1,8 @@
-﻿using Asteroids.Inputs;
+﻿using Asteroids.Core.Services;
+using Asteroids.Inputs;
+using UnityEngine;
 
-namespace Asteroids.Core.Services
+namespace Asteroids.Game.Services
 {
     public interface IInputSystem : IService
     {
@@ -10,10 +12,10 @@ namespace Asteroids.Core.Services
         public PlayerInputActions.JoystickActions InputActions { get; }
 #endif
 
-        public void Disable();
+        public void Init(Transform parent);
 
-        public void Enable();
+        public void Hide();
 
-        public void Init();
+        public void Show();
     }
 }

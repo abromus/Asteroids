@@ -26,33 +26,33 @@ namespace Asteroids.Game.Initializers
 
         private void InitServices()
         {
-            InitInputSystem();
+            var canvas = CanvasHelper.CreateCanvas(_game.GameData.ConfigStorage.GetCanvasConfig());
 
-            InitScreenSystem();
+            InitInputSystem(canvas);
+
+            InitScreenSystem(canvas);
 
             InitPositionCheckService();
 
             InitTimerSystem();
         }
 
-        private void InitInputSystem()
+        private void InitInputSystem(Transform parent)
         {
             var uiServices = _game.GameData.ConfigStorage.GetUiServiceConfig().UiServices;
             var inputSystem = uiServices.GetInputSystem();
-            inputSystem.Init();
+            inputSystem.Init(parent);
 
             _game.GameData.ServiceStorage.AddService(inputSystem);
         }
 
-        private void InitScreenSystem()
+        private void InitScreenSystem(Transform parent)
         {
             var bounds = CalculateBounds();
 
-            var canvas = CanvasHelper.CreateCanvas(_game.GameData.ConfigStorage.GetCanvasConfig());
-
             var uiServices = _game.GameData.ConfigStorage.GetUiServiceConfig().UiServices;
             var screenSystem = uiServices.GetScreenSystem();
-            screenSystem.Init(_game.GameData, _updater, bounds, canvas);
+            screenSystem.Init(_game.GameData, _updater, bounds, parent);
 
             _game.GameData.ServiceStorage.AddService(screenSystem);
         }
