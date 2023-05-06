@@ -2,6 +2,7 @@
 using Asteroids.Core;
 using Asteroids.Core.Settings;
 using Asteroids.Game.Factory;
+using Asteroids.Game.Services;
 using Asteroids.Game.Settings;
 
 namespace Asteroids.Game.Initializers
@@ -34,7 +35,7 @@ namespace Asteroids.Game.Initializers
             InitLaserFactory(uiFactories);
             InitLaserGunFactory(uiFactories);
             InitMachineGunFactory(uiFactories);
-            InitShipFactory(uiFactories, screenSystem);
+            InitShipFactory(uiFactories, bounds);
         }
 
         private void InitAsteroidFactory(IReadOnlyList<IUiFactory> uiFactories, Bounds bounds)
@@ -115,7 +116,7 @@ namespace Asteroids.Game.Initializers
             _game.GameData.FactoryStorage.AddFactory(factory);
         }
 
-        private void InitShipFactory(IReadOnlyList<IUiFactory> uiFactories, Services.IScreenSystem screenSystem)
+        private void InitShipFactory(IReadOnlyList<IUiFactory> uiFactories, Bounds bounds)
         {
             var viewFactory = uiFactories.GetShipViewFactory();
             var config = _game.GameData.ConfigStorage.GetShipConfig();
@@ -129,7 +130,7 @@ namespace Asteroids.Game.Initializers
                 config,
                 inputSystem,
                 inputConfig,
-                screenSystem,
+                bounds,
                 laserGunFactory,
                 machineGunFactory) as IShipFactory;
 

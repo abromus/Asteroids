@@ -1,10 +1,7 @@
 using System;
 using Asteroids.Core;
 using Asteroids.Core.Services;
-using Asteroids.Game.Services;
 using Asteroids.Game.Settings;
-using Asteroids.Inputs;
-using UnityEngine.InputSystem;
 
 namespace Asteroids.Game
 {
@@ -16,12 +13,12 @@ namespace Asteroids.Game
         private readonly IShipModel _model;
         private readonly IShipView _view;
         private readonly IShipConfig _config;
-        private readonly IInputSystem _inputSystem;
-        private readonly IScreenSystem _screenSystem;
+        private readonly Bounds _bounds;
         private readonly IMachineGunPresenter _machineGunPresenter;
         private readonly ILaserGunPresenter _laserGunPresenter;
 
-        private readonly PlayerInputActions.PlayerActions _inputActions;
+        private readonly IInputAction _inputActions;
+
         private readonly IAcceleration _acceleration;
 
         public float Acceleration => _acceleration.Speed;
@@ -44,7 +41,7 @@ namespace Asteroids.Game
             IShipView view,
             IShipConfig config,
             IInputSystem inputSystem,
-            IScreenSystem screenSystem,
+            Bounds bounds,
             IMachineGunPresenter machineGunPresenter,
             ILaserGunPresenter laserGunPresenter)
         {
@@ -53,9 +50,8 @@ namespace Asteroids.Game
             _view = view;
             _config = config;
 
-            _inputSystem = inputSystem;
-            _inputActions = _inputSystem.InputActions;
-            _screenSystem = screenSystem;
+            _inputActions = new InputAction(inputSystem);
+            _bounds = bounds;
 
             _machineGunPresenter = machineGunPresenter;
             _laserGunPresenter = laserGunPresenter;
@@ -93,19 +89,19 @@ namespace Asteroids.Game
 
         public void Tick(float deltaTime)
         {
-            if (_inputActions.Move.phase == InputActionPhase.Started)
+            if (_inputActions.IsMoving)
                 _acceleration.SpeedUp(deltaTime);
             else
                 _acceleration.SlowDown(deltaTime);
 
             Move(deltaTime);
 
-            if (_inputActions.RotateLeft.phase == InputActionPhase.Started)
-                RotateLeft(deltaTime);
-            else if (_inputActions.RotateRight.phase == InputActionPhase.Started)
-                RotateRight(deltaTime);
+            if (_inputActions.IsRotatingLeft)
+                Rotate(deltaTime, true);
+            else if (_inputActions.IsRotatingRight)
+                Rotate(deltaTime, false);
 
-            if (_inputActions.Shoot.phase == InputActionPhase.Performed)
+            if (_inputActions.IsShooting)
                 Shoot();
         }
 
@@ -119,36 +115,23 @@ namespace Asteroids.Game
         {
             var direction = MathUtils.TransformDirection(_model.Rotation.Value.Z);
             var delta = _acceleration.Speed * deltaTime * direction;
-            var modelPosition = MathUtils.CorrectPosition(_model.Position.Value + delta, _screenSystem.Bounds);
+            var modelPosition = MathUtils.CorrectPosition(_model.Position.Value + delta, _bounds);
 
             var machineGunPosition = _model.Position.Value + delta == modelPosition
                 ? _machineGunPresenter.Position - _machineGunPresenter.Offset + delta
-                : MathUtils.CorrectPosition(_machineGunPresenter.Position + delta, _screenSystem.Bounds) - _machineGunPresenter.Offset;
+                : MathUtils.CorrectPosition(_machineGunPresenter.Position + delta, _bounds) - _machineGunPresenter.Offset;
             var laserGunPosition = _model.Position.Value + delta == modelPosition
                 ? _laserGunPresenter.Position - _laserGunPresenter.Offset + delta
-                : MathUtils.CorrectPosition(_laserGunPresenter.Position + delta, _screenSystem.Bounds) - _laserGunPresenter.Offset;
-            
+                : MathUtils.CorrectPosition(_laserGunPresenter.Position + delta, _bounds) - _laserGunPresenter.Offset;
+
             _machineGunPresenter.SetPosition(machineGunPosition);
             _laserGunPresenter.SetPosition(laserGunPosition);
             _model.Position.Value = modelPosition;
         }
 
-        private void RotateLeft(float deltaTime)
+        private void Rotate(float deltaTime, bool isLeft)
         {
-            var direction = _inputActions.RotateLeft.ReadValue<float>();
-
-            Rotate(direction, deltaTime);
-        }
-
-        private void RotateRight(float deltaTime)
-        {
-            var direction = _inputActions.RotateRight.ReadValue<float>();
-
-            Rotate(direction, deltaTime);
-        }
-
-        private void Rotate(float direction, float deltaTime)
-        {
+            var direction = isLeft ? 1f : -1f;
             var angle = direction * _config.Damping * deltaTime;
             var rotation = MathUtils.CalculateRotation(angle, _model.Rotation.Value);
 

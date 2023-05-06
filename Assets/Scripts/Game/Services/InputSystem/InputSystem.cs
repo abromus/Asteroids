@@ -9,7 +9,11 @@ namespace Asteroids.Core.Services
 
         public override UiServiceType UiServiceType => UiServiceType.InputSystem;
 
-        public PlayerInputActions.PlayerActions InputActions => _playerInputActions.Player;
+#if UNITY_EDITOR
+        public PlayerInputActions.KeyboardActions InputActions => _playerInputActions.Keyboard;
+#else
+        public PlayerInputActions.JoystickActions InputActions  => _playerInputActions.Joystick;
+#endif
 
         public void Init()
         {

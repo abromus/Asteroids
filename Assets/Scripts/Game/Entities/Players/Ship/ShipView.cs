@@ -13,7 +13,6 @@ namespace Asteroids.Game
         public void Init(IInputConfig inputConfig, IMachineGunView machineGunView, ILaserGunView laserGunView)
         {
             _playerInput.actions = inputConfig.Actions;
-            _playerInput.SwitchCurrentActionMap(inputConfig.DefaultActionMap);
             _playerInput.notificationBehavior = inputConfig.Behaviour;
 
             machineGunView.SetParent(_firstGun);

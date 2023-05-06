@@ -4,7 +4,11 @@ namespace Asteroids.Core.Services
 {
     public interface IInputSystem : IService
     {
-        public PlayerInputActions.PlayerActions InputActions { get; }
+#if UNITY_EDITOR
+        public PlayerInputActions.KeyboardActions InputActions { get; }
+#else
+        public PlayerInputActions.JoystickActions InputActions { get; }
+#endif
 
         public void Disable();
 

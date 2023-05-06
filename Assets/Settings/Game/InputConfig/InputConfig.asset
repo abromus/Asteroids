@@ -13,5 +13,4 @@ MonoBehaviour:
   m_Name: InputConfig
   m_EditorClassIdentifier: 
   _actions: {fileID: -944628639613478452, guid: 9e9a23c47ff3c064f809d277c9cf74aa, type: 3}
-  _defaultActionMap: Player
   _behaviour: 3

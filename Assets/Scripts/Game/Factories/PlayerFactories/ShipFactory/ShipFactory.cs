@@ -12,7 +12,7 @@ namespace Asteroids.Game.Factory
         private readonly IShipConfig _config;
         private readonly IInputSystem _inputSystem;
         private readonly IInputConfig _inputConfig;
-        private readonly IScreenSystem _screenSystem;
+        private readonly Bounds _bounds;
         private readonly ILaserGunFactory _laserGunFactory;
         private readonly IMachineGunFactory _machineGunFactory;
 
@@ -22,7 +22,7 @@ namespace Asteroids.Game.Factory
             IShipConfig config,
             IInputSystem inputSystem,
             IInputConfig inputConfig,
-            IScreenSystem screenSystem,
+            Bounds bounds,
             ILaserGunFactory laserGunFactory,
             IMachineGunFactory machineGunFactory)
         {
@@ -31,7 +31,7 @@ namespace Asteroids.Game.Factory
             _config = config;
             _inputSystem = inputSystem;
             _inputConfig = inputConfig;
-            _screenSystem = screenSystem;
+            _bounds = bounds;
             _laserGunFactory = laserGunFactory;
             _machineGunFactory = machineGunFactory;
         }
@@ -48,7 +48,7 @@ namespace Asteroids.Game.Factory
                 view,
                 _config,
                 _inputSystem,
-                _screenSystem,
+                _bounds,
                 machineGunPresenter,
                 laserGunPresenter);
 
