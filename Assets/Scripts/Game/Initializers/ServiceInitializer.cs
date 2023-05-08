@@ -1,4 +1,5 @@
 ﻿using Asteroids.Core;
+using Asteroids.Core.Services;
 using Asteroids.Core.Settings;
 using Asteroids.Game.Services;
 using UnityEngine;
@@ -9,13 +10,11 @@ namespace Asteroids.Game.Initializers
     public sealed class ServiceInitializer : IServiceInitializer
     {
         private readonly IGame _game;
-        private readonly IUpdater _updater;
         private readonly Camera _camera;
 
-        public ServiceInitializer(IGame game, IUpdater updater, Camera camera)
+        public ServiceInitializer(IGame game, Camera camera)
         {
             _game = game;
-            _updater = updater;
             _camera = camera;
         }
 
@@ -26,15 +25,17 @@ namespace Asteroids.Game.Initializers
 
         private void InitServices()
         {
+            var updater = _game.GameData.ServiceStorage.GetUpdater();
+
             var canvas = CanvasHelper.CreateCanvas(_game.GameData.ConfigStorage.GetCanvasConfig());
 
             InitInputSystem(canvas);
 
-            InitScreenSystem(canvas);
+            InitScreenSystem(updater, canvas);
 
-            InitPositionCheckService();
+            InitPositionCheckService(updater);
 
-            InitTimerSystem();
+            InitTimerSystem(updater);
         }
 
         private void InitInputSystem(Transform parent)
@@ -46,13 +47,13 @@ namespace Asteroids.Game.Initializers
             _game.GameData.ServiceStorage.AddService(inputSystem);
         }
 
-        private void InitScreenSystem(Transform parent)
+        private void InitScreenSystem(IUpdater updater, Transform parent)
         {
             var bounds = CalculateBounds();
 
             var uiServices = _game.GameData.ConfigStorage.GetUiServiceConfig().UiServices;
             var screenSystem = uiServices.GetScreenSystem();
-            screenSystem.Init(_game.GameData, _updater, bounds, parent);
+            screenSystem.Init(_game.GameData, updater, bounds, parent);
 
             _game.GameData.ServiceStorage.AddService(screenSystem);
         }
@@ -71,20 +72,20 @@ namespace Asteroids.Game.Initializers
             return bounds;
         }
 
-        private void InitPositionCheckService()
+        private void InitPositionCheckService(IUpdater updater)
         {
             var positionCheckService = new PositionCheckService();
 
-            _updater.Add(positionCheckService);
+            updater.Add(positionCheckService);
 
             _game.GameData.ServiceStorage.AddService(positionCheckService as IPositionCheckService);
         }
 
-        private void InitTimerSystem()
+        private void InitTimerSystem(IUpdater updater)
         {
             var timerService = new TimerService();
 
-            _updater.Add(timerService);
+            updater.Add(timerService);
 
             _game.GameData.ServiceStorage.AddService(timerService as ITimerService);
         }

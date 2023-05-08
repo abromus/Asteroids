@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Asteroids.Core;
+using Asteroids.Core.Services;
 using Asteroids.Game.Factory;
 using Asteroids.Game.Services;
 using Asteroids.Game.Settings;
@@ -20,6 +21,7 @@ namespace Asteroids.Game
 
         private readonly List<IBulletPresenter> _bullets;
         private readonly ITimer _timer;
+        private readonly float _firingDelay;
 
         public Float3 Position => _model.Position.Value;
 
@@ -48,6 +50,7 @@ namespace Asteroids.Game
             _bullets = new List<IBulletPresenter>();
 
             _timer = _timerService.CreateTimer();
+            _firingDelay = MathUtils.Inverse(_config.FiringRate);
         }
 
         public void Enable()
@@ -57,13 +60,6 @@ namespace Asteroids.Game
             _timer?.Resume();
         }
 
-        public void Destroy()
-        {
-            Disable();
-
-            _timerService.RemoveTimer(_timer);
-        }
-
         public void Disable()
         {
             _updater.Remove(this);
@@ -71,20 +67,28 @@ namespace Asteroids.Game
             _timer?.Pause();
         }
 
+        public void Destroy()
+        {
+            Disable();
+
+            _timerService.RemoveTimer(_timer);
+
+            foreach (var bullet in _bullets)
+                DestroyBullet(bullet);
+        }
+
         public void Tick(float deltaTime)
         {
-            for (int i = 0; i < _bullets.Count; i++)
+            for (int i = _bullets.Count - 1; i >= 0; i--)
             {
                 var bullet = _bullets[i];
 
-                if (bullet.IsDestroyed)
-                {
-                    _bullets.RemoveAt(i);
-                    _bulletFactory.Release(bullet);
+                if (!bullet.IsDestroyed)
+                    continue;
 
-                    _positionCheckService.RemoveDamaging(bullet);
-                    i--;
-                }
+                DestroyBullet(bullet);
+
+                _bullets.RemoveAt(i);
             }
         }
 
@@ -103,11 +107,13 @@ namespace Asteroids.Game
             if (_timer == null || !_timer.IsElapsed)
                 return;
 
-            var firingDelay = MathUtils.Inverse(_config.FiringRate);
+            CreateBullet();
 
-            _timer.UpdateTime(firingDelay);
-            _timer.Resume();
+            UpdateTimer();
+        }
 
+        private void CreateBullet()
+        {
             var bullet = _bulletFactory.Create();
             bullet.SetRotation(_model.Rotation.Value);
             bullet.SetPosition(_model.Position.Value);
@@ -116,6 +122,19 @@ namespace Asteroids.Game
             _positionCheckService.AddDamaging(bullet);
 
             _bullets.Add(bullet);
+        }
+
+        private void DestroyBullet(IBulletPresenter bullet)
+        {
+            _bulletFactory.Release(bullet);
+
+            _positionCheckService.RemoveDamaging(bullet);
+        }
+
+        private void UpdateTimer()
+        {
+            _timer.UpdateTime(_firingDelay);
+            _timer.Resume();
         }
     }
 }

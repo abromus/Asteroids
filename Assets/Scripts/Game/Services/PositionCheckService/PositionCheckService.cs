@@ -5,10 +5,10 @@ namespace Asteroids.Game.Services
 {
     public sealed class PositionCheckService : IPositionCheckService, IUpdatable
     {
+        private const float Epsilon = 0.5f;
+
         private readonly IList<IDamagable> _damagables;
         private readonly IList<IDamaging> _damagings;
-
-        private readonly float epsilon = 0.5f;
 
         public PositionCheckService()
         {
@@ -40,7 +40,7 @@ namespace Asteroids.Game.Services
 
         public void Tick(float deltaTime)
         {
-            for (int i = 0; i < _damagings.Count; i++)
+            for (int i = _damagings.Count - 1; i >= 0; i--)
             {
                 var damaging = _damagings[i];
 
@@ -49,7 +49,7 @@ namespace Asteroids.Game.Services
                     continue;
                 }
 
-                for (int j = 0; j < _damagables.Count; j++)
+                for (int j = _damagables.Count - 1; j >= 0; j--)
                 {
                     var damagable = _damagables[j];
                     var needDestroy = IsNeedDestroy(damaging, damagable);
@@ -59,6 +59,11 @@ namespace Asteroids.Game.Services
 
                     damagable.TakeDamage(damaging);
                     damaging.Destroy();
+
+                    _damagables.Remove(damagable);
+                    _damagings.Remove(damaging);
+
+                    break;
                 }
             }
         }
@@ -72,7 +77,7 @@ namespace Asteroids.Game.Services
             var damagablePresenter = damagable as IPresenter;
             var distance = MathUtils.Distance(damagingPresenter.Position, damagablePresenter.Position);
 
-            return distance <= epsilon;
+            return distance <= Epsilon;
         }
     }
 }

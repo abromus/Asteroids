@@ -9,11 +9,13 @@ namespace Asteroids.Core
     {
         [SerializeField] private ConfigStorage _configStorage;
 
+        private IUpdater _updater;
         private IGameData _gameData;
 
         public void CreateGameData()
         {
-            _gameData = new GameData(this, _configStorage);
+            _updater = new Updater();
+            _gameData = new GameData(this, _configStorage, _updater);
 
             EnterInitState();
         }
@@ -23,6 +25,11 @@ namespace Asteroids.Core
             _configStorage.Init();
 
             DontDestroyOnLoad(this);
+        }
+
+        private void Update()
+        {
+            _updater.Tick(Time.deltaTime);
         }
 
         private void EnterInitState()

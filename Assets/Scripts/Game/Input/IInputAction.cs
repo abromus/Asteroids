@@ -1,4 +1,4 @@
-﻿namespace Asteroids.Game
+﻿namespace Asteroids.Game.Input
 {
     public interface IInputAction
     {

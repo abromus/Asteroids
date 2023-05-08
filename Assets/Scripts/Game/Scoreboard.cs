@@ -59,6 +59,7 @@ namespace Asteroids.Game
         private void OnRestarted()
         {
             _screenSystem.CloseScreen(_screen as IScreen);
+
             Restarted.SafeInvoke();
             Restarted = null;
         }

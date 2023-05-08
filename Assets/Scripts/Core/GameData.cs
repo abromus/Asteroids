@@ -16,13 +16,13 @@ namespace Asteroids.Core
 
         public IServiceStorage ServiceStorage => _serviceStorage;
 
-        public GameData(ICoroutineRunner coroutineRunner, IConfigStorage configStorage)
+        public GameData(ICoroutineRunner coroutineRunner, IConfigStorage configStorage, IUpdater updater)
         {
             _configStorage = configStorage;
 
             _factoryStorage = new FactoryStorage(configStorage);
 
-            _serviceStorage = new ServiceStorage(coroutineRunner, this);
+            _serviceStorage = new ServiceStorage(coroutineRunner, this, updater);
         }
     }
 }

@@ -20,16 +20,11 @@ namespace Asteroids.Core
 
         public const float EpsilonNormalSqrt = 1E-15f;
 
-        public static float Value => GetValue();
+        public static float Value => (float)_random.Next() / int.MaxValue;
 
         static MathUtils()
         {
             _random = new Random();
-        }
-
-        public static float GetValue()
-        {
-            return (float)_random.Next() / int.MaxValue;
         }
 
         public static float CalculateAngle(Float3 first, Float3 second)

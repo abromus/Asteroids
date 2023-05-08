@@ -6,5 +6,10 @@
         {
             return serviceStorage.GetService<IStateMachine>();
         }
+
+        public static IUpdater GetUpdater(this IServiceStorage serviceStorage)
+        {
+            return serviceStorage.GetService<IUpdater>();
+        }
     }
 }

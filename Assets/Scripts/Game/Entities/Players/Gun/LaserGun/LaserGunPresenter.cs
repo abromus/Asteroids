@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Asteroids.Core;
+using Asteroids.Core.Services;
 using Asteroids.Game.Factory;
 using Asteroids.Game.Services;
 using Asteroids.Game.Settings;
@@ -10,7 +11,6 @@ namespace Asteroids.Game
     {
         private Float3 _offset;
         private int _currentLasers;
-        private bool _isReload;
 
         private readonly IUpdater _updater;
         private readonly ITimerService _timerService;
@@ -22,12 +22,13 @@ namespace Asteroids.Game
 
         private readonly List<ILaserPresenter> _lasers;
         private readonly ITimer _firingTimer;
-        private readonly ITimer _reloadTimer;
-        private readonly ITimer _regenerateTimer;
+        private readonly float _firingDelay;
 
-        public int LasersCount => _isReload ? (int)MathUtils.Zero : _currentLasers;
+        private readonly ILaserGunReloader _laserGunReloader;
 
-        public float ReloadTime => _isReload ? _reloadTimer.TimeLeft : _regenerateTimer.TimeLeft;
+        public int LasersCount => _laserGunReloader.IsReload ? (int)MathUtils.Zero : _currentLasers;
+
+        public float ReloadTime => _laserGunReloader.ReloadTime;
 
         public Float3 Offset => _offset;
 
@@ -53,12 +54,16 @@ namespace Asteroids.Game
             _laserFactory = laserFactory;
 
             _offset = _config.Offset.ToFloat3();
+
             _lasers = new List<ILaserPresenter>();
             _currentLasers = _config.Capacity;
 
             _firingTimer = CreateTimer();
-            _reloadTimer = CreateTimer();
-            _regenerateTimer = CreateTimer();
+            _firingDelay = MathUtils.Inverse(_config.FiringRate);
+
+            _laserGunReloader = new LaserGunReloader(_timerService, _config.ReloadTime, _config.RegenerateTime);
+            _laserGunReloader.Reloaded += OnReloaded;
+            _laserGunReloader.Regenerated += OnRegenerated;
         }
 
         public void Enable()
@@ -66,17 +71,7 @@ namespace Asteroids.Game
             _updater.Add(this);
 
             _firingTimer?.Resume();
-            _reloadTimer?.Resume();
-            _regenerateTimer?.Resume();
-        }
-
-        public void Destroy()
-        {
-            Disable();
-
-            _timerService.RemoveTimer(_firingTimer);
-            _timerService.RemoveTimer(_reloadTimer);
-            _timerService.RemoveTimer(_regenerateTimer);
+            _laserGunReloader.Enable();
         }
 
         public void Disable()
@@ -84,24 +79,35 @@ namespace Asteroids.Game
             _updater.Remove(this);
 
             _firingTimer?.Pause();
-            _reloadTimer?.Pause();
-            _regenerateTimer?.Pause();
+            _laserGunReloader.Disable();
+        }
+
+        public void Destroy()
+        {
+            Disable();
+
+            _timerService.RemoveTimer(_firingTimer);
+
+            _laserGunReloader.Destroy();
+            _laserGunReloader.Reloaded = null;
+            _laserGunReloader.Regenerated = null;
+
+            foreach (var laser in _lasers)
+                DestroyLaser(laser);
         }
 
         public void Tick(float deltaTime)
         {
-            for (int i = 0; i < _lasers.Count; i++)
+            for (int i = _lasers.Count - 1; i >= 0; i--)
             {
                 var laser = _lasers[i];
 
-                if (laser.IsDestroyed)
-                {
-                    _lasers.RemoveAt(i);
-                    _laserFactory.Release(laser);
+                if (!laser.IsDestroyed)
+                    continue;
 
-                    _positionCheckService.RemoveDamaging(laser);
-                    i--;
-                }
+                DestroyLaser(laser);
+
+                _lasers.RemoveAt(i);
             }
         }
 
@@ -117,13 +123,47 @@ namespace Asteroids.Game
 
         public void TryShoot()
         {
-            if (_currentLasers <= MathUtils.Zero && !_isReload)
-                Reload();
+            if (_currentLasers <= MathUtils.Zero && !_laserGunReloader.IsReload)
+                _laserGunReloader.Reload();
 
             if (!CanShoot())
                 return;
 
             Shoot();
+        }
+
+        private bool CanShoot()
+        {
+            return !(_laserGunReloader.IsReload || _currentLasers <= MathUtils.Zero || _firingTimer == null || !_firingTimer.IsElapsed);
+        }
+
+        private void Shoot()
+        {
+            UpdateTimer();
+
+            CreateLaser();
+
+            _laserGunReloader.RegenerateLaser();
+        }
+
+        private void CreateLaser()
+        {
+            var laser = _laserFactory.Create();
+            laser.SetRotation(_model.Rotation.Value);
+            laser.SetPosition(_model.Position.Value);
+            laser.Enable();
+
+            _positionCheckService.AddDamaging(laser);
+
+            _lasers.Add(laser);
+            _currentLasers--;
+        }
+
+        private void DestroyLaser(ILaserPresenter laser)
+        {
+            _laserFactory.Release(laser);
+
+            _positionCheckService.RemoveDamaging(laser);
         }
 
         private ITimer CreateTimer()
@@ -134,71 +174,24 @@ namespace Asteroids.Game
             return timer;
         }
 
-        private bool CanShoot()
+        private void UpdateTimer()
         {
-            return !(_isReload || _currentLasers <= MathUtils.Zero || _firingTimer == null || !_firingTimer.IsElapsed);
-        }
-
-        private void Reload()
-        {
-            _isReload = true;
-
-            _regenerateTimer.Elapsed -= AfterRegenerateLaser;
-            _regenerateTimer.UpdateTime(MathUtils.Zero);
-            _regenerateTimer.Pause();
-
-            _reloadTimer.UpdateTime(_config.ReloadTime);
-            _reloadTimer.Resume();
-            _reloadTimer.Elapsed += AfterReload;
-        }
-
-        private void AfterReload(ITimer timer)
-        {
-            timer.Elapsed -= AfterReload;
-            _currentLasers = _config.Capacity;
-            _isReload = false;
-        }
-
-        private void Shoot()
-        {
-            var firingDelay = MathUtils.Inverse(_config.FiringRate);
-
-            _firingTimer.UpdateTime(firingDelay);
+            _firingTimer.UpdateTime(_firingDelay);
             _firingTimer.Resume();
-
-            var laser = _laserFactory.Create();
-            laser.SetRotation(_model.Rotation.Value);
-            laser.SetPosition(_model.Position.Value);
-            laser.Enable();
-
-            _positionCheckService.AddDamaging(laser);
-
-            _lasers.Add(laser);
-            _currentLasers--;
-
-            RegenerateLaser();
         }
 
-        private void RegenerateLaser()
+        private void OnReloaded()
         {
-            if (_regenerateTimer.IsElapsed)
-                _regenerateTimer.Elapsed += AfterRegenerateLaser;
-
-            _regenerateTimer.UpdateTime(_config.RegenerateTime);
-            _regenerateTimer.Resume();
+            _currentLasers = _config.Capacity;
         }
 
-        private void AfterRegenerateLaser(ITimer timer)
+        private void OnRegenerated()
         {
-            timer.Elapsed -= AfterRegenerateLaser;
-
-            if (!_isReload)
+            if (!_laserGunReloader.IsReload)
                 _currentLasers++;
 
             if (_currentLasers >= _config.Capacity)
-                return;
-
-            RegenerateLaser();
+                _laserGunReloader.StopRegeneration();
         }
     }
 }

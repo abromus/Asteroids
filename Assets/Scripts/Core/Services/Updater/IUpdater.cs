@@ -1,8 +1,6 @@
-﻿using Asteroids.Core;
-
-namespace Asteroids.Game
+﻿namespace Asteroids.Core.Services
 {
-    public interface IUpdater
+    public interface IUpdater : IService
     {
         public void Add(IUpdatable updatable);
 

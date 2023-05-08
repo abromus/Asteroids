@@ -14,7 +14,6 @@ namespace Asteroids.Game
         private Camera _camera;
 
         private IGame _game;
-        private IUpdater _updater;
 
         private IConfigInitializer _configInitializer;
         private IServiceInitializer _serviceInitializer;
@@ -24,15 +23,15 @@ namespace Asteroids.Game
         {
             base.Run(gameData);
 
-            _game = new Game(gameData, _updater);
+            _game = new Game(gameData);
 
             _configInitializer = new ConfigInitializer(_game, _configData);
             _configInitializer.Initialize();
 
-            _serviceInitializer = new ServiceInitializer(_game, _updater, _camera);
+            _serviceInitializer = new ServiceInitializer(_game, _camera);
             _serviceInitializer.Initialize();
 
-            _factoryInitializer = new FactoryInitializer(_game, _updater);
+            _factoryInitializer = new FactoryInitializer(_game);
             _factoryInitializer.Initialize();
 
             _game.Run();
@@ -42,18 +41,11 @@ namespace Asteroids.Game
         {
             _camera = Instantiate(_cameraPrefab);
             _camera.transform.SetAsFirstSibling();
-
-            _updater = new Updater();
         }
 
         private void OnDestroy()
         {
             _game.Destroy();
-        }
-
-        private void Update()
-        {
-            _updater.Tick(Time.deltaTime);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Asteroids.Game.Services;
+﻿using Asteroids.Core.Services;
+using Asteroids.Game.Services;
 using Asteroids.Game.Settings;
 
 namespace Asteroids.Game.Factory

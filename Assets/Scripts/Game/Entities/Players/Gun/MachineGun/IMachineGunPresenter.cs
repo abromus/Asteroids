@@ -1,16 +1,8 @@
-﻿using Asteroids.Core;
-
-namespace Asteroids.Game
+﻿namespace Asteroids.Game
 {
-    public interface IMachineGunPresenter : IPresenter
+    public interface IMachineGunPresenter : IGunPresenter
     {
-        public Float3 Offset { get; }
-
         public IMachineGunView View { get; }
-
-        public void SetPosition(Float3 position);
-
-        public void SetRotation(Float3 rotation);
 
         public void TryShoot();
     }

@@ -12,7 +12,6 @@ namespace Asteroids.Game.Factory
         public IBulletView Create()
         {
             var bullet = Instantiate(_prefab);
-            bullet.Init();
 
             return bullet;
         }

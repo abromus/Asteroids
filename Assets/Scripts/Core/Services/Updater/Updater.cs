@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Asteroids.Core;
 
-namespace Asteroids.Game
+namespace Asteroids.Core.Services
 {
     public sealed class Updater : IUpdater
     {

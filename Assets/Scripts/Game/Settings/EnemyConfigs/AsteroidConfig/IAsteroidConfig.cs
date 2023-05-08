@@ -6,8 +6,6 @@ namespace Asteroids.Game.Settings
     {
         public float FragmentSpeed { get; }
 
-        public float Damping { get; }
-
         public float Speed { get; }
     }
 }

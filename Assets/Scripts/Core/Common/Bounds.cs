@@ -11,12 +11,6 @@
             set => _center = value;
         }
 
-        public Float3 Extents
-        {
-            get => _extents;
-            set => _extents = value;
-        }
-
         public Float3 Size
         {
             get => _extents * 2f;

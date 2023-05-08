@@ -12,7 +12,6 @@ namespace Asteroids.Game.Factory
         public ILaserView Create()
         {
             var laser = Instantiate(_prefab);
-            laser.Init();
 
             return laser;
         }

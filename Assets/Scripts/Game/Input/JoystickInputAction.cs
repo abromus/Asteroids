@@ -4,7 +4,7 @@ using Asteroids.Inputs;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Asteroids.Game
+namespace Asteroids.Game.Input
 {
     public sealed class JoystickInputAction : IDeviceInputAction
     {

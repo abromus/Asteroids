@@ -45,14 +45,6 @@ namespace Asteroids.Game
                 Spawn();
         }
 
-        public IFlyingSaucerPresenter Spawn()
-        {
-            var flyingSaucerPresenter = CreateFlyingSaucer();
-            _flyingSaucers.Add(flyingSaucerPresenter);
-
-            return flyingSaucerPresenter;
-        }
-
         public void Destroy()
         {
             FlyingSaucerDestroyed = null;
@@ -73,18 +65,24 @@ namespace Asteroids.Game
 
                 DestroyFlyingSaucer(flyingSaucerPresenter);
 
-                var timer = _timerService.CreateTimer(_config.SpawnDelay);
-                timer.Elapsed += OnElapsed;
-                _timers.Add(timer);
+                CreateTimer();
             }
+        }
+
+        public IFlyingSaucerPresenter Spawn()
+        {
+            var flyingSaucerPresenter = CreateFlyingSaucer();
+            _flyingSaucers.Add(flyingSaucerPresenter);
+
+            return flyingSaucerPresenter;
         }
 
         private IFlyingSaucerPresenter CreateFlyingSaucer()
         {
-            var flyingSaucerPresenter = _factory.Create();
             var rotation = GetRotation();
             var position = _spawnerHelper.CalculatePosition(rotation);
 
+            var flyingSaucerPresenter = _factory.Create();
             flyingSaucerPresenter.Init(position, _shipPresenter);
             flyingSaucerPresenter.Enable();
 
@@ -105,13 +103,12 @@ namespace Asteroids.Game
             FlyingSaucerDestroyed.SafeInvoke();
         }
 
-        private void OnElapsed(ITimer timer)
+        private void DestroyFlyingSaucers()
         {
-            timer.Elapsed -= OnElapsed;
+            for (int i = _flyingSaucers.Count - 1; i >= 0; i--)
+                DestroyFlyingSaucer(_flyingSaucers[i]);
 
-            _timerService.RemoveTimer(timer);
-
-            Spawn();
+            _flyingSaucers.Clear();
         }
 
         private Float3 GetRotation()
@@ -120,6 +117,13 @@ namespace Asteroids.Game
             var rotation = MathUtils.CalculateRotation(angle, Float3.Zero);
 
             return rotation;
+        }
+
+        private void CreateTimer()
+        {
+            var timer = _timerService.CreateTimer(_config.SpawnDelay);
+            timer.Elapsed += OnElapsed;
+            _timers.Add(timer);
         }
 
         private void DestroyTimers()
@@ -136,12 +140,14 @@ namespace Asteroids.Game
             }
         }
 
-        private void DestroyFlyingSaucers()
+        private void OnElapsed(ITimer timer)
         {
-            for (int i = _flyingSaucers.Count - 1; i >= 0; i--)
-                DestroyFlyingSaucer(_flyingSaucers[i]);
+            timer.Elapsed -= OnElapsed;
 
-            _flyingSaucers.Clear();
+            _timers.Remove(timer);
+            _timerService.RemoveTimer(timer);
+
+            Spawn();
         }
     }
 }

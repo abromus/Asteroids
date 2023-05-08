@@ -12,7 +12,6 @@ namespace Asteroids.Game.Factory
         public ILaserGunView Create()
         {
             var laserGun = Instantiate(_prefab);
-            laserGun.Init();
 
             return laserGun;
         }

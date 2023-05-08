@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using Asteroids.Core;
+using Asteroids.Core.Services;
 using Asteroids.Core.Settings;
 using Asteroids.Game.Factory;
-using Asteroids.Game.Services;
 using Asteroids.Game.Settings;
 
 namespace Asteroids.Game.Initializers
@@ -10,12 +10,10 @@ namespace Asteroids.Game.Initializers
     public sealed class FactoryInitializer : IFactoryInitializer
     {
         private readonly IGame _game;
-        private readonly IUpdater _updater;
 
-        public FactoryInitializer(IGame game, IUpdater updater)
+        public FactoryInitializer(IGame game)
         {
             _game = game;
-            _updater = updater;
         }
 
         public void Initialize()
@@ -27,58 +25,59 @@ namespace Asteroids.Game.Initializers
         {
             var uiFactories = _game.GameData.ConfigStorage.GetUiFactoryConfig().UiFactories;
             var screenSystem = _game.GameData.ServiceStorage.GetScreenSystem();
+            var updater = _game.GameData.ServiceStorage.GetUpdater();
             var bounds = screenSystem.Bounds;
 
-            InitAsteroidFactory(uiFactories, bounds);
-            InitBulletFactory(uiFactories);
-            InitFlyingSaucerFactory(uiFactories, bounds);
-            InitLaserFactory(uiFactories);
-            InitLaserGunFactory(uiFactories);
-            InitMachineGunFactory(uiFactories);
-            InitShipFactory(uiFactories, bounds);
+            InitAsteroidFactory(uiFactories, updater, bounds);
+            InitBulletFactory(uiFactories, updater);
+            InitFlyingSaucerFactory(uiFactories, updater, bounds);
+            InitLaserFactory(uiFactories, updater);
+            InitLaserGunFactory(uiFactories, updater);
+            InitMachineGunFactory(uiFactories, updater);
+            InitShipFactory(uiFactories, updater, bounds);
         }
 
-        private void InitAsteroidFactory(IReadOnlyList<IUiFactory> uiFactories, Bounds bounds)
+        private void InitAsteroidFactory(IReadOnlyList<IUiFactory> uiFactories, IUpdater updater, Bounds bounds)
         {
             var viewFactory = uiFactories.GetAsteroidViewFactory();
             var config = _game.GameData.ConfigStorage.GetAsteroidConfig();
-            var factory = new AsteroidFactory(_updater, viewFactory, config, bounds) as IAsteroidFactory;
+            var factory = new AsteroidFactory(updater, viewFactory, config, bounds) as IAsteroidFactory;
 
             _game.GameData.FactoryStorage.AddFactory(viewFactory);
             _game.GameData.FactoryStorage.AddFactory(factory);
         }
 
-        private void InitBulletFactory(IReadOnlyList<IUiFactory> uiFactories)
+        private void InitBulletFactory(IReadOnlyList<IUiFactory> uiFactories, IUpdater updater)
         {
             var viewFactory = uiFactories.GetBulletViewFactory();
             var config = _game.GameData.ConfigStorage.GetBulletConfig();
-            var factory = new BulletFactory(_updater, viewFactory, config) as IBulletFactory;
+            var factory = new BulletFactory(updater, viewFactory, config) as IBulletFactory;
 
             _game.GameData.FactoryStorage.AddFactory(viewFactory);
             _game.GameData.FactoryStorage.AddFactory(factory);
         }
 
-        private void InitFlyingSaucerFactory(IReadOnlyList<IUiFactory> uiFactories, Bounds bounds)
+        private void InitFlyingSaucerFactory(IReadOnlyList<IUiFactory> uiFactories, IUpdater updater, Bounds bounds)
         {
             var viewFactory = uiFactories.GetFlyingSaucerViewFactory();
             var config = _game.GameData.ConfigStorage.GetFlyingSaucerConfig();
-            var factory = new FlyingSaucerFactory(_updater, viewFactory, config, bounds) as IFlyingSaucerFactory;
+            var factory = new FlyingSaucerFactory(updater, viewFactory, config, bounds) as IFlyingSaucerFactory;
 
             _game.GameData.FactoryStorage.AddFactory(viewFactory);
             _game.GameData.FactoryStorage.AddFactory(factory);
         }
 
-        private void InitLaserFactory(IReadOnlyList<IUiFactory> uiFactories)
+        private void InitLaserFactory(IReadOnlyList<IUiFactory> uiFactories, IUpdater updater)
         {
             var viewFactory = uiFactories.GetLaserViewFactory();
             var config = _game.GameData.ConfigStorage.GetLaserConfig();
-            var factory = new LaserFactory(_updater, viewFactory, config) as ILaserFactory;
+            var factory = new LaserFactory(updater, viewFactory, config) as ILaserFactory;
 
             _game.GameData.FactoryStorage.AddFactory(viewFactory);
             _game.GameData.FactoryStorage.AddFactory(factory);
         }
 
-        private void InitLaserGunFactory(IReadOnlyList<IUiFactory> uiFactories)
+        private void InitLaserGunFactory(IReadOnlyList<IUiFactory> uiFactories, IUpdater updater)
         {
             var positionCheckService = _game.GameData.ServiceStorage.GetPositionCheckService();
             var timerService = _game.GameData.ServiceStorage.GetTimerService();
@@ -86,7 +85,7 @@ namespace Asteroids.Game.Initializers
             var config = _game.GameData.ConfigStorage.GetLaserGunConfig();
             var laserFactory = _game.GameData.FactoryStorage.GetLaserFactory();
             var factory = new LaserGunFactory(
-                _updater,
+                updater,
                 timerService,
                 positionCheckService,
                 viewFactory,
@@ -97,7 +96,7 @@ namespace Asteroids.Game.Initializers
             _game.GameData.FactoryStorage.AddFactory(factory);
         }
 
-        private void InitMachineGunFactory(IReadOnlyList<IUiFactory> uiFactories)
+        private void InitMachineGunFactory(IReadOnlyList<IUiFactory> uiFactories, IUpdater updater)
         {
             var positionCheckService = _game.GameData.ServiceStorage.GetPositionCheckService();
             var timerService = _game.GameData.ServiceStorage.GetTimerService();
@@ -105,7 +104,7 @@ namespace Asteroids.Game.Initializers
             var config = _game.GameData.ConfigStorage.GetMachineGunConfig();
             var bulletFactory = _game.GameData.FactoryStorage.GetBulletFactory();
             var factory = new MachineGunFactory(
-                _updater,
+                updater,
                 timerService,
                 positionCheckService,
                 viewFactory,
@@ -116,7 +115,7 @@ namespace Asteroids.Game.Initializers
             _game.GameData.FactoryStorage.AddFactory(factory);
         }
 
-        private void InitShipFactory(IReadOnlyList<IUiFactory> uiFactories, Bounds bounds)
+        private void InitShipFactory(IReadOnlyList<IUiFactory> uiFactories, IUpdater updater, Bounds bounds)
         {
             var viewFactory = uiFactories.GetShipViewFactory();
             var config = _game.GameData.ConfigStorage.GetShipConfig();
@@ -125,7 +124,7 @@ namespace Asteroids.Game.Initializers
             var laserGunFactory = _game.GameData.FactoryStorage.GetLaserGunFactory();
             var machineGunFactory = _game.GameData.FactoryStorage.GetMachineGunFactory();
             var factory = new ShipFactory(
-                _updater,
+                updater,
                 viewFactory,
                 config,
                 inputSystem,

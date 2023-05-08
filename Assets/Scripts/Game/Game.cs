@@ -1,4 +1,5 @@
 using Asteroids.Core;
+using Asteroids.Core.Services;
 using Asteroids.Game.Services;
 using Asteroids.Game.Settings;
 
@@ -12,23 +13,24 @@ namespace Asteroids.Game
         private IScoreboard _scoreboard;
 
         private readonly IGameData _gameData;
-        private readonly IUpdater _updater;
 
         public IGameData GameData => _gameData;
 
-        public Game(IGameData gameData, IUpdater updater)
+        public Game(IGameData gameData)
         {
             _gameData = gameData;
-            _updater = updater;
         }
 
         public void Destroy()
         {
+            var inputSystem = _gameData.ServiceStorage.GetInputSystem();
+            inputSystem.Hide();
+
             var positionCheckService = _gameData.ServiceStorage.GetPositionCheckService();
             positionCheckService.RemoveDamaging(_shipPresenter);
 
-            var inputSystem = _gameData.ServiceStorage.GetInputSystem();
-            inputSystem.Hide();
+            var screenSystem = _gameData.ServiceStorage.GetScreenSystem();
+            screenSystem.CloseAllScreens();
 
             (_shipPresenter as IPresenter).Destroy();
             _shipPresenter = null;
@@ -68,14 +70,15 @@ namespace Asteroids.Game
         private void CreateEnemies(IPositionCheckService positionCheckService)
         {
             var timerService = _gameData.ServiceStorage.GetTimerService();
+            var updater = _gameData.ServiceStorage.GetUpdater();
             var bounds = _gameData.ServiceStorage.GetScreenSystem().Bounds;
 
-            CreateAsteroids(positionCheckService, timerService, bounds);
+            CreateAsteroids(positionCheckService, updater, timerService, bounds);
 
-            CreateFlyingSaucers(positionCheckService, timerService, bounds);
+            CreateFlyingSaucers(positionCheckService, updater, timerService, bounds);
         }
 
-        private void CreateAsteroids(IPositionCheckService positionCheckService, ITimerService timerService, Bounds bounds)
+        private void CreateAsteroids(IPositionCheckService positionCheckService, IUpdater updater, ITimerService timerService, Bounds bounds)
         {
             var asteroidSpawnerConfig = _gameData.ConfigStorage.GetAsteroidSpawnerConfig();
             var asteroidFactory = _gameData.FactoryStorage.GetAsteroidFactory();
@@ -86,10 +89,11 @@ namespace Asteroids.Game
                 positionCheckService,
                 timerService,
                 bounds);
-            _updater.Add(_asteroidSpawner);
+
+            updater.Add(_asteroidSpawner);
         }
 
-        private void CreateFlyingSaucers(IPositionCheckService positionCheckService, ITimerService timerService, Bounds bounds)
+        private void CreateFlyingSaucers(IPositionCheckService positionCheckService, IUpdater updater, ITimerService timerService, Bounds bounds)
         {
             var flyingSaucerSpawnerConfig = _gameData.ConfigStorage.GetFlyingSaucerSpawnerConfig();
             var flyingSaucerFactory = _gameData.FactoryStorage.GetFlyingSaucerFactory();
@@ -101,7 +105,8 @@ namespace Asteroids.Game
                 timerService,
                 bounds,
                 _shipPresenter);
-            _updater.Add(_flyingSaucerSpawner);
+
+            updater.Add(_flyingSaucerSpawner);
         }
 
         private void CreateScoreboard(IScreenSystem screenSystem)
@@ -111,6 +116,7 @@ namespace Asteroids.Game
                 _shipPresenter,
                 _asteroidSpawner,
                 _flyingSaucerSpawner);
+
             _scoreboard.Restarted += OnRestarted;
         }
 

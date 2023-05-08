@@ -1,5 +1,7 @@
 using System;
 using Asteroids.Core;
+using Asteroids.Core.Services;
+using Asteroids.Game.Input;
 using Asteroids.Game.Services;
 using Asteroids.Game.Settings;
 
@@ -66,6 +68,19 @@ namespace Asteroids.Game
             _updater.Add(this);
 
             _inputActions.Enable();
+
+            _machineGunPresenter.Enable();
+            _laserGunPresenter.Enable();
+        }
+
+        public void Disable()
+        {
+            _updater.Remove(this);
+
+            _inputActions.Disable();
+
+            _machineGunPresenter.Disable();
+            _laserGunPresenter.Disable();
         }
 
         public void Destroy()
@@ -74,41 +89,38 @@ namespace Asteroids.Game
 
             _view.DestroyView();
 
+            _machineGunPresenter.Destroy();
+            _laserGunPresenter.Destroy();
+
             _isDestroyed = true;
 
             Destroyed.SafeInvoke();
             Destroyed = null;
         }
 
-        public void Disable()
+        public void Tick(float deltaTime)
         {
-            _updater.Remove(this);
+            ChangeSpeed(deltaTime);
 
-            _inputActions.Disable();
+            Move(deltaTime);
+
+            ChangeRotation(deltaTime);
+
+            TryShoot();
         }
 
-        public void Tick(float deltaTime)
+        public void TakeDamage(IDamaging damaging)
+        {
+            if (damaging is IAsteroidPresenter or IFlyingSaucerPresenter)
+                Destroy();
+        }
+
+        private void ChangeSpeed(float deltaTime)
         {
             if (_inputActions.IsMoving)
                 _acceleration.SpeedUp(deltaTime);
             else
                 _acceleration.SlowDown(deltaTime);
-
-            Move(deltaTime);
-
-            if (_inputActions.IsRotatingLeft)
-                Rotate(deltaTime, true);
-            else if (_inputActions.IsRotatingRight)
-                Rotate(deltaTime, false);
-
-            if (_inputActions.IsShooting)
-                Shoot();
-        }
-
-        public void TakeDamage(IDamaging damaging)
-        {
-            if (damaging is IAsteroidPresenter || damaging is IFlyingSaucerPresenter)
-                Destroy();
         }
 
         private void Move(float deltaTime)
@@ -117,47 +129,64 @@ namespace Asteroids.Game
             var delta = _acceleration.Speed * deltaTime * direction;
             var modelPosition = MathUtils.CorrectPosition(_model.Position.Value + delta, _bounds);
 
-            var machineGunPosition = _model.Position.Value + delta == modelPosition
-                ? _machineGunPresenter.Position - _machineGunPresenter.Offset + delta
-                : MathUtils.CorrectPosition(_machineGunPresenter.Position + delta, _bounds) - _machineGunPresenter.Offset;
-            var laserGunPosition = _model.Position.Value + delta == modelPosition
-                ? _laserGunPresenter.Position - _laserGunPresenter.Offset + delta
-                : MathUtils.CorrectPosition(_laserGunPresenter.Position + delta, _bounds) - _laserGunPresenter.Offset;
+            SetGunPosition(_machineGunPresenter, delta, modelPosition);
+            SetGunPosition(_laserGunPresenter, delta, modelPosition);
 
-            _machineGunPresenter.SetPosition(machineGunPosition);
-            _laserGunPresenter.SetPosition(laserGunPosition);
             _model.Position.Value = modelPosition;
+        }
+
+        private void ChangeRotation(float deltaTime)
+        {
+            if (_inputActions.IsRotatingLeft)
+                Rotate(deltaTime, true);
+            else if (_inputActions.IsRotatingRight)
+                Rotate(deltaTime, false);
+        }
+
+        private void TryShoot()
+        {
+            if (!_inputActions.IsShooting)
+                return;
+
+            _laserGunPresenter.TryShoot();
+            _machineGunPresenter.TryShoot();
         }
 
         private void Rotate(float deltaTime, bool isLeft)
         {
             var direction = isLeft ? 1f : -1f;
-            var angle = direction * _config.Damping * deltaTime;
+            var angle = direction * _config.AngularVelocity * deltaTime;
             var rotation = MathUtils.CalculateRotation(angle, _model.Rotation.Value);
 
-            var deltaMachineGunPosition = MathUtils.Rotate(
-                _model.Position.Value,
-                _machineGunPresenter.Position,
-                rotation.Z - _model.Rotation.Value.Z);
-
-            var deltaLaserGunPosition = MathUtils.Rotate(
-                _model.Position.Value,
-                _laserGunPresenter.Position,
-                rotation.Z - _model.Rotation.Value.Z);
+            RotateGun(_machineGunPresenter, rotation);
+            RotateGun(_laserGunPresenter, rotation);
 
             _model.Rotation.Value = rotation;
-
-            _machineGunPresenter.SetPosition(_model.Position.Value + deltaMachineGunPosition - _machineGunPresenter.Offset);
-            _machineGunPresenter.SetRotation(rotation);
-
-            _laserGunPresenter.SetPosition(_model.Position.Value + deltaLaserGunPosition - _laserGunPresenter.Offset);
-            _laserGunPresenter.SetRotation(rotation);
         }
 
-        private void Shoot()
+        private void RotateGun(IGunPresenter gunPresenter, Float3 rotation)
         {
-            _laserGunPresenter.TryShoot();
-            _machineGunPresenter.TryShoot();
+            SetGunPosition(gunPresenter, rotation);
+            gunPresenter.SetRotation(rotation);
+        }
+
+        private void SetGunPosition(IGunPresenter gunPresenter, Float3 delta, Float3 modelPosition)
+        {
+            var gunPosition = _model.Position.Value + delta == modelPosition
+                ? gunPresenter.Position - gunPresenter.Offset + delta
+                : MathUtils.CorrectPosition(gunPresenter.Position + delta, _bounds) - gunPresenter.Offset;
+
+            gunPresenter.SetPosition(gunPosition);
+        }
+
+        private void SetGunPosition(IGunPresenter gunPresenter, Float3 rotation)
+        {
+            var deltaGunPosition = MathUtils.Rotate(
+                _model.Position.Value,
+                gunPresenter.Position,
+                rotation.Z - _model.Rotation.Value.Z);
+
+            gunPresenter.SetPosition(_model.Position.Value + deltaGunPosition - gunPresenter.Offset);
         }
     }
 }

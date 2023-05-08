@@ -8,16 +8,6 @@ namespace Asteroids.Game
 {
     public static class ServiceExtensions
     {
-        public static IPositionCheckService GetPositionCheckService(this IServiceStorage serviceStorage)
-        {
-            return serviceStorage.GetService<IPositionCheckService>();
-        }
-
-        public static ITimerService GetTimerService(this IServiceStorage serviceStorage)
-        {
-            return serviceStorage.GetService<ITimerService>();
-        }
-
         public static IInputSystem GetInputSystem(this IServiceStorage serviceStorage)
         {
             return serviceStorage.GetService<IInputSystem>();
@@ -28,6 +18,11 @@ namespace Asteroids.Game
             return uiServices.GetService<IInputSystem>(UiServiceType.InputSystem);
         }
 
+        public static IPositionCheckService GetPositionCheckService(this IServiceStorage serviceStorage)
+        {
+            return serviceStorage.GetService<IPositionCheckService>();
+        }
+
         public static IScreenSystem GetScreenSystem(this IServiceStorage serviceStorage)
         {
             return serviceStorage.GetService<IScreenSystem>();
@@ -36,6 +31,11 @@ namespace Asteroids.Game
         public static IScreenSystem GetScreenSystem(this IReadOnlyList<IUiService> uiServices)
         {
             return uiServices.GetService<IScreenSystem>(UiServiceType.ScreenSystem);
+        }
+
+        public static ITimerService GetTimerService(this IServiceStorage serviceStorage)
+        {
+            return serviceStorage.GetService<ITimerService>();
         }
 
         private static TService GetService<TService>(this IReadOnlyList<IUiService> uiServices, UiServiceType serviceType)

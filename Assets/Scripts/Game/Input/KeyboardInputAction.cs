@@ -3,7 +3,7 @@ using Asteroids.Game.Services;
 using Asteroids.Inputs;
 using UnityEngine.InputSystem;
 
-namespace Asteroids.Game
+namespace Asteroids.Game.Input
 {
     public sealed class KeyboardInputAction : IDeviceInputAction
     {

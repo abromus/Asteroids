@@ -8,13 +8,14 @@ namespace Asteroids.Core.Services
     {
         private readonly Dictionary<Type, IService> _services;
 
-        public ServiceStorage(ICoroutineRunner coroutineRunner, IGameData gameData)
+        public ServiceStorage(ICoroutineRunner coroutineRunner, IGameData gameData, IUpdater updater)
         {
             var stateMachine = InitStateMachine(coroutineRunner, gameData);
 
             _services = new Dictionary<Type, IService>()
             {
                 [typeof(IStateMachine)] = stateMachine,
+                [typeof(IUpdater)] = updater,
             };
         }
 

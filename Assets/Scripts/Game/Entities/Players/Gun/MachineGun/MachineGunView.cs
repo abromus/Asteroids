@@ -4,10 +4,6 @@ namespace Asteroids.Game
 {
     public sealed class MachineGunView : View, IMachineGunView
     {
-        public Transform Transform => transform;
-
-        public void Init() { }
-
         public void SetParent(Transform parent)
         {
             transform.SetParent(parent);

@@ -1,11 +1,9 @@
 ﻿using Asteroids.Game.Services;
 
-namespace Asteroids.Game
+namespace Asteroids.Game.Input
 {
     public sealed class InputAction : IInputAction
     {
-        private readonly IInputSystem _inputSystem;
-
         private readonly IDeviceInputAction _deviceInputActions;
 
         public bool IsMoving => _deviceInputActions.IsMoving();
@@ -18,8 +16,6 @@ namespace Asteroids.Game
 
         public InputAction(IInputSystem inputSystem)
         {
-            _inputSystem = inputSystem;
-
 #if UNITY_EDITOR
             _deviceInputActions = new KeyboardInputAction(inputSystem);
 #else
