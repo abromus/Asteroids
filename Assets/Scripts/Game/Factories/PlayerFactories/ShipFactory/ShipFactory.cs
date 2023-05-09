@@ -36,6 +36,8 @@ namespace Asteroids.Game.Factory
             _machineGunFactory = machineGunFactory;
         }
 
+        public void Destroy() { }
+
         public IShipPresenter Create()
         {
             var model = new ShipModel();

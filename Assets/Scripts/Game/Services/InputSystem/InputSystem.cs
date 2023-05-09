@@ -28,6 +28,11 @@ namespace Asteroids.Game.Services
             _playerInputActions = new PlayerInputActions();
         }
 
+        public void Destroy()
+        {
+            Hide();
+        }
+
         public void Show()
         {
             var prefab = _defaultView;

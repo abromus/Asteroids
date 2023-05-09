@@ -24,5 +24,12 @@ namespace Asteroids.Core
 
             _serviceStorage = new ServiceStorage(coroutineRunner, this, updater);
         }
+
+        public void Destroy()
+        {
+            _factoryStorage.Destroy();
+
+            _serviceStorage.Destroy();
+        }
     }
 }

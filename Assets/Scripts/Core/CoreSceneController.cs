@@ -20,6 +20,11 @@ namespace Asteroids.Core
             EnterInitState();
         }
 
+        public void Destroy()
+        {
+            _gameData.Destroy();
+        }
+
         private void Awake()
         {
             _configStorage.Init();
@@ -35,6 +40,11 @@ namespace Asteroids.Core
         private void EnterInitState()
         {
             _gameData.ServiceStorage.GetStateMachine().Enter<BootstrapState>();
+        }
+
+        private void OnDestroy()
+        {
+            Destroy();
         }
     }
 }

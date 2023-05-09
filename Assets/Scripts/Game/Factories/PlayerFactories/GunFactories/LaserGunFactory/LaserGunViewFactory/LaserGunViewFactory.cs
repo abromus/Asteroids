@@ -15,5 +15,7 @@ namespace Asteroids.Game.Factory
 
             return laserGun;
         }
+
+        public override void Destroy() { }
     }
 }

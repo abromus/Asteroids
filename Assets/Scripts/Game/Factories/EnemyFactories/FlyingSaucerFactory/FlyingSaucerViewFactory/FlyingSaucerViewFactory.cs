@@ -15,5 +15,7 @@ namespace Asteroids.Game.Factory
 
             return flyingSaucer;
         }
+
+        public override void Destroy() { }
     }
 }

@@ -9,5 +9,7 @@ namespace Asteroids.Core.Settings
         [SerializeField] private List<UiFactory> _uiFactories;
 
         public IReadOnlyList<IUiFactory> UiFactories => _uiFactories;
+
+        public void Destroy() { }
     }
 }

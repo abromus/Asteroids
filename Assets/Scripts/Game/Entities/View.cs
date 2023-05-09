@@ -7,7 +7,8 @@ namespace Asteroids.Game
     {
         public void Activate()
         {
-            gameObject.SetActive(true);
+            if (this != null && transform != null)
+                gameObject.SetActive(true);
         }
 
         public void Deactivate()
@@ -18,12 +19,14 @@ namespace Asteroids.Game
 
         public void Move(Float3 value)
         {
-            transform.position = value.ToVector3();
+            if (this != null && transform != null)
+                transform.position = value.ToVector3();
         }
 
         public void Rotate(Float3 value)
         {
-            transform.rotation = Quaternion.Euler(value.ToVector3());
+            if (this != null && transform != null)
+                transform.rotation = Quaternion.Euler(value.ToVector3());
         }
     }
 }

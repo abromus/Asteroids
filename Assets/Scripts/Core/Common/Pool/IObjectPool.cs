@@ -7,5 +7,7 @@
         public void Release(T pooledObject);
 
         public void Clear();
+
+        public void Dispose();
     }
 }

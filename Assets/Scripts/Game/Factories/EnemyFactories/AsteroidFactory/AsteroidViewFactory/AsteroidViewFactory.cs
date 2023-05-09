@@ -23,5 +23,7 @@ namespace Asteroids.Game.Factory
 
             return asteroidFragment;
         }
+
+        public override void Destroy() { }
     }
 }

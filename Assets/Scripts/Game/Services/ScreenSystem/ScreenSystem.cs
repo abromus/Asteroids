@@ -19,9 +19,13 @@ namespace Asteroids.Game.Services
 
         private List<IScreen> _activeScreens;
 
+        private bool _isDestroyed;
+
         public override UiServiceType UiServiceType => UiServiceType.ScreenSystem;
 
         public Bounds Bounds => _bounds;
+
+        public bool IsDestroyed => _isDestroyed;
 
         public void Init(IGameData gameData, IUpdater updater, Bounds bounds, Transform transform)
         {
@@ -33,6 +37,16 @@ namespace Asteroids.Game.Services
             _activeScreens = new List<IScreen>();
         }
 
+        public void Destroy()
+        {
+            CloseAllScreens();
+
+            _activeScreens.Clear();
+            _activeScreens = null;
+
+            _isDestroyed = true;
+        }
+
         public void CloseScreen(IScreen screen)
         {
             screen.Close();
@@ -40,9 +54,18 @@ namespace Asteroids.Game.Services
 
         public void CloseAllScreens()
         {
+            if (_activeScreens == null)
+            {
+                return;
+            }
+
             for (int i = _activeScreens.Count - 1; i >= 0; i--)
             {
                 var screen = _activeScreens[i];
+
+                if (screen == null)
+                    return;
+
                 screen.Close();
 
                 OnClosed(screen);
@@ -84,16 +107,19 @@ namespace Asteroids.Game.Services
 
         private void OnClosed(IScreen screen)
         {
-            if (this == null)
+            if (this == null || screen == null)
                 return;
 
             screen.Closed -= OnClosed;
 
             _activeScreens.Remove(screen);
-            _updater.Remove(screen);
 
-            if (screen != null)
-                Destroy((screen as MonoBehaviour).gameObject);
+            _updater?.Remove(screen);
+
+            var mono = screen as MonoBehaviour;
+
+            if (mono != null && mono.gameObject != null)
+                DestroyImmediate(mono.gameObject);
         }
     }
 }

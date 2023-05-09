@@ -21,6 +21,11 @@ namespace Asteroids.Game.Factory
             _pool = new ObjectPool<IBulletPresenter>(() => CreateBullet());
         }
 
+        public void Destroy()
+        {
+            _pool.Dispose();
+        }
+
         public IBulletPresenter Create()
         {
             var bullet = _pool.Get();

@@ -15,5 +15,7 @@ namespace Asteroids.Game.Factory
 
             return bullet;
         }
+
+        public override void Destroy() { }
     }
 }

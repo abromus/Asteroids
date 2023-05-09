@@ -21,6 +21,11 @@ namespace Asteroids.Game.Factory
             _pool = new ObjectPool<ILaserPresenter>(() => CreateLaser());
         }
 
+        public void Destroy()
+        {
+            _pool.Dispose();
+        }
+
         public ILaserPresenter Create()
         {
             var laser = _pool.Get();

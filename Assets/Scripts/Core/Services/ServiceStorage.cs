@@ -6,7 +6,7 @@ namespace Asteroids.Core.Services
 {
     public sealed class ServiceStorage : IServiceStorage
     {
-        private readonly Dictionary<Type, IService> _services;
+        private Dictionary<Type, IService> _services;
 
         public ServiceStorage(ICoroutineRunner coroutineRunner, IGameData gameData, IUpdater updater)
         {
@@ -17,6 +17,15 @@ namespace Asteroids.Core.Services
                 [typeof(IStateMachine)] = stateMachine,
                 [typeof(IUpdater)] = updater,
             };
+        }
+
+        public void Destroy()
+        {
+            foreach (var service in _services.Values)
+                service.Destroy();
+
+            _services.Clear();
+            _services = null;
         }
 
         public void AddService<TService>(TService service) where TService : class, IService

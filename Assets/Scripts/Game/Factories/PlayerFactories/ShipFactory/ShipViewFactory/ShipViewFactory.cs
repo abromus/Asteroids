@@ -17,5 +17,7 @@ namespace Asteroids.Game.Factory
 
             return ship;
         }
+
+        public override void Destroy() { }
     }
 }

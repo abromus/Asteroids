@@ -7,19 +7,31 @@ namespace Asteroids.Core.Services
 {
     public sealed class FactoryStorage : IFactoryStorage
     {
-        private readonly IReadOnlyList<IUiFactory> _uiFactories;
-        private readonly Dictionary<Type, IFactory> _factories;
+        private Dictionary<Type, IFactory> _factories;
+
+        private readonly IUiFactoryConfig _uiFactoryConfig;
 
         public FactoryStorage(IConfigStorage configStorage)
         {
-            _uiFactories = configStorage.GetUiFactoryConfig().UiFactories;
+            _uiFactoryConfig = configStorage.GetUiFactoryConfig();
 
-            var gameSceneControllerFactory = _uiFactories.GetGameSceneControllerFactory();
+            var gameSceneControllerFactory = _uiFactoryConfig.UiFactories.GetGameSceneControllerFactory();
 
             _factories = new Dictionary<Type, IFactory>()
             {
                 [typeof(IGameSceneControllerFactory)] = gameSceneControllerFactory,
             };
+        }
+
+        public void Destroy()
+        {
+            _uiFactoryConfig.Destroy();
+
+            foreach (var factory in _factories.Values)
+                factory.Destroy();
+
+            _factories.Clear();
+            _factories = null;
         }
 
         public void AddFactory<TFactory>(TFactory factory) where TFactory : class, IFactory

@@ -11,6 +11,8 @@ namespace Asteroids.Game.Services
     {
         public Bounds Bounds { get; }
 
+        public bool IsDestroyed { get; }
+
         public void CloseScreen(IScreen screen);
 
         public void CloseAllScreens();

@@ -15,5 +15,7 @@ namespace Asteroids.Core.Factories
 
             return gameController;
         }
+
+        public override void Destroy() { }
     }
 }

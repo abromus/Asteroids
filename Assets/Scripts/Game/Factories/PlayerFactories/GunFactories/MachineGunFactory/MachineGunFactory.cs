@@ -44,5 +44,7 @@ namespace Asteroids.Game.Factory
 
             return presenter;
         }
+
+        public void Destroy() { }
     }
 }

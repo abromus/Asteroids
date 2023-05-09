@@ -25,6 +25,12 @@ namespace Asteroids.Game.Factory
             _fragmentPool = new ObjectPool<IAsteroidFragmentPresenter>(() => CreateAsteroidFragment());
         }
 
+        public void Destroy()
+        {
+            _pool.Dispose();
+            _fragmentPool.Dispose();
+        }
+
         public IAsteroidPresenter Create()
         {
             var asteroid = _pool.Get();

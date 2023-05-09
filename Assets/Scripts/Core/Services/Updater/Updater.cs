@@ -4,7 +4,18 @@ namespace Asteroids.Core.Services
 {
     public sealed class Updater : IUpdater
     {
-        private readonly List<IUpdatable> _updatables = new List<IUpdatable>();
+        private List<IUpdatable> _updatables;
+
+        public Updater()
+        {
+            _updatables = new List<IUpdatable>();
+        }
+
+        public void Destroy()
+        {
+            _updatables.Clear();
+            _updatables = null;
+        }
 
         public void Add(IUpdatable updatable)
         {
@@ -14,7 +25,7 @@ namespace Asteroids.Core.Services
 
         public void Remove(IUpdatable updatable)
         {
-            if (_updatables.Contains(updatable))
+            if (_updatables != null && _updatables.Contains(updatable))
                 _updatables.Remove(updatable);
         }
 

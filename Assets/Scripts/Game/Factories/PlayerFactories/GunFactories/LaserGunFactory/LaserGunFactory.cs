@@ -29,6 +29,8 @@ namespace Asteroids.Game.Factory
             _laserFactory = laserFactory;
         }
 
+        public void Destroy() { }
+
         public ILaserGunPresenter Create()
         {
             var model = new LaserGunModel();

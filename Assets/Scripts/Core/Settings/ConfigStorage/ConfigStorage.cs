@@ -38,5 +38,11 @@ namespace Asteroids.Core.Settings
         {
             return _configs[typeof(TConfig)] as TConfig;
         }
+
+        public void Destroy()
+        {
+            _configs.Clear();
+            _configs = null;
+        }
     }
 }

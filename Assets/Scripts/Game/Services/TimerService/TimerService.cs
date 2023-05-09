@@ -5,11 +5,20 @@ namespace Asteroids.Game.Services
 {
     public sealed class TimerService : ITimerService, IUpdatable
     {
-        private readonly IList<ITimer> _timers;
+        private IList<ITimer> _timers;
 
         public TimerService()
         {
             _timers = new List<ITimer>();
+        }
+
+        public void Destroy()
+        {
+            for (int i = _timers.Count - 1; i >= 0; i--)
+                RemoveTimer(_timers[i]);
+
+            _timers.Clear();
+            _timers = null;
         }
 
         public ITimer CreateTimer(float seconds = 0f)
@@ -25,7 +34,7 @@ namespace Asteroids.Game.Services
         {
             timer.Destroy();
 
-            if (_timers.Contains(timer))
+            if (_timers != null && _timers.Contains(timer))
                 _timers.Remove(timer);
         }
 

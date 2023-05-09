@@ -7,6 +7,8 @@ namespace Asteroids.Core.States
     {
         private readonly IGameData _gameData;
 
+        private SceneController _gameSceneController;
+
         public GameLoopState(IGameData gameData)
         {
             _gameData = gameData;
@@ -15,9 +17,9 @@ namespace Asteroids.Core.States
         public void Enter()
         {
             var gameSceneControllerFactory = _gameData.FactoryStorage.GetGameSceneControllerFactory();
-            var gameSceneController = gameSceneControllerFactory.Create();
+            _gameSceneController = gameSceneControllerFactory.Create();
 
-            gameSceneController.Run(_gameData);
+            _gameSceneController.Run(_gameData);
         }
 
         public void Exit() { }

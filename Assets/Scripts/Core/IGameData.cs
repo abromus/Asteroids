@@ -11,5 +11,7 @@ namespace Asteroids.Core
         public IFactoryStorage FactoryStorage { get; }
 
         public IServiceStorage ServiceStorage { get; }
+
+        public void Destroy();
     }
 }

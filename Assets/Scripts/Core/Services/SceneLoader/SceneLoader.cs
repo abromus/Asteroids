@@ -13,6 +13,8 @@ namespace Asteroids.Core.Services
             _coroutineRunner = coroutineRunner;
         }
 
+        public void Destroy() { }
+
         public void Load(string name, Action success)
         {
             _coroutineRunner.StartCoroutine(LoadScene(name, success));

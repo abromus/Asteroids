@@ -23,15 +23,6 @@ namespace Asteroids.Game
 
         public void Destroy()
         {
-            var inputSystem = _gameData.ServiceStorage.GetInputSystem();
-            inputSystem.Hide();
-
-            var positionCheckService = _gameData.ServiceStorage.GetPositionCheckService();
-            positionCheckService.RemoveDamaging(_shipPresenter);
-
-            var screenSystem = _gameData.ServiceStorage.GetScreenSystem();
-            screenSystem.CloseAllScreens();
-
             (_shipPresenter as IPresenter).Destroy();
             _shipPresenter = null;
 

@@ -7,13 +7,22 @@ namespace Asteroids.Game.Services
     {
         private const float Epsilon = 0.5f;
 
-        private readonly IList<IDamagable> _damagables;
-        private readonly IList<IDamaging> _damagings;
+        private IList<IDamagable> _damagables;
+        private IList<IDamaging> _damagings;
 
         public PositionCheckService()
         {
             _damagables = new List<IDamagable>();
             _damagings = new List<IDamaging>();
+        }
+
+        public void Destroy()
+        {
+            _damagables.Clear();
+            _damagables = null;
+
+            _damagings.Clear();
+            _damagings = null;
         }
 
         public void AddDamagable(IDamagable damagable)
@@ -28,13 +37,13 @@ namespace Asteroids.Game.Services
 
         public void RemoveDamagable(IDamagable damagable)
         {
-            if (_damagables.Contains(damagable))
+            if (_damagables != null && _damagables.Contains(damagable))
                 _damagables.Remove(damagable);
         }
 
         public void RemoveDamaging(IDamaging damaging)
         {
-            if (_damagings.Contains(damaging))
+            if (_damagings != null && _damagings.Contains(damaging))
                 _damagings.Remove(damaging);
         }
 

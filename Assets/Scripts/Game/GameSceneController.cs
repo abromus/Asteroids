@@ -37,6 +37,11 @@ namespace Asteroids.Game
             _game.Run();
         }
 
+        public override void Destroy()
+        {
+            _game.Destroy();
+        }
+
         private void Awake()
         {
             _camera = Instantiate(_cameraPrefab);
@@ -45,7 +50,7 @@ namespace Asteroids.Game
 
         private void OnDestroy()
         {
-            _game.Destroy();
+            Destroy();
         }
     }
 }

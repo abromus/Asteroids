@@ -30,6 +30,11 @@ namespace Asteroids.Game.Factory
             return flyingSaucer;
         }
 
+        public void Destroy()
+        {
+            _pool.Dispose();
+        }
+
         public void Release(IFlyingSaucerPresenter presenter)
         {
             presenter.Clear();

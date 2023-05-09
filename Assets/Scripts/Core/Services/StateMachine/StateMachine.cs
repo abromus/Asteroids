@@ -7,7 +7,21 @@ namespace Asteroids.Core.Services
     {
         private IExitState _currentState;
 
-        private readonly Dictionary<Type, IState> _states = new Dictionary<Type, IState>();
+        private Dictionary<Type, IState> _states = new Dictionary<Type, IState>();
+
+        public StateMachine()
+        {
+            _states = new Dictionary<Type, IState>();
+        }
+
+        public void Destroy()
+        {
+            _currentState?.Exit();
+            _currentState = null;
+
+            _states.Clear();
+            _states = null;
+        }
 
         public void Enter<TState>() where TState : class, IEnterState
         {

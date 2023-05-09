@@ -41,10 +41,16 @@ namespace Asteroids.Game
             _asteroidSpawner.AsteroidDestroyed -= UpdateScore;
             _asteroidSpawner.AsteroidFragmentDestroyed -= UpdateScore;
             _flyingSaucerSpawner.FlyingSaucerDestroyed -= UpdateScore;
+
+            if (_screen != null)
+                _screenSystem.CloseScreen(_screen as IScreen);
         }
 
         private void OnDestroyed()
         {
+            if (_screenSystem.IsDestroyed)
+                return;
+
             _screenSystem.CloseAllScreens();
 
             _screen = _screenSystem.ShowGameOver(_score);
