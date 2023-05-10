@@ -41,7 +41,7 @@ namespace Asteroids.Game.Services
             prefab = _editorView;
 #endif
 
-            if (prefab != null)
+            if (_view == null && prefab != null)
                 _view = Instantiate(prefab, _parent);
         }
 
